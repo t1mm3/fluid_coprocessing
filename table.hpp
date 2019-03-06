@@ -52,7 +52,7 @@ private:
 
 public:
 	template<typename T, typename S>
-	void chunk(T&& morsel, S&& finished, size_t morsel_size = 16*1024) {
+	void chunk(T&& morsel, S&& finished, int64_t morsel_size = 16*1024) {
 		while (1) {
 			int64_t num = 0;
 			int64_t offset = 0;

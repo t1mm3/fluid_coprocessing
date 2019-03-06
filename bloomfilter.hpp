@@ -2,9 +2,11 @@
 #include "table.hpp"
 #include <vector>
 
-#if 0
 struct Pipeline {
 private:
+	uint32_t hashs[Vectorized::kVecSize];
+	HashTablinho::StaticProbeContext<Vectorized::kVecSize> ctx;
+
 	void build_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,
 			int* sel, int num) {
 		Vectorized::map_hash(hashs, keys, sel, num);
@@ -20,8 +22,6 @@ private:
 	}
 public:
 	void build(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		uint32_t hashs[vsize];
-
 		t.chunk([&] (void* base_addr, auto offset, auto num) {
 			int32_t* tkeys = (int32_t*)base_addr;
 			Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
@@ -34,9 +34,6 @@ public:
 	}
 
 	void probe(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		uint32_t hashs[vsize];
-		HashTablinho::StaticProbeContext<Vectorized::kVecSize> ctx;
-
 		t.chunk([&] (void* base_addr, auto offset, auto num) {
 			int32_t* tkeys = (int32_t*)base_addr;
 
@@ -46,7 +43,6 @@ public:
 		}, [&] () { });
 	}
 };
-#endif
 
 #include <vector>
 #include <thread>
