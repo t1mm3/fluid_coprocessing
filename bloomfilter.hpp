@@ -2,6 +2,7 @@
 #include "table.hpp"
 #include <vector>
 
+#if 0
 struct Pipeline {
 private:
 	void build_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,
@@ -45,6 +46,7 @@ public:
 		}, [&] () { });
 	}
 };
+#endif
 
 #include <vector>
 #include <thread>

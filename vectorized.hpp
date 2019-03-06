@@ -1,6 +1,7 @@
 #pragma once
 #include "build.hpp"
 #include <stdint.h>
+#include <algorithm>
 #include <string>
 
 struct Vectorized {
@@ -83,7 +84,7 @@ struct Vectorized {
 		const size_t end = size + offset;
 		size_t i = offset;
 		while (i < end) {
-			size_t num = std::min(vsize, end-i);
+			size_t num = std::min((size_t)vsize, end-i);
 			fun(i, num);
 		}
 	}

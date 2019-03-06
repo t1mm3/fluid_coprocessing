@@ -4,6 +4,7 @@
 #include <string>
 #include <atomic>
 #include <cassert>
+#include <cstring>
 #include <mutex>
 
 struct HashTablinho {
@@ -15,7 +16,7 @@ struct HashTablinho {
 	size_t next_offset;
 	size_t hash_offset;
 
-	std::atomic<size_t> num_buckets;
+	std::atomic<int64_t> num_buckets;
 	size_t max_buckets;
 
 	char* value_space;
@@ -26,7 +27,7 @@ private:
 	}
 
 	static uint32_t* BucketPtrOfHash(void* bucket, size_t offset) {
-		return (uint32_t**)((char**)bucket + offset);
+		return (uint32_t*)((char**)bucket + offset);
 	}
 
 	static void BucketSetNext(void* bucket, void* next, size_t offset) {
@@ -109,7 +110,7 @@ public:
 		mod_mask = 0;
 		num_buckets = 0;
 
-		max_buckets = std::max(capacity, 1024);
+		max_buckets = std::max(capacity, (size_t)1024);
 		value_space = new char[bucket_size * max_buckets];
 	}
 
@@ -119,7 +120,7 @@ public:
 
 	void Insert(int32_t* key, uint32_t* hash, int* sel, int num) {
 		assert(num_buckets + num < max_buckets);
-		const size_t offset = std::atomic_fetch_add(&num_buckets, num);
+		const size_t offset = std::atomic_fetch_add(&num_buckets, (int64_t)num);
 
 		assert(offset + num < max_buckets);
 
@@ -127,8 +128,8 @@ public:
 		Vectorized::map(sel, num, [&] (auto i) {
 			char* bucket = &value_space[bucket_size * (offset + o)];
 
-			memcpy(bucket, key[i], sizeof(int32_t));
-			memcpy(BucketPtrOfHash(bucket, hash_offset), hash[i], sizeof(uint32_t));
+			memcpy(bucket, &key[i], sizeof(int32_t));
+			memcpy(BucketPtrOfHash(bucket, hash_offset), &hash[i], sizeof(uint32_t));
 
 			o++;
 		});
@@ -208,7 +209,7 @@ public:
 		}
 		_Probe(ctx.tmp_buckets, ctx.tmp_sel, matches, hash, sel, num,
 			[&] (auto& match, auto& buckets, auto& sel, auto& n) {
-				check_ptr<int32_t>(match, keys, (int32_t**)buckets, sel, n);
+				Vectorized::check_ptr<int32_t>(match, keys, (int32_t**)buckets, sel, n);
 		});
 	}
 };
