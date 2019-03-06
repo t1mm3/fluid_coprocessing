@@ -1,48 +1,4 @@
-#include "hash_table.hpp"
-#include "table.hpp"
-#include <vector>
-
-struct Pipeline {
-private:
-	uint32_t hashs[Vectorized::kVecSize];
-	HashTablinho::StaticProbeContext<Vectorized::kVecSize> ctx;
-
-	void build_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,
-			int* sel, int num) {
-		Vectorized::map_hash(hashs, keys, sel, num);
-		ht->Insert(keys, hashs, sel, num);
-	}
-
-	void probe_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,
-			int* sel, int num, HashTablinho::ProbeContext& ctx) {
-		bool matches[num];
-
-		Vectorized::map_hash(hashs, keys, sel, num);
-		ht->Probe(ctx, matches, keys, hashs, sel, num);
-	}
-public:
-	void build(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		t.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
-			int32_t* tkeys = (int32_t*)columns[0];
-			Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
-				build_vec(ht, &tkeys[offset], hashs, nullptr, num);
-			}, vsize);
-		}, [&] () {
-			// finished
-			ht->FinalizeBuild();
-		});
-	}
-
-	void probe(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		t.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
-			int32_t* tkeys = (int32_t*)columns[0];
-
-			Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
-				probe_vec(ht, &tkeys[offset], hashs, nullptr, num, ctx);
-			}, vsize);
-		}, [&] () { });
-	}
-};
+#include "query.hpp"
 
 #include <vector>
 #include <thread>

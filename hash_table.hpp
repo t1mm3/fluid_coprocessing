@@ -139,8 +139,6 @@ public:
 		});
 	}
 
-	static constexpr size_t kVecSize = Vectorized::kVecSize;
-
 	void FinalizeBuild() {
 		std::lock_guard<std::mutex> guard(finalize_build_mutex);
 
@@ -167,7 +165,7 @@ public:
 
 		size_t i = 0;
 		while (i < (size_t)num_buckets) {
-			size_t num = std::min(kVecSize, num_buckets-i);
+			size_t num = std::min((size_t)kVecSize, num_buckets-i);
 
 			// gather
 			Vectorized::map(nullptr, num, [&] (auto k) {

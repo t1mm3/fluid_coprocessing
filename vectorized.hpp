@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <string>
 
-struct Vectorized {
-	static constexpr int kVecSize = 1024;
+#define kVecSize 1024
 
+struct Vectorized {
 	template<typename T>static void
 	map(int* sel, int num, T&& fun) {
 		if (sel) {
