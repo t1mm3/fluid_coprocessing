@@ -116,6 +116,9 @@ public:
 
 	~HashTablinho() {
 		delete[] value_space;
+		if (heads) {
+			delete[] heads;
+		}
 	}
 
 	void Insert(int32_t* key, uint32_t* hash, int* sel, int num) {
