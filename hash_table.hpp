@@ -8,6 +8,7 @@
 #include <mutex>
 
 struct HashTablinho {
+private:
 	void** heads;
 
 	uint32_t mod_mask;
@@ -21,7 +22,6 @@ struct HashTablinho {
 
 	char* value_space;
 
-private:
 	static void** BucketPtrOfNext(void* bucket, size_t offset) {
 		return (void**)((char**)bucket + offset);
 	}
@@ -122,7 +122,8 @@ public:
 	}
 
 	void Insert(int32_t* key, uint32_t* hash, int* sel, int num) {
-		assert(num_buckets + num < max_buckets);
+		// Will just crash when OOM
+		assert(num_buckets.load() + num < max_buckets);
 		const size_t offset = std::atomic_fetch_add(&num_buckets, (int64_t)num);
 
 		assert(offset + num < max_buckets);
@@ -165,7 +166,7 @@ public:
 		void* tmp_buckets[kVecSize];
 
 		size_t i = 0;
-		while (i < num_buckets) {
+		while (i < (size_t)num_buckets) {
 			size_t num = std::min(kVecSize, num_buckets-i);
 
 			// gather
