@@ -1,5 +1,7 @@
 #pragma once
 
+#cmakedefine HAVE_CUDA
+
 #define NO_INLINE __attribute__((noinline))
 #define R __restrict
 

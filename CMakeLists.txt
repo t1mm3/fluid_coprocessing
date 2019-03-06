@@ -10,6 +10,14 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 find_package(Threads REQUIRED)
 
+find_package(CUDA 9.1)
+if(CUDA_FOUND)
+	message("CUDA stuff")
+endif()
+
+configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(main main.cpp)
 
 target_link_libraries(main Threads::Threads)
