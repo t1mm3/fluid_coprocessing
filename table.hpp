@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <atomic>
+#include <vector>
 #include <cassert>
 
 struct Table {
@@ -9,21 +10,19 @@ private:
 	int64_t capacity;
 	std::atomic<int64_t> start; //! Current start offset
 	std::atomic<int64_t> done; //!< Current finished offset (after morsel completion)
-
-	void *base;
+	std::vector<void*> columns;
 
 public:
 	int64_t size() const { return capacity; }
 
-	Table(int64_t cap) {
-		start = 0;
-		done = 0;
-		capacity = cap;
-	}
+	Table(int64_t num_cols, int64_t cap);
+	void reset();
 
-	void reset() {
-		done = 0;
-		start = 0;
+	template<typename T>void
+	fill_columns(T&& f) {
+		for (size_t i=0; i<columns.size(); i++) {
+			f(i, columns[i], this);
+		}
 	}
 
 private:
@@ -33,22 +32,7 @@ private:
 		\param num Preferred size of range
 		\returns True, if successful (and valid range); False, otherwise
 	*/
-	bool get_range(int64_t& onum, int64_t& ostart, int64_t num) {
-		if (start > capacity) {
-			return false;
-		}
-
-		ostart = std::atomic_fetch_add(&start, num);
-		if (ostart >= capacity) {
-			return false;
-		}
-
-		const int64_t todo = capacity - ostart;
-		assert(todo > 0);
-
-		onum = std::min(todo, num);
-		return onum > 0;
-	}
+	bool get_range(int64_t& onum, int64_t& ostart, int64_t num);
 
 public:
 	template<typename T, typename S>
@@ -64,7 +48,7 @@ public:
 
 			assert(num <= morsel_size);
 
-			morsel(base, offset, num);
+			morsel(&columns[0], columns.size(), offset, num);
 
 			done += num;
 			if (done >= capacity) {

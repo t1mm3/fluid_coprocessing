@@ -22,8 +22,8 @@ private:
 	}
 public:
 	void build(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		t.chunk([&] (void* base_addr, auto offset, auto num) {
-			int32_t* tkeys = (int32_t*)base_addr;
+		t.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
+			int32_t* tkeys = (int32_t*)columns[0];
 			Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
 				build_vec(ht, &tkeys[offset], hashs, nullptr, num);
 			}, vsize);
@@ -34,8 +34,8 @@ public:
 	}
 
 	void probe(HashTablinho* ht, Table& t, int64_t morsel_size, size_t vsize) {
-		t.chunk([&] (void* base_addr, auto offset, auto num) {
-			int32_t* tkeys = (int32_t*)base_addr;
+		t.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
+			int32_t* tkeys = (int32_t*)columns[0];
 
 			Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
 				probe_vec(ht, &tkeys[offset], hashs, nullptr, num, ctx);
