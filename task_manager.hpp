@@ -12,9 +12,9 @@ struct InflightProbe {
     probe_t probe;
     int64_t num;
     int64_t offset;
+    cudaStream_t stream;
 
     InflightProbe() {
-        cudaStream_t stream;
         cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
         probe = probe(num, offset, stream);
     }
@@ -22,11 +22,24 @@ struct InflightProbe {
     bool is_done() {
         return probe.is_done();
     }
+
+    ~InflightProbe() {
+        cudaStreamDestroy(stream);
+    }
 }
 
 struct WorkerThread {
     std::thread worker;
     int device{-1};
+    uint32_t hashs[kVecSize];
+    bool matches[kVecSize];
+    int sel1[kVecSize];
+    int sel2[kVecSize];
+    int64_t ksum = 0;
+
+    int32_t payload[kVecSize*16];
+
+    HashTablinho::StaticProbeContext<kVecSize> ctx;
 
     WorkerThread(bool is_gpu_active) {
         if(is_gpu_active) {
@@ -34,7 +47,7 @@ struct WorkerThread {
             worker(execute_pipeline);
         }
     }
-    void execute_pipeline(Pipeline pipeline) {
+    NO_INLINE void execute_pipeline(Pipeline pipeline) {
         int64_t morsel_size; 
         auto &table = pipeline.table;
         std::vector<InflightProbe> probes;
@@ -55,51 +68,85 @@ struct WorkerThread {
                         break;
                     do_gpu_work(probe.probe, offset, num);
                 }
-                
             }
             if(finished_probes == 0) {
                 morsel_size = cpu_morsel_size;
                 auto success = table.get_range(num, offset, morsel_size);
                 if (!success)
                     break;
-                do_cpu_work(offset);
+                do_cpu_work(table, num, offset);
             }
         }
         for(auto &probe : probes){
             probe.wait();
             auto results = probe.probe.result();
-            do_cpu_join(results, probe.num, probe.offset);
+            do_cpu_join(table, results, probe.num, probe.offset);
+        }
+    }
+
+    NO_INLINE void do_cpu_work(Table& table, int64_t num, int64_t offset) {
+        int* sel = nullptr;
+
+        // TODO: CPU bloom filter
+
+        do_cpu_join(table, nullptr, sel, num, offset);
+    }
+
+    NO_INLINE void do_cpu_join(Table& table, int32_t* bf_results, int* sel,
+            int64_t num, int64_t offset) {
+        assert(!sel == !!bf_results);
+
+        if (sel) {
+            assert(num <= kVecSize);
         }
 
+        Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
+            int32_t* tkeys = (int32_t*)table.columns[0];
+            auto keys = &tkeys[offset];
+
+            if (bf_results) {
+                int n = num + (8-1);
+                n /= 8;
+                n *= 8;
+                num = Vectorized::select_match_bit(sel1, bf_results + offset/8, n);
+                sel = &sel2[0];
+            } else {
+                sel = nullptr;
+            }
+
+            // probe
+            Vectorized::map_hash(hashs, keys, sel, num);
+
+            ht->Probe(ctx, matches, keys, hashs, sel, num);
+            num = Vectorized::select_match(sel1, matches, sel, num);
+            sel = &sel1[0];
+
+            // TODO: gather some columns
+            for (int i=1; i<4; i++) {
+                Vectorized::gather_ptr<int32_t>(payload + (i-1)*kVecSize, ctx.tmp_buckets, i, sel, num);
+            }
+
+            // global sum
+            Vectorized::glob_sum(&ksum, keys, sel, num);
+        });
     }
 
-    void do_cpu_join(int32_t results, int64_t num, int64_t offset) {
-
-
-    }
-    void do_gpu_work(probe, offset, num) {
+    NO_INLINE void do_gpu_work(probe, offset, num) {
         probe.contains(offset, num);
     }
 };
 
 class TaskManager {
 public:
-    TaskManager() {
-       
-    
-    }
     void execute_query() {
+        std::vector<WorkerThread> workers;
 
-       for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
-           workers.emplace_back(WorkerThread(true));
-       }
-       for(auto &worker : workers) {
-           worker.thread.join();
-       }
+        for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
+            workers.emplace_back(WorkerThread(true));
+        }
+        for(auto &worker : workers) {
+            worker.thread.join();
+        }
        
     }
-
-private:
-    std::vector<WorkerThread> workers;
-    std::atomic<size_t> global_counter;
 };

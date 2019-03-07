@@ -27,6 +27,7 @@ struct Vectorized {
 	template<typename T>static int
 	select(int* osel, int* sel, int num, T&& fun) {
 		int res = 0;
+
 		if (sel) {
 			for (int i=0; i<num; i++) {
 				if (fun(sel[i])) {
@@ -57,6 +58,26 @@ struct Vectorized {
 	static int NO_INLINE select_not_match(int* R osel, bool* R b, int* R sel,
 			int num) {
 		return select(osel, sel, num, [&] (auto i) { return !b[i]; });
+	}
+
+	static int NO_INLINE select_match_bit(int* R osel, uint8_t* R a, int num) {
+		int res=0;
+		int i=0;
+#define A(z) { int i=z; int w=a[i/8]; uint8_t m=1 << (i % 8); if (w & m) { osel[res++] = i;}}
+
+		for (; i+8<num; i+=8) {
+			A(i);
+			A(i+1);
+			A(i+2);
+			A(i+3);
+			A(i+4);
+			A(i+5);
+			A(i+6);
+			A(i+7);
+		}
+		for (; i<num; i++) { A(i); }
+#undef A
+		return res;
 	}
 
 	inline static uint32_t hash32(uint32_t a) {
