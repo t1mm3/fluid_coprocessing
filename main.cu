@@ -20,23 +20,30 @@ void populate_table(Table &table) {
 int main() {
     TaskManager manager;
 	Table table_build(1,100);
-	Table table_probe(1,100);
+
     populate_table(table_build);
-    populate_table(table_probe);
-    //build table
+
+    auto ht = new HashTablinho(4+4*4, 1000);
+
+     //build table
     table_build.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
-		int32_t* tkeys = (int32_t*)columns[0];
-		Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
+        int32_t* tkeys = (int32_t*)columns[0];
+        Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
             auto keys = &tkeys[offset];
             Vectorized::map_hash(hashs, keys, sel, num);
-	        ht->Insert(keys, hashs, sel, num);
-		}, vsize);
-	}, [&] () {
-		// finished
-		ht->FinalizeBuild();
+            ht->Insert(keys, hashs, sel, num);
+        }, vsize);
+    }, [&] () {
+        // finished
+        ht->FinalizeBuild();
     });
+
+
+    Table table_probe(1,100);
+    populate_table(table_probe);
+
     //execute probe
-    manager.executeQuery(table_probe);
+    manager.executeQuery(Pipeline { {ht}, table_probe});
     
     return 0;
 }

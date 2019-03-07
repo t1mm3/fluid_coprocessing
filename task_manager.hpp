@@ -26,7 +26,12 @@ struct InflightProbe {
     ~InflightProbe() {
         cudaStreamDestroy(stream);
     }
-}
+};
+
+struct Pipeline {
+    std::vector<HashTablinho*> hts;
+    Table& table; //!< Probe relation
+};
 
 struct WorkerThread {
     std::thread worker;
@@ -39,25 +44,34 @@ struct WorkerThread {
 
     int32_t payload[kVecSize*16];
 
+    Pipeline& pipeline;
+
     HashTablinho::StaticProbeContext<kVecSize> ctx;
 
-    WorkerThread(bool is_gpu_active) {
+    WorkerThread(bool is_gpu_active, Pipeline& pipeline)
+        : pipeline(pipeline) {
         if(is_gpu_active) {
             device = 0;
             worker(execute_pipeline);
         }
     }
-    NO_INLINE void execute_pipeline(Pipeline pipeline) {
+    NO_INLINE void execute_pipeline() {
         int64_t morsel_size; 
         auto &table = pipeline.table;
-        std::vector<InflightProbe> probes;
+        std::vector<InflightProbe> inflight_probes;
 
-        probes.emplace_back(InflightProbe());
+        if (device >= 0) {
+            for (int i=0; i<4; i++) {
+                probes.emplace_back(InflightProbe());
+            }
+        }
+
         while(1) {
             int64_t num = 0;
             int64_t offset = 0;
+            size_t finished_probes=0;
 
-            for(auto &probe : probes) {
+            for(auto &probe : inflight_probes) {
                 if(probe.is_done()) {
                     auto results = probe.probe.result();
                     do_cpu_join(results, probe.num, probe.offset);
@@ -77,7 +91,7 @@ struct WorkerThread {
                 do_cpu_work(table, num, offset);
             }
         }
-        for(auto &probe : probes){
+        for(auto &probe : inflight_probes){
             probe.wait();
             auto results = probe.probe.result();
             do_cpu_join(table, results, probe.num, probe.offset);
@@ -117,13 +131,16 @@ struct WorkerThread {
             // probe
             Vectorized::map_hash(hashs, keys, sel, num);
 
-            ht->Probe(ctx, matches, keys, hashs, sel, num);
-            num = Vectorized::select_match(sel1, matches, sel, num);
-            sel = &sel1[0];
+            for (auto ht : pipeline.hts) {
+                ht->Probe(ctx, matches, keys, hashs, sel, num);
+                num = Vectorized::select_match(sel1, matches, sel, num);
+                sel = &sel1[0];
 
-            // TODO: gather some columns
-            for (int i=1; i<4; i++) {
-                Vectorized::gather_ptr<int32_t>(payload + (i-1)*kVecSize, ctx.tmp_buckets, i, sel, num);
+                // TODO: gather some payload columns
+                for (int i=1; i<4; i++) {
+                    Vectorized::gather_ptr<int32_t>(payload + (i-1)*kVecSize,
+                        ctx.tmp_buckets, i, sel, num);
+                }
             }
 
             // global sum
@@ -138,11 +155,11 @@ struct WorkerThread {
 
 class TaskManager {
 public:
-    void execute_query() {
+    void execute_query(Pipeline& pipeline) {
         std::vector<WorkerThread> workers;
 
         for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
-            workers.emplace_back(WorkerThread(true));
+            workers.emplace_back(WorkerThread(true, pipeline));
         }
         for(auto &worker : workers) {
             worker.thread.join();
