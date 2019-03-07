@@ -33,6 +33,8 @@ int main() {
             Vectorized::map_hash(hashs, keys, sel, num);
             ht->Insert(keys, hashs, sel, num);
         }, kVecSize);
+
+        // FIXME: build bloom filter
     }, [&] () {
         // finished
         ht->FinalizeBuild();
