@@ -32,7 +32,7 @@ int main() {
             auto keys = &tkeys[offset];
             Vectorized::map_hash(hashs, keys, sel, num);
             ht->Insert(keys, hashs, sel, num);
-        }, vsize);
+        }, kVecSize);
     }, [&] () {
         // finished
         ht->FinalizeBuild();
