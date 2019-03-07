@@ -1,3 +1,7 @@
+/* Copyright (c) 2019 by Tim Gubner, CWI 
+ * Licensed under GPLv3
+ */
+
 #pragma once
 
 #include "vectorized.hpp"
@@ -7,6 +11,10 @@
 struct Query {
 private:
 	uint32_t hashs[kVecSize];
+	bool matches[kVecSize];
+	int sel2[kVecSize];
+	int64_t ksum = 0;
+
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 
 	void build_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,

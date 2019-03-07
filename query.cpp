@@ -1,3 +1,7 @@
+/* Copyright (c) 2019 by Tim Gubner, CWI 
+ * Licensed under GPLv3
+ */
+
 #include "query.hpp"
 
 void
@@ -12,10 +16,18 @@ void
 Query::probe_vec(HashTablinho* ht, int32_t* keys, uint32_t* hashs,
 	int* sel, int num, HashTablinho::ProbeContext& ctx)
 {
-	bool matches[num];
+	// BloomProbe
 
+
+	// HashSemiJoin
 	Vectorized::map_hash(hashs, keys, sel, num);
 	ht->Probe(ctx, matches, keys, hashs, sel, num);
+
+	num = Vectorized::select_match(sel2, matches, sel, num);
+	sel = &sel2[0];
+
+	// SUM(key)
+	Vectorized::glob_sum(&ksum, keys, sel, num);
 }
 
 void

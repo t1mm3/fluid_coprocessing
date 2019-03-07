@@ -1,3 +1,7 @@
+/* Copyright (c) 2019 by Tim Gubner, CWI 
+ * Licensed under GPLv3
+ */
+
 #pragma once
 
 #include <stdint.h>

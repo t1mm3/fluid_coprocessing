@@ -1,3 +1,7 @@
+/* Copyright (c) 2019 by Tim Gubner, CWI 
+ * Licensed under GPLv3
+ */
+
 #pragma once
 #include "build.hpp"
 #include "vectorized.hpp"
@@ -65,7 +69,7 @@ private:
 		});
 	}
 
-	template<typename CHECK_KEYS>
+	NO_INLINE template<typename CHECK_KEYS>
 	void _Probe(void** tmp_buckets, int* tmp_sel,
 			bool* match, uint32_t* hash,
 			int* in_sel, int in_num,
@@ -139,7 +143,7 @@ public:
 		});
 	}
 
-	void FinalizeBuild() {
+	NO_INLINE void FinalizeBuild() {
 		std::lock_guard<std::mutex> guard(finalize_build_mutex);
 
 		if (heads) {
@@ -213,5 +217,11 @@ public:
 			[&] (auto& match, auto& buckets, auto& sel, auto& n) {
 				Vectorized::check_ptr<int32_t>(match, keys, (int32_t**)buckets, sel, n);
 		});
+	}
+
+	// Gathers payload column, supposed to be run after Probe for fetching the buckets
+	// However, the selection vector should only contain matching keys
+	void ProbeGather(ProbeContext &ctx, int32_t* coldata, int64_t colidx, int* sel, int n) {
+		Vectorized::gather_ptr<int32_t>(coldata, (int32_t**)ctx.tmp_buckets, colidx, sel, n);
 	}
 };

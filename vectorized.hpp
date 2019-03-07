@@ -1,3 +1,7 @@
+/* Copyright (c) 2019 by Tim Gubner, CWI 
+ * Licensed under GPLv3
+ */
+
 #pragma once
 #include "build.hpp"
 #include <stdint.h>
@@ -64,6 +68,24 @@ struct Vectorized {
 		map(sel, num, [&] (auto i) { out[i] = hash32((uint32_t)(a[i])); });
 	}
 
+	static void NO_INLINE glob_sum(int64_t* R out, int32_t* R a, int* R sel,
+			int num) {
+
+		int64_t p=0;
+		map(sel, num, [&] (auto i) { p+= a[i]; });
+		*out = *out + p;
+	}
+
+	template<typename T>
+	static void NO_INLINE check(bool* R match, T* R keys, T* R table, size_t* R idx,
+			size_t stride, int* R sel, int num) {
+		if (stride > 1) {
+			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
+		} else {
+			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * 1] == keys[i]; });
+		}
+	}
+
 	template<typename T>
 	static void NO_INLINE check(bool* R match, T* R keys, T* R table, size_t* R idx,
 			size_t stride, int* R sel, int num) {
@@ -77,6 +99,31 @@ struct Vectorized {
 	template<typename T>
 	static void NO_INLINE check_ptr(bool* R match, T* R keys, T** R ptrs, int* R sel, int num) {
 		map(sel, num, [&] (auto i) { match[i] = (*ptrs[i]) == keys[i]; });
+	}
+
+	template<typename T>
+	static void NO_INLINE scatter(T* R table, T* R a, size_t* R idx,
+			size_t stride, int* R sel, int num) {
+		if (stride > 1) {
+			map(sel, num, [&] (auto i) { table[idx[i] * stride] = a[i]; });
+		} else {
+			map(sel, num, [&] (auto i) { table[idx[i] * 1] = a[i]; });
+		}
+	}
+
+	template<typename T>
+	static void NO_INLINE gather(T* R out, T* R table, size_t* R idx,
+			size_t stride, int* R sel, int num) {
+		if (stride > 1) {
+			map(sel, num, [&] (auto i) { out[i] = table[idx[i] * stride]; });
+		} else {
+			map(sel, num, [&] (auto i) { out[i] = table[idx[i] * 1]; });
+		}
+	}
+
+	template<typename T>
+	static void NO_INLINE gather_ptr(T* R out, T** R ptrs, int offset, int* R sel, int num) {
+		map(sel, num, [&] (auto i) { out[i] = *(ptrs[i] + offset); });
 	}
 
 	template<typename T>
