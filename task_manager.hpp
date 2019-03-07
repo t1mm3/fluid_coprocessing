@@ -7,6 +7,7 @@
 constexpr gpu_morsel_size  = 100 * 1024 * 1024; 
 constexpr cpu_morsel_size  = 10 * 1024; 
 
+#ifdef HAVE_CUDA
 struct InflightProbe {
     using probe_t = cuda_filter::probe;
     probe_t probe;
@@ -27,6 +28,7 @@ struct InflightProbe {
         cudaStreamDestroy(stream);
     }
 };
+#endif
 
 struct Pipeline {
     std::vector<HashTablinho*> hts;
@@ -48,16 +50,14 @@ struct WorkerThread {
 
     HashTablinho::StaticProbeContext<kVecSize> ctx;
 
-    WorkerThread(bool is_gpu_active, Pipeline& pipeline)
-        : pipeline(pipeline) {
-        if(is_gpu_active) {
-            device = 0;
-            worker(execute_pipeline);
-        }
+    WorkerThread(int gpu_device, Pipeline& pipeline)
+            : pipeline(pipeline), device(gpu_device), worker(execute_pipeline, this) {
     }
     NO_INLINE void execute_pipeline() {
         int64_t morsel_size; 
         auto &table = pipeline.table;
+
+#ifdef HAVE_CUDA
         std::vector<InflightProbe> inflight_probes;
 
         if (device >= 0) {
@@ -65,12 +65,14 @@ struct WorkerThread {
                 probes.emplace_back(InflightProbe());
             }
         }
+#endif
 
         while(1) {
             int64_t num = 0;
             int64_t offset = 0;
             size_t finished_probes=0;
 
+#ifdef HAVE_CUDA
             for(auto &probe : inflight_probes) {
                 if(probe.is_done()) {
                     auto results = probe.probe.result();
@@ -83,6 +85,7 @@ struct WorkerThread {
                     do_gpu_work(probe.probe, offset, num);
                 }
             }
+#endif
             if(finished_probes == 0) {
                 morsel_size = cpu_morsel_size;
                 auto success = table.get_range(num, offset, morsel_size);
@@ -91,11 +94,13 @@ struct WorkerThread {
                 do_cpu_work(table, num, offset);
             }
         }
+#ifdef HAVE_CUDA
         for(auto &probe : inflight_probes){
             probe.wait();
             auto results = probe.probe.result();
             do_cpu_join(table, results, probe.num, probe.offset);
         }
+#endif
     }
 
     NO_INLINE void do_cpu_work(Table& table, int64_t num, int64_t offset) {
@@ -148,9 +153,11 @@ struct WorkerThread {
         });
     }
 
+#ifdef HAVE_CUDA
     NO_INLINE void do_gpu_work(probe, offset, num) {
         probe.contains(offset, num);
     }
+#endif
 };
 
 class TaskManager {
