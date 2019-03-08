@@ -2,7 +2,7 @@
 #include <thread>
 #include <vector>
 #include <atomic>
-#include "bloom_cuda_filter.cuh"
+#include "bloomfilter/bloom_cuda_filter.cuh"
 
 constexpr gpu_morsel_size  = 100 * 1024 * 1024; 
 constexpr cpu_morsel_size  = 10 * 1024; 
