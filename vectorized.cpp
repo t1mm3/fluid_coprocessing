@@ -1,8 +1,8 @@
 #include "vectorized.hpp"
 
 
-void Vectorized::map_not_match_void(bool* R out, void** R a,
-		void* R b, int* R sel, int num) {
+void Vectorized::map_not_match_bucket_t(bool* R out, bucket_t* R a,
+		bucket_t b, int* R sel, int num) {
 	map(sel, num, [&] (auto i) { out[i] = a[i] != b; });
 }
 

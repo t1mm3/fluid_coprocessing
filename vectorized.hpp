@@ -9,6 +9,9 @@
 #include <string>
 #include <cassert>
 
+#define bucket_t uint32_t
+
+
 #define kVecSize 1024
 
 struct Vectorized {
@@ -46,8 +49,9 @@ struct Vectorized {
 		return res;
 	}
 
-	static void NO_INLINE map_not_match_void(bool* R out, void** R a,
-			void* R b, int* R sel, int num);
+	static void NO_INLINE map_not_match_bucket_t(bool* R out, bucket_t* R a,
+			bucket_t b, int* R sel, int num);
+
 	static int NO_INLINE select_match(int* R osel, bool* R b, int* R sel,
 			int num);
 	static int NO_INLINE select_not_match(int* R osel, bool* R b, int* R sel,
@@ -65,7 +69,7 @@ struct Vectorized {
 			int num);
 
 	template<typename T>
-	static void check(bool* R match, T* R keys, T* R table, size_t* R idx,
+	static void NO_INLINE check(bool* R match, T* R keys, T* R table, bucket_t* R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
@@ -75,22 +79,17 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void check_ptr(bool* R match, T* R keys, T** R ptrs, int* R sel, int num) {
-		map(sel, num, [&] (auto i) { match[i] = (*ptrs[i]) == keys[i]; });
-	}
-
-	template<typename T>
-	static void scatter(T* R table, T* R a, size_t* R idx,
+	static void NO_INLINE write(T* R table, T* R a, size_t R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
-			map(sel, num, [&] (auto i) { table[idx[i] * stride] = a[i]; });
+			map(sel, num, [&] (auto i) { table[(idx+i) * stride] = a[i]; });
 		} else {
-			map(sel, num, [&] (auto i) { table[idx[i] * 1] = a[i]; });
+			map(sel, num, [&] (auto i) { table[(idx+i) * 1] = a[i]; });
 		}
 	}
 
 	template<typename T>
-	static void gather(T* R out, T* R table, size_t* R idx,
+	static void NO_INLINE gather(T* R out, T* R table, bucket_t* R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { out[i] = table[idx[i] * stride]; });
@@ -99,9 +98,19 @@ struct Vectorized {
 		}
 	}
 
+	static void NO_INLINE gather_next(bucket_t* R out, bucket_t* R table, bucket_t* R idx,
+			size_t stride, int* R sel, int num) {
+		Vectorized::gather<bucket_t>(out, table, idx, stride, sel, num);
+	}
+
 	template<typename T>
-	static void gather_ptr(T* R out, T** R ptrs, int offset, int* R sel, int num) {
-		map(sel, num, [&] (auto i) { out[i] = *(ptrs[i] + offset); });
+	static void NO_INLINE read(T* R out, T* R table, size_t R idx,
+			size_t stride, int* R sel, int num) {
+		if (stride > 1) {
+			map(sel, num, [&] (auto i) { out[i] = table[(idx+i) * stride]; });
+		} else {
+			map(sel, num, [&] (auto i) { out[i] = table[(idx+i) * 1]; });
+		}
 	}
 
 	template<typename T>

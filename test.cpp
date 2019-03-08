@@ -4,7 +4,7 @@
 #include "hash_table.hpp"
 #include <map>
 
-TEST_CASE("set", "[hj]" ) {
+TEST_CASE("hash table", "[hj]" ) {
 	std::map<int32_t, int32_t> build_tuples;
 
 	SECTION("64k") {
@@ -39,7 +39,7 @@ TEST_CASE("set", "[hj]" ) {
 
 
 		// check whether the keys are inside
-		Vectorized::chunk(0, cap, [&] (auto offset, auto num) {
+		Vectorized::chunk(0, 2*cap, [&] (auto offset, auto num) {
 			// printf("probe offset %d\n", offset);
 			for (int i=0; i<num; i++) {
 				keys[i] = i + offset;
@@ -63,7 +63,7 @@ TEST_CASE("set", "[hj]" ) {
 	}
 
 	SECTION("2k one bucket") {
-		const int32_t cap = 2*1024;
+		const int32_t cap = 3*1024;
 		HashTablinho ht(64, cap);
 		HashTablinho::StaticProbeContext<kVecSize> probe;
 
@@ -93,18 +93,26 @@ TEST_CASE("set", "[hj]" ) {
 
 
 		// check whether the keys are inside
-		Vectorized::chunk(0, cap, [&] (auto offset, auto num) {
+		Vectorized::chunk(0, cap+1, [&] (auto offset, auto num) {
 			// printf("probe offset %d\n", offset);
 			for (int i=0; i<num; i++) {
 				keys[i] = i + offset;
-				hashs[i] = 0;
 			}
+
+			Vectorized::map_hash(hashs, keys, nullptr, num);
+
 
 			ht.Probe(probe, matches, keys, hashs, nullptr, num);
 
 			for (int i=0; i<num; i++) {
-				REQUIRE(matches[i]);
-				matches[i] = false;
+				printf("idx %d\n", offset+i);
+				if (offset+i < cap) {
+					REQUIRE(matches[i]);
+				} else {
+					REQUIRE(!matches[i]);
+				}
+				
+				matches[i] = false;	
 			}
 		});
 	}
