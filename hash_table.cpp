@@ -51,6 +51,10 @@ void HashTablinho::FinalizeBuild() {
 		return;
 	}
 
+	int32_t keys[kVecSize];
+	uint32_t hash[kVecSize];
+	void* tmp_buckets[kVecSize];
+
 	size_t num_heads = num_buckets*2;
 	assert(num_heads > 1);
 
@@ -64,24 +68,29 @@ void HashTablinho::FinalizeBuild() {
 	heads = new void*[num_heads];
 	for (size_t i=0; i<num_heads; i++) heads[i] = nullptr;
 
-	int32_t keys[kVecSize];
-	uint32_t hash[kVecSize];
-	void* tmp_buckets[kVecSize];
-
+	
 	size_t i = 0;
 	while (i < (size_t)num_buckets) {
-		size_t num = std::min((size_t)kVecSize, num_buckets-i);
+		const size_t num = std::min((size_t)kVecSize, num_buckets-i);
 
 		// gather
 		Vectorized::map(nullptr, num, [&] (auto k) {
 			size_t idx = k+i;
 			void* bucket = &value_space[idx * bucket_size];
 
-			hash[i] = *BucketPtrOfHash(bucket, hash_offset);
+			hash[k] = *BucketPtrOfHash(bucket, hash_offset);
 			int32_t* key = (int32_t*)bucket;
-			keys[i] = *key;
+			keys[k] = *key;
+
+			tmp_buckets[k] = bucket;
+			// printf("tmp_buckets[%d] = %p = %p\n", k, bucket, tmp_buckets[k]);
 		});
 
+#if 0
+		Vectorized::map(nullptr, num, [&] (auto i) {
+			printf("buck[%d] = %p\n", i, tmp_buckets[i]);
+		});
+#endif
 		_Insert(tmp_buckets, heads, hash, mod_mask, next_offset, nullptr, num);
 
 		i+=num;
