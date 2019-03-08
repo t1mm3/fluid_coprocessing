@@ -42,6 +42,7 @@ HashTablinho::~HashTablinho() {
 void HashTablinho::_Insert(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
 		uint32_t mod_mask, bucket_t* R next_vector, size_t next_stride,
 		int* R sel, int num) {
+#if 1
 	Vectorized::map(sel, num, [&] (auto i) {
 		bucket_t bucket = buckets[i];
 		size_t slot = hash[i] & mod_mask;
@@ -51,6 +52,15 @@ void HashTablinho::_Insert(bucket_t* R buckets, bucket_t* R heads, uint32_t* R h
 			next_vector[bucket * next_stride] = head;
 		} while (__sync_bool_compare_and_swap(&heads[slot], head, bucket));
 	});
+#else
+	Vectorized::map(sel, num, [&] (auto i) {
+		bucket_t bucket = buckets[i];
+		size_t slot = hash[i] & mod_mask;
+		bucket_t head = heads[slot];
+		next_vector[bucket * next_stride] = head;
+		heads[slot] = bucket;
+	});
+#endif
 }
 
 void HashTablinho::BucketInit(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
@@ -106,8 +116,7 @@ void HashTablinho::FinalizeBuild() {
 		Vectorized::read(hashs, hash_vector, i, hash_stride, nullptr, num);
 
 		Vectorized::map(nullptr, num, [&] (auto k) {
-			size_t idx = k+i;
-			tmp_buckets[k] = idx;
+			tmp_buckets[k] = k+i;
 		});
 
 		_Insert(tmp_buckets, heads, hashs, mod_mask, next_vector, next_stride, nullptr, num);
@@ -116,7 +125,8 @@ void HashTablinho::FinalizeBuild() {
 	}
 }
 
-void HashTablinho::Probe(ProbeContext &ctx, bool* match, int32_t* keys, uint32_t* hash, int* in_sel, int in_num) {
+void HashTablinho::Probe(ProbeContext &ctx, bool* match, int32_t* keys, uint32_t* hash,
+		int* in_sel, int in_num) {
 	assert(heads);
 
 	int* tmp_sel = ctx.tmp_sel;
