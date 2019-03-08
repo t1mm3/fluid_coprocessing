@@ -22,7 +22,15 @@ endif()
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(main main.cpp table.cpp query.cpp)
+add_library(mainlib STATIC table.cpp query.cpp)
+target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
-target_link_libraries(main Threads::Threads)
+add_executable(main main.cpp)
+
+target_link_libraries(main mainlib Threads::Threads)
 target_compile_options(main PRIVATE -march=native -Wall -pedantic)
+
+enable_testing()
+add_executable(test_cpp test.cpp table.cpp query.cpp)
+target_link_libraries(test_cpp mainlib Threads::Threads)
+add_test(NAME test_cpp COMMAND test_cpp)

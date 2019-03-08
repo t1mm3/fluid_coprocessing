@@ -98,7 +98,7 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE check(bool* R match, T* R keys, T* R table, size_t* R idx,
+	static void check(bool* R match, T* R keys, T* R table, size_t* R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
@@ -108,22 +108,12 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE check(bool* R match, T* R keys, T* R table, size_t* R idx,
-			size_t stride, int* R sel, int num) {
-		if (stride > 1) {
-			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
-		} else {
-			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * 1] == keys[i]; });
-		}
-	}
-
-	template<typename T>
-	static void NO_INLINE check_ptr(bool* R match, T* R keys, T** R ptrs, int* R sel, int num) {
+	static void check_ptr(bool* R match, T* R keys, T** R ptrs, int* R sel, int num) {
 		map(sel, num, [&] (auto i) { match[i] = (*ptrs[i]) == keys[i]; });
 	}
 
 	template<typename T>
-	static void NO_INLINE scatter(T* R table, T* R a, size_t* R idx,
+	static void scatter(T* R table, T* R a, size_t* R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { table[idx[i] * stride] = a[i]; });
@@ -133,7 +123,7 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE gather(T* R out, T* R table, size_t* R idx,
+	static void gather(T* R out, T* R table, size_t* R idx,
 			size_t stride, int* R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { out[i] = table[idx[i] * stride]; });
@@ -143,7 +133,7 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE gather_ptr(T* R out, T** R ptrs, int offset, int* R sel, int num) {
+	static void gather_ptr(T* R out, T** R ptrs, int offset, int* R sel, int num) {
 		map(sel, num, [&] (auto i) { out[i] = *(ptrs[i] + offset); });
 	}
 
