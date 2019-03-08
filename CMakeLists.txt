@@ -11,8 +11,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" 
 include_directories(../dtl/src)
 include_directories(../dtl/thirdparty)
 include_directories(../cub cub)
-
 include_directories(thirdparty/)
+include_directories(src/include)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message(FATAL_ERROR "No build type was specified. Valid choices are either -DCMAKE_BUILD_TYPE=Release or -DCMAKE_BUILD_TYPE=Debug")
@@ -71,7 +71,7 @@ endif()
 
 SET(BLOOM_CUDA_SOURCE_FILES
         ${BLOOM_FILTER_SOURCE_FILES}
-        bloomfilter/blocked_bloom_benchmark.cu
+        src/bloomfilter/blocked_bloom_benchmark.cu
         )
 
 cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
