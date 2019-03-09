@@ -110,13 +110,11 @@ void benchmark(const std::size_t m,
         $u64 match_cnt_gpu = 0;
         $u64 mismatches = 0;
         cf.contains_clustering(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data);
-        
         for (std::size_t i = 0; i < n; i++) {
-            auto hash_key = filter.hash(to_lookup[i]);
+          auto hash_key = filter.hash(to_lookup[i]);
           u1 is_match_on_cpu = filter.contains_with_hash(&filter_data[0], hash_key);
           u1 is_match_on_gpu = (result_bitmap[i] == 1);
           if (is_match_on_gpu != is_match_on_cpu) {
-              printf("pos %lu value %lu", i, result_bitmap[i]);
               mismatches++;
           } else {
               match_cnt_gpu++;
@@ -199,6 +197,7 @@ void benchmark(const std::size_t m,
                   << " Sort time (ms): "    << perf_data.sort_time * 1000  << '\n'
                   << " Probes per second: " << perf_data.probes_per_second << '\n'
                   << " Probe time (ms): "   << perf_data.probe_time * 1000 << '\n'
+                  << " Candidate List time (ms): "   << perf_data.candidate_time * 1000 << '\n'
                   << " Total throughput: "  << perf_data.total_throughput  << '\n'
                   << "=============================== "                    << '\n'
                   << std::endl;
@@ -218,25 +217,30 @@ int main() {
 
     //===----------------------------------------------------------------------===//
     // Data generation.
-    std::size_t default_m = 256ull * 1024 * 1024 * 8; // 256MiB
-    auto m = {default_m};// default_m * 10, default_m * 100, default_m * 1000, default_m * 10000};
+    std::size_t default_m = 64 * 1024 * 1024 * 8; // 256MiB
+    auto m = {default_m, default_m * 2, default_m * 4, default_m * 16, default_m * 32};
     using key_t        = $u32;
-    const std::size_t to_insert_cnt = 10<<25;
+    const std::size_t to_insert_cnt = 1ull<<27;
     const std::size_t to_lookup_cnt = to_insert_cnt;
     std::vector<key_t> to_insert(to_insert_cnt);
     std::vector<key_t> to_lookup(to_lookup_cnt);
     std::vector<key_t> hash_val(to_lookup_cnt);
     
     for(auto bloom_size : m) {
-        //set_random_values(to_insert);
+        set_random_values(to_insert);
         set_random_values(to_lookup);
+
+        /*for(size_t i = 0; i != (0.1*to_insert_cnt); ++i){
+          to_lookup[i] = to_insert[i];
+        }*/
     
         std::cout << "to_insert.size(): " << to_insert.size()/1000 << " K-keys" << std::endl;
         std::cout << "to_lookup.size(): " << to_lookup.size()/1000 << " K-keys" << std::endl;
         //Register Blocking
-        benchmark<8, 1, 2>(bloom_size, to_lookup, to_lookup);
-        benchmark<16, 1, 4>(bloom_size, to_lookup, to_lookup);
-        benchmark<32, 1, 8>(bloom_size, to_lookup, to_lookup);
+        benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup);
+        benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup);
+        benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup);
+        benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup);
     }
     
     //std::vector<key_t> hash_val(100000000, 0);

@@ -12,7 +12,7 @@ main:
 	@if [ ! -d "../dtl" ]; \
 	then \
 		cd ..; \
-		git clone https://github.com/peterboncz/bloomfilter-bsd.git dtl; \
+		git clone https://github.com/diegomestre2/bloomfilter-bsd.git dtl; \
 		echo "dtl downloaded!"; \
 		cd $(DIR); \
 	fi

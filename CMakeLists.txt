@@ -77,7 +77,7 @@ SET(BLOOM_CUDA_SOURCE_FILES
 cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
 target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 
-#configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
+configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 #add_executable(main main.cpp table.cpp query.cpp)

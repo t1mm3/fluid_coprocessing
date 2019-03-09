@@ -116,11 +116,3 @@ __global__ void contains_shared(
   result_bitmap[write_pos] = thread_local_bitmap;
 }
 //===----------------------------------------------------------------------===//
-
-//===----------------------------------------------------------------------===//
-template <typename filter_t>
-__global__ void build_candidate_list($u32 *__restrict__ result_bitmap,
-                                     $u32 *__restrict__ positions)
-{
-    
-}
