@@ -49,28 +49,28 @@ struct Vectorized {
 		return res;
 	}
 
-	static void NO_INLINE map_not_match_bucket_t(bool* R out, bucket_t* R a,
-			bucket_t b, int* R sel, int num);
+	static void NO_INLINE map_not_match_bucket_t(bool* CPU_R out, bucket_t* CPU_R a,
+			bucket_t b, int* CPU_R sel, int num);
 
-	static int NO_INLINE select_match(int* R osel, bool* R b, int* R sel,
+	static int NO_INLINE select_match(int* CPU_R osel, bool* CPU_R b, int* CPU_R sel,
 			int num);
-	static int NO_INLINE select_not_match(int* R osel, bool* R b, int* R sel,
+	static int NO_INLINE select_not_match(int* CPU_R osel, bool* CPU_R b, int* CPU_R sel,
 			int num);
-	static int NO_INLINE select_match_bit(int* R osel, uint8_t* R a, int num);
+	static int NO_INLINE select_match_bit(int* CPU_R osel, uint8_t* CPU_R a, int num);
 
 	inline static uint32_t hash32(uint32_t a) {
 		return a * 2654435761;
 	}
 
-	static void NO_INLINE map_hash(uint32_t* R out, int32_t* R a, int* R sel,
+	static void NO_INLINE map_hash(uint32_t* CPU_R out, int32_t* CPU_R a, int* CPU_R sel,
 			int num);
 
-	static void NO_INLINE glob_sum(int64_t* R out, int32_t* R a, int* R sel,
+	static void NO_INLINE glob_sum(int64_t* CPU_R out, int32_t* CPU_R a, int* CPU_R sel,
 			int num);
 
 	template<typename T>
-	static void NO_INLINE check(bool* R match, T* R keys, T* R table, bucket_t* R idx,
-			size_t stride, int* R sel, int num) {
+	static void NO_INLINE check(bool* CPU_R match, T* CPU_R keys, T* CPU_R table, bucket_t* CPU_R idx,
+			size_t stride, int* CPU_R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
 		} else {
@@ -79,8 +79,8 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE write(T* R table, T* R a, size_t R idx,
-			size_t stride, int* R sel, int num) {
+	static void NO_INLINE write(T* CPU_R table, T* CPU_R a, size_t CPU_R idx,
+			size_t stride, int* CPU_R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { table[(idx+i) * stride] = a[i]; });
 		} else {
@@ -89,8 +89,8 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE gather(T* R out, T* R table, bucket_t* R idx,
-			size_t stride, int* R sel, int num) {
+	static void NO_INLINE gather(T* CPU_R out, T* CPU_R table, bucket_t* CPU_R idx,
+			size_t stride, int* CPU_R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { out[i] = table[idx[i] * stride]; });
 		} else {
@@ -98,14 +98,14 @@ struct Vectorized {
 		}
 	}
 
-	static void NO_INLINE gather_next(bucket_t* R out, bucket_t* R table, bucket_t* R idx,
-			size_t stride, int* R sel, int num) {
+	static void NO_INLINE gather_next(bucket_t* CPU_R out, bucket_t* CPU_R table, bucket_t* CPU_R idx,
+			size_t stride, int* CPU_R sel, int num) {
 		Vectorized::gather<bucket_t>(out, table, idx, stride, sel, num);
 	}
 
 	template<typename T>
-	static void NO_INLINE read(T* R out, T* R table, size_t R idx,
-			size_t stride, int* R sel, int num) {
+	static void NO_INLINE read(T* CPU_R out, T* CPU_R table, size_t CPU_R idx,
+			size_t stride, int* CPU_R sel, int num) {
 		if (stride > 1) {
 			map(sel, num, [&] (auto i) { out[i] = table[(idx+i) * stride]; });
 		} else {

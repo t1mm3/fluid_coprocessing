@@ -6,7 +6,7 @@
 #cmakedefine HAVE_CUDA
 
 #define NO_INLINE __attribute__((noinline))
-#define R __restrict
+#define CPU_R __restrict
 
 #include <stdint.h>
 

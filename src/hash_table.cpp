@@ -39,9 +39,9 @@ HashTablinho::~HashTablinho() {
 	}
 }
 
-void HashTablinho::_Insert(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
-		uint32_t mod_mask, bucket_t* R next_vector, size_t next_stride,
-		int* R sel, int num) {
+void HashTablinho::_Insert(bucket_t* CPU_R buckets, bucket_t* CPU_R heads, uint32_t* CPU_R hash,
+		uint32_t mod_mask, bucket_t* CPU_R next_vector, size_t next_stride,
+		int* CPU_R sel, int num) {
 #if 1
 	Vectorized::map(sel, num, [&] (auto i) {
 		bucket_t bucket = buckets[i];
@@ -63,8 +63,8 @@ void HashTablinho::_Insert(bucket_t* R buckets, bucket_t* R heads, uint32_t* R h
 #endif
 }
 
-void HashTablinho::BucketInit(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
-		uint32_t mod_mask, int* R sel, int num) {
+void HashTablinho::BucketInit(bucket_t* CPU_R buckets, bucket_t* CPU_R heads, uint32_t* CPU_R hash,
+		uint32_t mod_mask, int* CPU_R sel, int num) {
 	Vectorized::map(sel, num, [&] (auto i) {
 		size_t slot = hash[i] & mod_mask;
 		buckets[i] = heads[slot];

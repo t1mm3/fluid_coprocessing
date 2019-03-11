@@ -33,12 +33,12 @@ private:
 
 	char* value_space;
 
-	static void _Insert(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
-			uint32_t mod_mask, bucket_t* R next_vector, size_t next_stride,
-			int* R sel, int num);
+	static void _Insert(bucket_t* CPU_R buckets, bucket_t* CPU_R heads, uint32_t* CPU_R hash,
+			uint32_t mod_mask, bucket_t* CPU_R next_vector, size_t next_stride,
+			int* CPU_R sel, int num);
 
-	static void BucketInit(bucket_t* R buckets, bucket_t* R heads, uint32_t* R hash,
-			uint32_t mod_mask, int* R sel, int num);
+	static void BucketInit(bucket_t* CPU_R buckets, bucket_t* CPU_R heads, uint32_t* CPU_R hash,
+			uint32_t mod_mask, int* CPU_R sel, int num);
 
 	std::mutex finalize_build_mutex;
 

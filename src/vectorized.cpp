@@ -1,22 +1,22 @@
 #include "vectorized.hpp"
 
 
-void Vectorized::map_not_match_bucket_t(bool* R out, bucket_t* R a,
-		bucket_t b, int* R sel, int num) {
+void Vectorized::map_not_match_bucket_t(bool* CPU_R out, bucket_t* CPU_R a,
+		bucket_t b, int* CPU_R sel, int num) {
 	map(sel, num, [&] (auto i) { out[i] = a[i] != b; });
 }
 
-int Vectorized::select_match(int* R osel, bool* R b, int* R sel,
+int Vectorized::select_match(int* CPU_R osel, bool* CPU_R b, int* CPU_R sel,
 		int num) {
 	return select(osel, sel, num, [&] (auto i) { return b[i]; });
 }
 
-int Vectorized::select_not_match(int* R osel, bool* R b, int* R sel,
+int Vectorized::select_not_match(int* CPU_R osel, bool* CPU_R b, int* CPU_R sel,
 		int num) {
 	return select(osel, sel, num, [&] (auto i) { return !b[i]; });
 }
 
-int Vectorized::select_match_bit(int* R osel, uint8_t* R a, int num) {
+int Vectorized::select_match_bit(int* CPU_R osel, uint8_t* CPU_R a, int num) {
 	int res=0;
 	int i=0;
 #define A(z) { int i=z; int w=a[i/8]; uint8_t m=1 << (i % 8); if (w & m) { osel[res++] = i;}}
@@ -36,12 +36,12 @@ int Vectorized::select_match_bit(int* R osel, uint8_t* R a, int num) {
 	return res;
 }
 
-void Vectorized::map_hash(uint32_t* R out, int32_t* R a, int* R sel,
+void Vectorized::map_hash(uint32_t* CPU_R out, int32_t* CPU_R a, int* CPU_R sel,
 		int num) {
 	map(sel, num, [&] (auto i) { out[i] = hash32((uint32_t)(a[i])); });
 }
 
-void Vectorized::glob_sum(int64_t* R out, int32_t* R a, int* R sel,
+void Vectorized::glob_sum(int64_t* CPU_R out, int32_t* CPU_R a, int* CPU_R sel,
 		int num) {
 
 	int64_t p=0;
