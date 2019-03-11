@@ -12,6 +12,7 @@ include_directories(../dtl/src)
 include_directories(../dtl/thirdparty)
 include_directories(../cub cub)
 include_directories(thirdparty/)
+include_directories(src/)
 include_directories(src/include)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -74,8 +75,15 @@ SET(BLOOM_CUDA_SOURCE_FILES
         src/bloomfilter/blocked_bloom_benchmark.cu
         )
 
-cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
-target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
+SET(FRAMEWORK
+        ${BLOOM_FILTER_SOURCE_FILES}
+        main.cu
+        )
+
+#cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
+#target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
+cuda_add_executable(main ${FRAMEWORK})
+target_link_libraries(main cudart numa pthread)
 
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

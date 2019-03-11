@@ -108,16 +108,6 @@ struct Vectorized {
 	}
 
 	template<typename T>
-	static void NO_INLINE check(bool* R match, T* R keys, T* R table, size_t* R idx,
-			size_t stride, int* R sel, int num) {
-		if (stride > 1) {
-			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * stride] == keys[i]; });
-		} else {
-			map(sel, num, [&] (auto i) { match[i] = table[idx[i] * 1] == keys[i]; });
-		}
-	}
-
-	template<typename T>
 	static void NO_INLINE check_ptr(bool* R match, T* R keys, T** R ptrs, int* R sel, int num) {
 		map(sel, num, [&] (auto i) { match[i] = (*ptrs[i]) == keys[i]; });
 	}

@@ -69,7 +69,7 @@ private:
 		});
 	}
 
-	NO_INLINE template<typename CHECK_KEYS>
+	template<typename CHECK_KEYS>
 	void _Probe(void** tmp_buckets, int* tmp_sel,
 			bool* match, uint32_t* hash,
 			int* in_sel, int in_num,

@@ -2,3 +2,7 @@ build
 cub
 cuda-api-wrappers
 dtl
+out.txt
+out1.txt
+out2.txt
+out_bits.txt
