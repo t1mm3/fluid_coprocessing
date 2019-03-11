@@ -2,22 +2,23 @@
 #include <thread>
 #include <vector>
 #include <atomic>
-#include "bloom_cuda_filter.cuh"
+#include "bloomfilter/bloom_cuda_filter.hpp"
 
 constexpr gpu_morsel_size  = 100 * 1024 * 1024; 
 constexpr cpu_morsel_size  = 10 * 1024; 
+constexpr number_of_streams  = 4; 
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
-    using probe_t = cuda_filter::probe;
-    probe_t probe;
+    using cuda_probe_t = typename cuda_filter<filter_t>::probe;
+    cuda_probe_t probe;
     int64_t num;
     int64_t offset;
     cudaStream_t stream;
 
-    InflightProbe() {
+    InflightProbe(const cuda_filter& cf) {
         cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
-        probe = probe(num, offset, stream);
+        probe = probe(cf, batch_size_gpu, stream);
     }
 
     bool is_done() {
@@ -35,6 +36,7 @@ struct Pipeline {
     Table& table; //!< Probe relation
 };
 
+template <typename filter_t, typename word_t>
 struct WorkerThread {
     std::thread worker;
     int device{-1};
@@ -43,16 +45,22 @@ struct WorkerThread {
     int sel1[kVecSize];
     int sel2[kVecSize];
     int64_t ksum = 0;
-
     int32_t payload[kVecSize*16];
 
     Pipeline& pipeline;
+    const filter_t& filter;
+    const word_t*  filter_data;
 
     HashTablinho::StaticProbeContext<kVecSize> ctx;
 
     WorkerThread(int gpu_device, Pipeline& pipeline)
             : pipeline(pipeline), device(gpu_device), worker(execute_pipeline, this) {
     }
+
+    WorkerThread(int gpu_device, Pipeline& pipeline, const filter_t& filter, const word_t* __restrict filter_data)
+            : pipeline(pipeline), device(gpu_device), worker(execute_pipeline, this), filter(filter) {
+    }
+    
     NO_INLINE void execute_pipeline() {
         int64_t morsel_size; 
         auto &table = pipeline.table;
@@ -60,9 +68,12 @@ struct WorkerThread {
 #ifdef HAVE_CUDA
         std::vector<InflightProbe> inflight_probes;
 
-        if (device >= 0) {
-            for (int i=0; i<4; i++) {
-                probes.emplace_back(InflightProbe());
+        if (device > 0) {
+            //instantiate CUDA Filter
+            cuda_filter<filter_t> cf(filter, &filter_data[0], filter_data.size());
+            for (int i = 0; i < number_of_streams; i++) {
+                //create probes
+                probes.emplace_back(InflightProbe(cf));
             }
         }
 #endif
@@ -70,7 +81,7 @@ struct WorkerThread {
         while(1) {
             int64_t num = 0;
             int64_t offset = 0;
-            size_t finished_probes=0;
+            size_t finished_probes = 0;
 
 #ifdef HAVE_CUDA
             for(auto &probe : inflight_probes) {
@@ -86,7 +97,7 @@ struct WorkerThread {
                 }
             }
 #endif
-            if(finished_probes == 0) {
+            if (finished_probes == 0) {
                 morsel_size = cpu_morsel_size;
                 auto success = table.get_range(num, offset, morsel_size);
                 if (!success)
@@ -166,7 +177,20 @@ public:
         std::vector<WorkerThread> workers;
 
         for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
-            workers.emplace_back(WorkerThread(true, pipeline));
+            workers.emplace_back(WorkerThread(false, pipeline));
+        }
+        for(auto &worker : workers) {
+            worker.thread.join();
+        }
+        
+    }
+
+    template <typename filter_t, typename word_t>
+    void execute_query(Pipeline& pipeline, const filter_t& filter, const word_t* __restrict filter_data) {
+        std::vector<WorkerThread> workers;
+
+        for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
+            workers.emplace_back(WorkerThread<filter_t, word_t>(true, pipeline. filter, filter_data));
         }
         for(auto &worker : workers) {
             worker.thread.join();
