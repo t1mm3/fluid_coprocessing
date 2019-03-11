@@ -15,6 +15,10 @@ include_directories(thirdparty/)
 include_directories(src/)
 include_directories(src/include)
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message(FATAL_ERROR "No build type was specified. Valid choices are either -DCMAKE_BUILD_TYPE=Release or -DCMAKE_BUILD_TYPE=Debug")
 endif()
@@ -92,9 +96,14 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(mainlib STATIC table.cpp query.cpp)
 target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
+add_library(veclib STATIC hash_table.cpp vectorized.cpp)
+target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
+set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
+
+
 add_executable(main main.cpp)
 
-target_link_libraries(main mainlib Threads::Threads)
+target_link_libraries(main mainlib veclib Threads::Threads)
 target_compile_options(main PRIVATE -march=native -Wall -pedantic)
 
 enable_testing()
