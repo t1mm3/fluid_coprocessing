@@ -68,8 +68,11 @@ main:
 
 	@mkdir -p build
 	@mkdir -p build/release
-	@cd build/release && cmake -DCMAKE_BUILD_TYPE=Release ../.. && make main
+	@cd build/release && cmake -DCMAKE_BUILD_TYPE=Release ../.. && make main_cu
+
 debug:
-	@mkdir -p cmake-build-release
-	@mkdir -p cmake-build-release/debug
-	@cd cmake-build-release/debug && cmake -DCMAKE_BUILD_TYPE=D
+	@mkdir -p build
+	@mkdir -p build/debug
+	@cd build/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../.. && make main
+
+

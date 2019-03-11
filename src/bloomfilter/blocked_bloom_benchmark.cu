@@ -48,7 +48,8 @@ template<
 void benchmark(const std::size_t m,
                std::vector<filter_key_t>& to_insert,
                std::vector<filter_key_t>& to_lookup,
-               std::size_t bits_to_sort) {
+               std::size_t bits_to_sort,
+               std::ofstream &results) {
     //===----------------------------------------------------------------------===//
     // Construct an empty filter with the given size.
     using filter_t = bbf_t<word_cnt, zone_cnt, k>;
@@ -202,6 +203,21 @@ void benchmark(const std::size_t m,
                   << " Total throughput: "           << perf_data.total_throughput      << '\n'
                   << "=============================== "                                 << '\n'
                   << std::endl;
+
+
+        
+        
+        results << "Bloom filter size (MiB); Block size (bytes); bits to sort; Probe size ; Hash time (ms); Sort time (ms); Probe time (ms); Total throughput" << '\n';
+        results << m/(8*1024*1024)             << ';';
+        results <<  word_cnt * 4               << ';';
+        results << bits_to_sort                << ';';
+        results << to_insert.size()            << ';';
+        results << perf_data.hash_time * 1000  << ';';
+        results << perf_data.sort_time * 1000  << ';';
+        results << perf_data.probe_time * 1000 << ';';
+        results << perf_data.total_throughput  << "\n";
+        
+
     
     }
 
@@ -214,9 +230,11 @@ void benchmark(const std::size_t m,
 //===----------------------------------------------------------------------===//
 int main() {
 
-    std::ofstream out("out_bits.txt");
+    std::ofstream out("benchmark_info.txt");
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
     std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+    std::ofstream results;
+    results.open("results.csv");
 
     //get_device_properties();
 
@@ -225,37 +243,40 @@ int main() {
     std::size_t default_m = 64 * 1024 * 1024 * 8; // 256MiB
     auto m = {default_m, default_m * 2, default_m * 4, default_m * 16, default_m * 32};
     auto bits = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
+    auto input_size = {1ull<<17, 1ull<<20, 1ull<<24, 1ull<<27}; // 10K 100K 1M 10M 100M
     
     // Data generation.
     using key_t        = $u32;
-    const std::size_t to_insert_cnt = 1ull<<27;
-    const std::size_t to_lookup_cnt = to_insert_cnt;
-    std::vector<key_t> to_insert(to_insert_cnt);
-    std::vector<key_t> to_lookup(to_lookup_cnt);
 
-    auto selectivity = (0.1 * to_insert_cnt);
-    for(auto bloom_size : m) {
-        set_random_values(to_insert);
-        set_random_values(to_lookup);
-        auto bf_size = (bloom_size / (8*1024*1024));
-
-        for(size_t i = 0; i < selectivity; ++i) {
-          to_lookup[i] = to_insert[i];
-        }
-        for(auto& bit : bits) {
-          std::cout << "to_insert.size(): " << to_insert.size()/1000 << " K-keys" << std::endl;
-          std::cout << "to_lookup.size(): " << to_lookup.size()/1000 << " K-keys" << std::endl;
-          std::cout << "bits to sort: "     << bit                   << " bits"   << std::endl;
-          std::cerr << "bits to sort: "     << bit                   << " bits"   << std::endl;
-          std::cerr << "Bloom Size: "       << bf_size               << " MiB"    << std::endl;
-          //Register Blocking
-          //benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-          //benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-          benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-          //benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-        }
+    for(auto to_insert_cnt : input_size){
+      const std::size_t to_lookup_cnt = to_insert_cnt;
+      std::vector<key_t> to_insert(to_insert_cnt);
+      std::vector<key_t> to_lookup(to_lookup_cnt);
+  
+        auto selectivity = (0.1 * to_insert_cnt);
+        for(auto bloom_size : m) {
+            set_random_values(to_insert);
+            set_random_values(to_lookup);
+            auto bf_size = (bloom_size / (8*1024*1024));
+  
+            for(size_t i = 0; i < selectivity; ++i) {
+              to_lookup[i] = to_insert[i];
+            }
+            for(auto& bit : bits) {
+              std::cout << "to_insert.size(): " << to_insert.size()/1000 << " K-keys" << std::endl;
+              std::cout << "to_lookup.size(): " << to_lookup.size()/1000 << " K-keys" << std::endl;
+              std::cout << "bits to sort: "     << bit                   << " bits"   << std::endl;
+              std::cerr << "bits to sort: "     << bit                   << " bits"   << std::endl;
+              std::cerr << "Bloom Size: "       << bf_size               << " MiB"    << std::endl;
+              //Register Blocking
+              //benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+              //benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+              benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bit, results);
+              //benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+            }
+      }
     }
-    
+    results.close();
     //std::vector<key_t> hash_val(100000000, 0);
     //auto printer = [&](auto& value) {std::cout << value << ' '; };
     //std::for_each(to_lookup.begin() + 1000000, to_lookup.end(), printer);

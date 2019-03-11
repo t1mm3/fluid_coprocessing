@@ -84,16 +84,16 @@ SET(FRAMEWORK
         main.cu
         )
 
-#cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
-#target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
-cuda_add_executable(main ${FRAMEWORK})
-target_link_libraries(main cudart numa pthread)
+cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
+target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
+cuda_add_executable(main_cu ${FRAMEWORK})
+target_link_libraries(main_cu cudart numa pthread)
 
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_library(mainlib STATIC src/table.cpp src/query.cpp)
+add_library(mainlib STATIC src/task_manager src/table.cpp src/query.cpp)
 target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
 add_library(veclib STATIC src/hash_table.cpp src/vectorized.cpp)
@@ -101,10 +101,10 @@ target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
 set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
 
 
-# add_executable(main main.cpp)
+add_executable(main main.cpp)
 
-#target_link_libraries(main mainlib veclib Threads::Threads)
-#target_compile_options(main PRIVATE -march=native -Wall -pedantic)
+target_link_libraries(main mainlib veclib Threads::Threads)
+target_compile_options(main PRIVATE -march=native -Wall -pedantic)
 
 enable_testing()
 add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
