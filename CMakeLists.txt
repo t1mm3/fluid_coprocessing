@@ -20,7 +20,7 @@ set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointe
 
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-	message(FATAL_ERROR "No build type was specified. Valid choices are either -DCMAKE_BUILD_TYPE=Release or -DCMAKE_BUILD_TYPE=Debug")
+    message(FATAL_ERROR "No build type was specified. Valid choices are either -DCMAKE_BUILD_TYPE=Release or -DCMAKE_BUILD_TYPE=Debug")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
@@ -93,20 +93,20 @@ configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_library(mainlib STATIC table.cpp query.cpp)
+add_library(mainlib STATIC src/table.cpp src/query.cpp)
 target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
-add_library(veclib STATIC src/hash_table.cpp vectorized.cpp)
+add_library(veclib STATIC src/hash_table.cpp src/vectorized.cpp)
 target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
 set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
 
 
-#add_executable(main main.cpp)
+# add_executable(main main.cpp)
 
 #target_link_libraries(main mainlib veclib Threads::Threads)
 #target_compile_options(main PRIVATE -march=native -Wall -pedantic)
 
 enable_testing()
-add_executable(test_cpp test.cpp src/table.cpp src/query.cpp)
+add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
 target_link_libraries(test_cpp mainlib Threads::Threads)
 add_test(NAME test_cpp COMMAND test_cpp)

@@ -3,6 +3,7 @@
 #include "task_manager.hpp"
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
+#include <random>
 
 using filter_key_t = uint32_t;
 

@@ -173,6 +173,7 @@ struct WorkerThread {
 
 class TaskManager {
 public:
+<<<<<<< HEAD
     void execute_query(Pipeline& pipeline) {
         std::vector<WorkerThread<filter_t, word_t>> workers;
 
@@ -185,9 +186,11 @@ public:
         
     }
 
+=======
+>>>>>>> b0b0b4175f51ed93ab86a5898539502a1572cc97
     template <typename filter_t, typename word_t>
     void execute_query(Pipeline& pipeline, const filter_t& filter, const word_t* __restrict filter_data) {
-        std::vector<WorkerThread> workers;
+        std::vector<WorkerThread<filter_t, word_t>> workers;
 
         for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
             workers.emplace_back(WorkerThread<filter_t, word_t>(true, pipeline. filter, filter_data));
