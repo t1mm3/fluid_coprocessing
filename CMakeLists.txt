@@ -93,20 +93,20 @@ configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_library(mainlib STATIC table.cpp query.cpp)
+add_library(mainlib STATIC src/table.cpp src/query.cpp)
 target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
-add_library(veclib STATIC hash_table.cpp vectorized.cpp)
+add_library(veclib STATIC src/hash_table.cpp src/vectorized.cpp)
 target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
 set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
 
 
-add_executable(main main.cpp)
+# add_executable(main main.cpp)
 
-target_link_libraries(main mainlib veclib Threads::Threads)
-target_compile_options(main PRIVATE -march=native -Wall -pedantic)
+#target_link_libraries(main mainlib veclib Threads::Threads)
+#target_compile_options(main PRIVATE -march=native -Wall -pedantic)
 
 enable_testing()
-add_executable(test_cpp test.cpp table.cpp query.cpp)
+add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
 target_link_libraries(test_cpp mainlib Threads::Threads)
 add_test(NAME test_cpp COMMAND test_cpp)

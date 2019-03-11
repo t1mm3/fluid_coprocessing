@@ -14,6 +14,8 @@ private:
 	int64_t capacity;
 	std::atomic<int64_t> start; //! Current start offset
 	std::atomic<int64_t> done; //!< Current finished offset (after morsel completion)
+
+public:
 	std::vector<void*> columns;
 
 public:
