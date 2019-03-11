@@ -4,9 +4,9 @@
 #include <atomic>
 #include "bloomfilter/bloom_cuda_filter.hpp"
 
-constexpr gpu_morsel_size  = 100 * 1024 * 1024; 
-constexpr cpu_morsel_size  = 10 * 1024; 
-constexpr number_of_streams  = 4; 
+constexpr size_t gpu_morsel_size  = 100 * 1024 * 1024; 
+constexpr size_t cpu_morsel_size  = 10 * 1024; 
+constexpr size_t number_of_streams  = 4; 
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
@@ -174,7 +174,7 @@ struct WorkerThread {
 class TaskManager {
 public:
     void execute_query(Pipeline& pipeline) {
-        std::vector<WorkerThread> workers;
+        std::vector<WorkerThread<filter_t, word_t>> workers;
 
         for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
             workers.emplace_back(WorkerThread(false, pipeline));
