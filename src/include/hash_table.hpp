@@ -19,7 +19,6 @@ private:
 
 	size_t bucket_size;
 
-
 	bucket_t* next_vector;
 	size_t next_stride;
 
