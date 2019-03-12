@@ -3,7 +3,10 @@
 void TaskManager::execute_query(Pipeline& pipeline) {
     std::vector<WorkerThread<filter_t, word_t>> workers;
 
-    for(int i = 0; i != std::thread::hardware_concurrency; ++i) {
+    auto hardware_threads = std::thread::hardware_concurrency();
+    assert(hardware_threads > 0);
+    
+    for(int i = 0; i != hardware_threads; ++i) {
         workers.emplace_back(WorkerThread(false, pipeline));
     }
     for(auto &worker : workers) {
@@ -96,7 +99,7 @@ void WorkerThread::do_cpu_join(Table& table, int32_t* bf_results, int* sel,
             sel = &sel1[0];
 
             // TODO: gather some payload columns
-            for (int i=1; i<4; i++) {
+            for (int i = 1; i < 4; i++) {
                 Vectorized::gather_ptr<int32_t>(payload + (i-1)*kVecSize,
                     ctx.tmp_buckets, i, sel, num);
             }

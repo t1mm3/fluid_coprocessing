@@ -207,7 +207,6 @@ void benchmark(const std::size_t m,
 
         
         
-        results << "Bloom filter size (MiB); Block size (bytes); bits to sort; Probe size ; Hash time (ms); Sort time (ms); Probe time (ms); Total throughput" << '\n';
         results << m/(8*1024*1024)             << ';';
         results <<  word_cnt * 4               << ';';
         results << bits_to_sort                << ';';
@@ -235,7 +234,7 @@ int main() {
     std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
     std::ofstream results;
     results.open("results.csv");
-
+    results << "Bloom filter size (MiB); Block size (bytes); bits to sort; Probe size ; Hash time (ms); Sort time (ms); Probe time (ms); Total throughput" << '\n';
     //get_device_properties();
 
     //===----------------------------------------------------------------------===//

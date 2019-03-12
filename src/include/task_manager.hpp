@@ -4,9 +4,9 @@
 #include <atomic>
 #include "bloomfilter/bloom_cuda_filter.hpp"
 
-constexpr size_t gpu_morsel_size  = 100 * 1024 * 1024; 
-constexpr size_t cpu_morsel_size  = 10 * 1024; 
-constexpr size_t number_of_streams  = 4; 
+constexpr size_t GPU_MORSEL_SIZE    = 100 * 1024 * 1024; 
+constexpr size_t CPU_MORSEL_SIZE    = 10 * 1024; 
+constexpr size_t NUMBER_OF_STREAMS  = 4; 
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
