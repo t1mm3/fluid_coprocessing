@@ -31,6 +31,7 @@ public:
 		}
 	}
 
+	bool get_range(int64_t& onum, int64_t& ostart, int64_t num);
 private:
 	/* "Consumes" a range of the table
 		\param ostart Offset of range
@@ -38,7 +39,6 @@ private:
 		\param num Preferred size of range
 		\returns True, if successful (and valid range); False, otherwise
 	*/
-	bool get_range(int64_t& onum, int64_t& ostart, int64_t num);
 
 public:
 	template<typename T, typename S>

@@ -37,6 +37,7 @@ find_package(CUDA 9.1)
 if (CUDA_FOUND)
     message("CUDA found")
 
+    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -x cu)
     # avoid implicitly synchronization with other streams
     set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} --default-stream per-thread)
 
@@ -73,6 +74,10 @@ else()
     message("CUDA found")
 endif()
 
+### GCC Flags
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGPU -DDEBUG -O0 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU")
+
 
 SET(BLOOM_CUDA_SOURCE_FILES
         ${BLOOM_FILTER_SOURCE_FILES}
@@ -84,29 +89,31 @@ SET(FRAMEWORK
         main.cu
         )
 
-cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
-target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
-cuda_add_executable(main_cu ${FRAMEWORK})
-target_link_libraries(main_cu cudart numa pthread)
-
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_library(mainlib STATIC src/task_manager src/table.cpp src/query.cpp)
-target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
+add_library(mainlib  src/task_manager.cpp src/table.cpp src/query.cpp)
+#target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
-add_library(veclib STATIC src/hash_table.cpp src/vectorized.cpp)
-target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
-set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
+add_library(veclib  src/hash_table.cpp src/vectorized.cpp)
+#target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
+#set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
 
 
-add_executable(main main.cpp)
+#add_executable(main main.cpp)
 
-target_link_libraries(main mainlib veclib Threads::Threads)
-target_compile_options(main PRIVATE -march=native -Wall -pedantic)
+#target_link_libraries(main mainlib veclib Threads::Threads)
+#target_compile_options(main PRIVATE -march=native -Wall -pedantic)
 
-enable_testing()
-add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
-target_link_libraries(test_cpp mainlib Threads::Threads)
-add_test(NAME test_cpp COMMAND test_cpp)
+#benchmark
+cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
+target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
+#framework
+cuda_add_executable(main_cu ${FRAMEWORK})
+target_link_libraries(main_cu cudart numa pthread)
+
+#enable_testing()
+#add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
+#target_link_libraries(test_cpp mainlib Threads::Threads)
+#add_test(NAME test_cpp COMMAND test_cpp)

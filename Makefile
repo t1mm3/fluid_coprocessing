@@ -35,6 +35,7 @@ bench:
 	fi
 
 	@mkdir -p build
+	@mkdir -p results
 	@mkdir -p build/release
 	@cd build/release && cmake -DCMAKE_BUILD_TYPE=Release ../.. && make blocked_bloom_benchmark
 

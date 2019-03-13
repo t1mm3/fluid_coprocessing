@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cuda_runtime.h>
 #include <fstream>
+#include <string>
 
 #include <dtl/dtl.hpp>
 #include <dtl/env.hpp>
@@ -227,21 +228,40 @@ void benchmark(const std::size_t m,
 //===----------------------------------------------------------------------===//
 // Main
 //===----------------------------------------------------------------------===//
-int main() {
+int main(int argc, char** argv) {
+    std::string result_file("result.csv"), output_file("output.txt");
+    for (int i = 1; i < argc; i++) {
+      auto arg = std::string(argv[i]);
+      if (arg.substr(0, 2) != "--") {
+          exit(EXIT_FAILURE);
+      }
+      arg = arg.substr(2);
+      auto p = split_once(arg, '=');
+      auto &arg_name = p.first;
+      auto &arg_value = p.second;
+      if (arg_name.compare("result_file") == 0) {
+        result_file = arg_value;
+      }
+      if (arg_name.compare("output_file") == 0) {
+        output_file = arg_value;
+      }
+    }
 
-    std::ofstream out("benchmark_info.txt");
+    std::ofstream out(std::string("results/" + output_file));
     std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
     std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
     std::ofstream results;
-    results.open("results.csv");
+    results.open(std::string("results/" + result_file));
     results << "Bloom filter size (MiB); Block size (bytes); bits to sort; Probe size ; Hash time (ms); Sort time (ms); Probe time (ms); Total throughput" << '\n';
     //get_device_properties();
 
     //===----------------------------------------------------------------------===//
     //Benchmark set up
+    auto increment_one = [n = 0]() mutable {return ++n;};
     std::size_t default_m = 64 * 1024 * 1024 * 8; // 256MiB
-    auto m = {default_m, default_m * 2, default_m * 4, default_m * 16, default_m * 32};
-    auto bits = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
+    auto m = {default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32};
+    std::vector<size_t> bits_to_sort(32);
+    std::generate(bits_to_sort.begin(), bits_to_sort.end(), increment_one);
     auto input_size = {1ull<<17, 1ull<<20, 1ull<<24, 1ull<<27}; // 10K 100K 1M 10M 100M
     
     // Data generation.
@@ -261,16 +281,16 @@ int main() {
             for(size_t i = 0; i < selectivity; ++i) {
               to_lookup[i] = to_insert[i];
             }
-            for(auto& bit : bits) {
-              std::cout << "to_insert.size(): " << to_insert.size()/1000 << " K-keys" << std::endl;
-              std::cout << "to_lookup.size(): " << to_lookup.size()/1000 << " K-keys" << std::endl;
-              std::cout << "bits to sort: "     << bit                   << " bits"   << std::endl;
-              std::cerr << "bits to sort: "     << bit                   << " bits"   << std::endl;
+            for(auto& bits : bits_to_sort) {
+              std::cout << "to_insert.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
+              std::cout << "to_lookup.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
+              std::cout << "bits to sort: "     << bits                  << " bits"   << std::endl;
+              std::cerr << "bits to sort: "     << bits                  << " bits"   << std::endl;
               std::cerr << "Bloom Size: "       << bf_size               << " MiB"    << std::endl;
               //Register Blocking
               //benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup, bit);
               //benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-              benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bit, results);
+              benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bits, results);
               //benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup, bit);
             }
       }

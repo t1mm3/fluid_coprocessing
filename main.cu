@@ -10,7 +10,7 @@ constexpr size_t TABLE_SIZE = 100;
 
 
 //===----------------------------------------------------------------------===//
-void set_uniform_distributed_values(void *column, size_t range_size) {
+void set_uniform_distributed_values(int32_t* column, size_t range_size) {
     //thread_local allows unique seed for each thread
     thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
     thread_local std::mt19937 engine(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -24,13 +24,16 @@ void set_uniform_distributed_values(void *column, size_t range_size) {
 //===----------------------------------------------------------------------===//
 void populate_table(Table &table) {
     for(auto &column : table.columns)
-        set_uniform_distributed_values(column, table.size());
+        set_uniform_distributed_values((int32_t*)column, table.size());
 }
 //===----------------------------------------------------------------------===//
 
 //===----------------------------------------------------------------------===//
 int main() {
+
+
     TaskManager manager;
+
     Table table_build(1,TABLE_SIZE);
     populate_table(table_build);
 
@@ -55,29 +58,22 @@ int main() {
 
     Table table_probe(1,TABLE_SIZE*10);
     populate_table(table_probe);
-    manager.execute_query(Pipeline { {ht}, table_probe});
+    Pipeline pipeline = { {ht}, table_probe};
+    manager.execute_query(pipeline);
 
 #ifdef HAVE_CUDA
     // Build 128 bytes Blocked Bloom Filter on CPU
     {
-        using filter_t = bbf_t<32, 1, 1, 2>;
-        using word_t = typename filter_t::word_t;
         size_t m = 256*8*1024*1024;
-        filter_t filter(m);
-        word_t *filter_data;
+        FilterWrapper filter(m);
 
-        // Allocate Pinned memory
-        size_t filter_bytes = (filter.word_cnt() + 1024) *  sizeof(word_t);
-        cudaMallocHost((void**)&filter_data, filter_bytes);
-
-        // TODO build in parallel
         for (std::size_t i = 0; i < table_build.size(); ++i) {
-            const auto key = table_build.columns[0];
-            filter.insert(&filter_data[0], key);
+            const auto key = table_build.columns[0] + i;
+            filter.insert_with_hash(&filter_data[0], key);
         }
 
         //execute probe
-        manager.execute_query<filter_t, word_t>(Pipeline { {ht}, table_probe}, filter, filter_data);
+        manager.execute_query<filter_t, word_t, cuda_probe_t>(Pipeline { {ht}, table_probe}, filter);
     }
 #endif
     return 0;
