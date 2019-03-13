@@ -1,7 +1,7 @@
 #include "query.hpp"
 
-#include <vector>
 #include <thread>
+#include <vector>
 
 struct Scheduler {
 private:
@@ -9,18 +9,21 @@ private:
 
 	std::atomic<bool> done;
 
-	template<bool GPU>
-	void worker() {
+	template <bool GPU> void worker() {
 		while (!done) {
-			
 		}
 	}
 
-	void NO_INLINE cpu() { return worker<false>(); }
-	void NO_INLINE gpu() { return worker<true>(); }
+	void NO_INLINE cpu() {
+		return worker<false>();
+	}
+	void NO_INLINE gpu() {
+		return worker<true>();
+	}
+
 public:
 	~Scheduler() {
-		for (auto& w : workers) {
+		for (auto &w : workers) {
 			w.join();
 		}
 	}

@@ -93,10 +93,10 @@ configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
-add_library(mainlib  src/task_manager.cpp src/table.cpp src/query.cpp)
+#add_library(mainlib SHARED src/task_manager.cpp src/table.cpp src/query.cpp)
 #target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
 
-add_library(veclib  src/hash_table.cpp src/vectorized.cpp)
+#add_library(veclib SHARED src/hash_table.cpp src/vectorized.cpp)
 #target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
 #set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
 
