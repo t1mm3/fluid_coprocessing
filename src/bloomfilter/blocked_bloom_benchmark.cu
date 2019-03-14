@@ -63,7 +63,7 @@ void benchmark(const std::size_t m,
     
     using filter_data_t = std::vector<word_t, dtl::mem::numa_allocator<word_t>>;
     filter_data_t filter_data(filter.word_cnt() + 1024, 0, allocator); // + x to avoid buffer overrun bug in CF
-
+    
     // Build Filter by inserting keys.
     std::size_t n = 0;
     for (std::size_t i = 0; i < to_insert.size(); ++i) {

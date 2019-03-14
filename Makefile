@@ -74,7 +74,7 @@ main:
 debug:
 	@mkdir -p build
 	@mkdir -p build/debug
-	@cd build/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../.. && make main
+	@cd build/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../.. && make main_cu
 
 format:
 	python format.py

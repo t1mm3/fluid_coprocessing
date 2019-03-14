@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#cmakedefine HAVE_CUDA
+#define HAVE_CUDA
 
 #define NO_INLINE __attribute__((noinline))
 #define CPU_R __restrict

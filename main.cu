@@ -5,8 +5,8 @@
 #include <thrust/device_vector.h>
 #include <random>
 
-using filter_key_t = uint32_t;
-constexpr size_t TABLE_SIZE = 100;
+
+constexpr size_t TABLE_SIZE = 10;
 
 
 //===----------------------------------------------------------------------===//
@@ -40,7 +40,7 @@ int main() {
     auto ht = new HashTablinho(4+4*4, 1000);
 
      //build table
-    table_build.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
+    /*table_build.chunk([&] (auto columns, auto num_columns, auto offset, auto num) {
         int32_t* tkeys = (int32_t*)columns[0];
         Vectorized::chunk(offset, num, [&] (auto offset, auto num) {
             auto keys = &tkeys[offset];
@@ -54,28 +54,37 @@ int main() {
     }, [&] () {
         // finished
         ht->FinalizeBuild();
-    });
+    });*/
 
     Table table_probe(1,TABLE_SIZE*10);
     populate_table(table_probe);
     Pipeline pipeline = { {ht}, table_probe};
-    manager.execute_query(pipeline);
+    //manager.execute_query(pipeline);
 
-#ifdef HAVE_CUDA
     // Build 128 bytes Blocked Bloom Filter on CPU
     {
-        size_t m = 256*8*1024*1024;
+        size_t m = 64*8*1024*1024;
         FilterWrapper filter(m);
+        uint32_t *table_keys = (uint32_t *)table_probe.columns[0];
 
         for (std::size_t i = 0; i < table_build.size(); ++i) {
-            const auto key = table_build.columns[0] + i;
-            filter.insert_with_hash(&filter_data[0], key);
+            const auto key = (uint32_t)*(table_keys + i);
+            std::cout << "Insert key " << key << " position " << i << '\n';
+            filter.insert(key);
         }
+        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.filter_data_size);
+        for (std::size_t i = 0; i < table_build.size(); ++i) {
+            const auto key = (uint32_t)*(table_keys + i);
+            auto match = filter.contains(key);
+            if(!match)
+                std::cout << "no match key " << key << " position "<< i << '\n';
 
+        }
+        std::cout << std::endl;
         //execute probe
-        manager.execute_query<filter_t, word_t, cuda_probe_t>(Pipeline { {ht}, table_probe}, filter);
+        manager.execute_query(Pipeline { {ht}, table_probe}, filter, cf);
     }
-#endif
+
     return 0;
 }
 //===----------------------------------------------------------------------===//
