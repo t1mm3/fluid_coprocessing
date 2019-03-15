@@ -35,7 +35,7 @@ int main() {
 
     TaskManager manager;
 
-    Table table_build(1,TABLE_SIZE);
+    Table table_build(1,100);
     populate_table(table_build);
 
     auto ht = new HashTablinho(4+4*4, TABLE_SIZE);
@@ -58,7 +58,7 @@ int main() {
         ht->FinalizeBuild();
     });
 
-    Table table_probe(1,TABLE_SIZE*10);
+    Table table_probe(1,200000000);
     populate_table(table_probe);
     Pipeline pipeline = { {ht}, table_probe};
     //manager.execute_query(pipeline);
@@ -71,7 +71,7 @@ int main() {
 
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
-            std::cout << "Insert key " << key << " position " << i << '\n';
+            //std::cout << "Insert key " << key << " position " << i << '\n';
             filter.insert(key);
         }
 

@@ -12,7 +12,7 @@
 
 #define bucket_t uint32_t
 
-#define kVecSize 1024
+#define kVecSize 5
 
 struct Vectorized {
 	template <typename T> static void map(int *sel, int num, T &&fun) {
@@ -98,8 +98,7 @@ struct Vectorized {
 	}
 
 	static void NO_INLINE glob_sum(uint64_t *CPU_R out, int32_t *CPU_R a, int *CPU_R sel, int num) {
-
-		int64_t p = 0;
+		uint64_t p = 0;
 		map(sel, num, [&](auto i) { p += a[i]; });
 		*out = *out + p;
 	}

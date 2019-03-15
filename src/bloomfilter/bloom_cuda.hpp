@@ -48,9 +48,6 @@ public:
 
 	FilterWrapper(size_t bloom_size = DEFAULT_BLOOM_SIZE) : bloom_filter(bloom_size) {
 		// set the device to be used for CUDA execution
-		/*cudaFree(0);
-		cudaDeviceReset();
-		cudaSetDevice(0);*/
 
 		// Allocates Pinned memory on the host
 		filter_data_size = (bloom_filter.word_cnt() + 1024) * sizeof(word_t);

@@ -11,8 +11,8 @@
 #include <thread>
 #include <vector>
 
-constexpr size_t GPU_MORSEL_SIZE = 100 * 1024 * 1024;
-constexpr size_t CPU_MORSEL_SIZE = 10 * 1024;
+constexpr size_t GPU_MORSEL_SIZE = 2*1024;
+constexpr size_t CPU_MORSEL_SIZE = 16 * 1024;
 constexpr size_t NUMBER_OF_STREAMS = 4;
 
 #ifdef HAVE_CUDA
@@ -61,6 +61,9 @@ struct WorkerThread {
 	uint64_t ksum = 0;
 	int32_t payload[kVecSize * 16];
 
+	int64_t tuples = 0;
+	int64_t tuples_morsel = 0;
+
 	Pipeline &pipeline;
 	FilterWrapper &filter;
 	FilterWrapper::cuda_filter_t &cuda_filter;
@@ -82,14 +85,19 @@ struct WorkerThread {
 		do_cpu_join(table, nullptr, sel, num, offset);
 	}
 
-	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t num, int64_t offset) {
+	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset) {
 
 		if (sel) {
-			assert(num <= kVecSize);
+			assert(mnum <= kVecSize);
 		}
 
-		Vectorized::chunk(offset, num, [&](auto offset, auto num) {
-			int32_t *tkeys = (int32_t *)table.columns[0];
+		tuples_morsel += mnum;
+
+		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
+
+		Vectorized::chunk(moffset, mnum, [&](auto offset, auto num) {
+			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
+			int32_t *tkeys = (int32_t*)table.columns[0];
 			auto keys = &tkeys[offset];
 
 			if (bf_results) {
@@ -107,8 +115,10 @@ struct WorkerThread {
 
 			for (auto ht : pipeline.hts) {
 				ht->Probe(ctx, matches, keys, hashs, sel, num);
+				//std::cout << "num " << num << std::endl;
 				num = Vectorized::select_match(sel1, matches, sel, num);
 				sel = &sel1[0];
+				//std::cout << "num2 " << num << std::endl;
 
 				// TODO: gather some payload columns
 				/*for (int i = 1; i < 4; i++) {
@@ -116,9 +126,14 @@ struct WorkerThread {
 				        ctx.tmp_buckets, i, sel, num);
 				}*/
 			}
-
+			//Vectorized::map(sel, num, [&](auto i) {
+			//	std::cout << "key " << keys[i] << " i " << i << std::endl;
+			//});
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
+			//std::cout << " thread "<< std::this_thread::get_id() << " KSum inside " << ksum << std::endl;
+
+			tuples += num;
 		});
 	}
 };
@@ -131,14 +146,15 @@ class TaskManager {
 public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
-		std::vector<WorkerThread> workers;
-		auto num_threads = 2 * std::thread::hardware_concurrency();
+		std::vector<WorkerThread*> workers;
+		auto num_threads = 2; //2 * std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(WorkerThread(i == 0 ? 0 : -1, pipeline, filter, cf));
+			workers.push_back(new WorkerThread(i == 0 ? 0 : -1, pipeline, filter, cf));
 		}
 		for (auto &worker : workers) {
-			worker.thread.join();
+			worker->thread.join();
+			delete worker;
 		}
 
 		std::cout << "KSum " << pipeline.ksum << std::endl;
@@ -152,7 +168,8 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe> inflight_probes;
 
-	if (device > 0) {
+	if (device >= 0) {
+		printf("dev %d\n", device);
 		cudaSetDevice(device);
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
@@ -175,6 +192,7 @@ void WorkerThread::execute_pipeline() {
 				if (inflight_probe.has_done_probing) {
 					uint32_t* results = inflight_probe.probe->get_results();
 					assert(results != nullptr);
+					printf("GPU\n");
 					do_cpu_join(table, results, nullptr, inflight_probe.num, inflight_probe.offset);
 				}
 
@@ -200,9 +218,14 @@ void WorkerThread::execute_pipeline() {
 	for (auto &probe : inflight_probes) {
 		probe.wait();
 		uint32_t* results = probe.probe->get_results();
+		printf("GPU\n");
 		do_cpu_join(table, results, nullptr, probe.num, probe.offset);
+
 	}
 #endif
 
+	//std::cout << " thread "<< std::this_thread::get_id() << " tuples " << tuples << std::endl;
+//std::cout << " thread "<< std::this_thread::get_id() << " morseltuples " << tuples_morsel << std::endl;
+//std::cout << " thread "<< std::this_thread::get_id() << " ksum " << ksum << std::endl;
 	__sync_fetch_and_add(&pipeline.ksum, ksum);
 }

@@ -8,6 +8,7 @@
 #include <cassert>
 #include <stdint.h>
 #include <vector>
+#include <iostream>
 
 struct Table {
 private:
@@ -51,7 +52,7 @@ public:
 	}
 
 	bool get_range(int64_t &onum, int64_t &ostart, int64_t num) {
-		if (start > capacity) {
+		if (start >= capacity) {
 			return false;
 		}
 
@@ -64,6 +65,7 @@ public:
 		assert(todo > 0);
 
 		onum = std::min(todo, num);
+		//std::cout << " get range " << onum << " " << ostart << std::endl;
 		return onum > 0;
 	}
 
