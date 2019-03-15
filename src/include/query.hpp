@@ -13,7 +13,7 @@ private:
 	uint32_t hashs[kVecSize];
 	bool matches[kVecSize];
 	int sel2[kVecSize];
-	int64_t ksum = 0;
+	uint64_t ksum = 0;
 
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 

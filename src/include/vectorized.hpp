@@ -97,7 +97,7 @@ struct Vectorized {
 		map(sel, num, [&](auto i) { out[i] = hash32((uint32_t)(a[i])); });
 	}
 
-	static void NO_INLINE glob_sum(int64_t *CPU_R out, int32_t *CPU_R a, int *CPU_R sel, int num) {
+	static void NO_INLINE glob_sum(uint64_t *CPU_R out, int32_t *CPU_R a, int *CPU_R sel, int num) {
 
 		int64_t p = 0;
 		map(sel, num, [&](auto i) { p += a[i]; });
