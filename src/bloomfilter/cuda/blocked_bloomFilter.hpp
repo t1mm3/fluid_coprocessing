@@ -283,6 +283,9 @@ template <typename filter_t> struct cuda_filter {
 		/// the CUDA stream to use
 		const cudaStream_t &cuda_stream;
 
+	  	/// CUDA device
+	  	u32 device_no_;
+
 		/// CUDA events used for synchronization
 		cudaEvent_t start_event;
 		cudaEvent_t stop_event;
@@ -300,16 +303,17 @@ template <typename filter_t> struct cuda_filter {
 		$u32 *host_bitmap;
 
 		/// c'tor
-		probe(cuda_filter &cuda_filter_instance, u64 batch_size, const cudaStream_t &cuda_stream)
-		    : cuda_filter_instance(cuda_filter_instance), batch_size(batch_size), cuda_stream(cuda_stream) {
+		probe(cuda_filter &cuda_filter_instance, u64 batch_size, const cudaStream_t &cuda_stream, u32 cuda_device_no)
+		    : cuda_filter_instance(cuda_filter_instance), batch_size(batch_size), cuda_stream(cuda_stream), device_no_(cuda_device_no) {
 		    assert(batch_size > 0);
-
+			cudaSetDevice(device_no_);
 			// Allocate device memory for the keys and for the result bitmap
+			std::cout << "allocating: " << (batch_size * sizeof(key_t)) << " bytes" << std::endl;
 			cudaMalloc((void **)&device_in_keys, batch_size * sizeof(key_t));
 			cuda_check_error();
 			cudaMalloc((void **)&device_bitmap, batch_size / 8);
 			cuda_check_error();
-			cudaMallocHost((void **)&host_bitmap, batch_size / 8);
+			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
 			cuda_check_error();
 
 			/// create events
@@ -328,6 +332,7 @@ template <typename filter_t> struct cuda_filter {
 
 		/// asynchronously batch-probe the filter
 		void contains(const key_t *keys, u32 key_cnt) {
+			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			cudaEventRecord(start_event, 0);
 			cuda_check_error();

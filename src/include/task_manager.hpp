@@ -22,9 +22,9 @@ struct InflightProbe {
 	int64_t offset{1};
 	bool has_done_probing = false;
 	cudaStream_t stream;
-	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf) {
+	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device) {
 		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
-		typename FilterWrapper::cuda_probe_t probe_(cf, offset, stream);
+		typename FilterWrapper::cuda_probe_t probe_(cf, offset, stream, device);
 		probe = &probe_;
 	}
 	bool is_gpu_available() {
@@ -173,7 +173,7 @@ void WorkerThread::execute_pipeline() {
 		cudaSetDevice(device);
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
-			inflight_probes.emplace_back(InflightProbe(filter, cuda_filter));
+			inflight_probes.emplace_back(InflightProbe(filter, cuda_filter, device));
 		}
 	}
 #endif
