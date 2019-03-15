@@ -47,10 +47,11 @@ public:
 	using key_t = word_t;
 
 	FilterWrapper(size_t bloom_size = DEFAULT_BLOOM_SIZE) : bloom_filter(bloom_size) {
-		int cuda_device = 0;
-
 		// set the device to be used for CUDA execution
-		cudaSetDevice(cuda_device);
+		/*cudaFree(0);
+		cudaDeviceReset();
+		cudaSetDevice(0);*/
+
 		// Allocates Pinned memory on the host
 		filter_data_size = (bloom_filter.word_cnt() + 1024) * sizeof(word_t);
 		cudaError result_code = cudaHostAlloc((void **)&filter_data, filter_data_size, cudaHostAllocDefault);
@@ -62,10 +63,6 @@ public:
 		cudaError result_code = cudaFreeHost(filter_data);
 		if (result_code != cudaSuccess)
 			throw std::bad_alloc();
-	}
-
-	cuda_probe_t get_probe_instance(cuda_filter_t cuda_filter, size_t batch_size, cudaStream_t &stream) {
-		return cuda_probe_t(cuda_filter, batch_size, stream);
 	}
 
 	void insert_with_hash(const key_t key) noexcept {

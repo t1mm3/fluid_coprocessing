@@ -15,25 +15,24 @@ constexpr size_t NUMBER_OF_STREAMS = 4;
 #ifdef HAVE_CUDA
 struct InflightProbe {
 	FilterWrapper::cuda_probe_t *probe;
-	int64_t num;
-	int64_t offset;
+	int64_t num{1};
+	int64_t offset{1};
 	bool has_done_probing = false;
 	cudaStream_t stream;
-	InflightProbe(const FilterWrapper &filter, const FilterWrapper::cuda_filter_t &cf) {
+	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf) {
 		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
-		probe = new FilterWrapper::cuda_probe_t(cf, offset, stream);
+		typename FilterWrapper::cuda_probe_t probe_(cf, offset, stream);
+		probe = &probe_;
 	}
 	bool is_gpu_available() {
-		return true;
-		// probe->is_done();
+		return probe->is_done();
 	}
-	bool wait() {
-		return true;
-		// probe->is_done();
+	void wait() {
+		return probe->wait();
 	}
 	~InflightProbe() {
 		cudaStreamDestroy(stream);
-		delete probe;
+		probe = nullptr;	
 	}
 };
 #endif
@@ -58,13 +57,13 @@ struct WorkerThread {
 	int32_t payload[kVecSize * 16];
 
 	const Pipeline &pipeline;
-	const FilterWrapper &filter;
-	const FilterWrapper::cuda_filter_t &cuda_filter;
+	FilterWrapper &filter;
+	FilterWrapper::cuda_filter_t &cuda_filter;
 
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 
-	WorkerThread(int gpu_device, const Pipeline &pipeline, const FilterWrapper &filter,
-	             const FilterWrapper::cuda_filter_t &cf)
+	WorkerThread(int gpu_device, const Pipeline &pipeline, FilterWrapper &filter,
+	              FilterWrapper::cuda_filter_t &cf)
 	    : pipeline(pipeline), device(gpu_device), thread(ExecuteWorkerThread, this), filter(filter), cuda_filter(cf) {
 	}
 
@@ -130,10 +129,11 @@ public:
 	void execute_query(const Pipeline &pipeline) {
 	}
 
-	void execute_query(const Pipeline &pipeline, const FilterWrapper &filter, const FilterWrapper::cuda_filter_t &cf) {
+	void execute_query(const Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread> workers;
-
-		for (int i = 0; i != std::thread::hardware_concurrency(); ++i) {
+		auto num_threads = std::thread::hardware_concurrency();
+		assert(num_threads > 0);
+		for (int i = 0; i != num_threads; ++i) {
 			workers.emplace_back(WorkerThread(true, pipeline, filter, cf));
 		}
 		for (auto &worker : workers) {
@@ -141,21 +141,6 @@ public:
 		}
 	}
 };
-
-/*void TaskManager::execute_query(const Pipeline& pipeline) {
-    std::vector<WorkerThread> workers;
-
-    auto hardware_threads = std::thread::hardware_concurrency();
-    assert(hardware_threads > 0);
-
-    for(int i = 0; i != hardware_threads; ++i) {
-        workers.emplace_back(WorkerThread(false, pipeline));
-    }
-    for(auto &worker : workers) {
-        worker.thread.join();
-    }
-
-}*/
 
 void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
@@ -165,7 +150,6 @@ void WorkerThread::execute_pipeline() {
 	std::vector<InflightProbe> inflight_probes;
 
 	if (device > 0) {
-		// instantiate CUDA Filter
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
 			inflight_probes.emplace_back(InflightProbe(filter, cuda_filter));
@@ -182,12 +166,13 @@ void WorkerThread::execute_pipeline() {
 		for (auto &inflight_probe : inflight_probes) {
 			if (inflight_probe.is_gpu_available()) {
 				// get the keys to probe
-				uint32_t *tkeys = (uint32_t *)table.columns[0];
-				uint32_t *results = 0;
-				// TODO results
-				// inflight_probe.probe->result();
+				uint32_t* tkeys = (uint32_t *)table.columns[0];
+				uint32_t* results = inflight_probe.probe->get_results();
+
 				if (inflight_probe.has_done_probing)
 					do_cpu_join(table, results, nullptr, inflight_probe.num, inflight_probe.offset);
+
+				std::cout << "num" << inflight_probe.num << std::endl;
 				finished_probes++;
 				morsel_size = GPU_MORSEL_SIZE;
 				auto success = table.get_range(num, offset, morsel_size);
@@ -209,8 +194,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	for (auto &probe : inflight_probes) {
 		probe.wait();
-		uint32_t *results = 0;
-		// probe.probe->result();
+		uint32_t* results = probe.probe->get_results();
 		do_cpu_join(table, results, nullptr, probe.num, probe.offset);
 	}
 #endif

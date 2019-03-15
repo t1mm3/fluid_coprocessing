@@ -72,7 +72,9 @@ int main() {
             std::cout << "Insert key " << key << " position " << i << '\n';
             filter.insert(key);
         }
-        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.filter_data_size);
+
+        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
+        
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
             auto match = filter.contains(key);
