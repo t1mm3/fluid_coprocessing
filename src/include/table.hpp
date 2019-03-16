@@ -7,6 +7,7 @@
 #include <atomic>
 #include <cassert>
 #include <stdint.h>
+#include <cstring>
 #include <vector>
 #include <iostream>
 

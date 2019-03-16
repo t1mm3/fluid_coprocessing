@@ -11,7 +11,7 @@
 #include <thread>
 #include <vector>
 
-constexpr size_t GPU_MORSEL_SIZE = 2*1024;
+constexpr size_t GPU_MORSEL_SIZE = 2*1024*1024;
 constexpr size_t CPU_MORSEL_SIZE = 16 * 1024;
 constexpr size_t NUMBER_OF_STREAMS = 4;
 
@@ -22,10 +22,10 @@ struct InflightProbe {
 	int64_t offset{1};
 	bool has_done_probing = false;
 	cudaStream_t stream;
-	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device) {
-		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
-		typename FilterWrapper::cuda_probe_t probe_(cf, offset, stream, device);
-		probe = &probe_;
+	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
+			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
+		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking  & cudaEventDisableTiming);
+		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device);
 	}
 	bool is_gpu_available() {
 		return probe->is_done();
@@ -90,7 +90,7 @@ struct WorkerThread {
 		if (sel) {
 			assert(mnum <= kVecSize);
 		}
-
+		std::cout << " doing join" << std::endl;
 		tuples_morsel += mnum;
 
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
@@ -150,7 +150,7 @@ public:
 		auto num_threads = 2; //2 * std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(i == 0 ? 0 : -1, pipeline, filter, cf));
+			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
 		}
 		for (auto &worker : workers) {
 			worker->thread.join();
@@ -166,14 +166,16 @@ void WorkerThread::execute_pipeline() {
 	auto &table = pipeline.table;
 
 #ifdef HAVE_CUDA
-	std::vector<InflightProbe> inflight_probes;
+	std::vector<InflightProbe*> inflight_probes;
 
 	if (device >= 0) {
-		printf("dev %d\n", device);
 		cudaSetDevice(device);
+		int64_t offset = 0;
+		int64_t tuples = GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
-			inflight_probes.emplace_back(InflightProbe(filter, cuda_filter, device));
+			inflight_probes.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
+			offset+= GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
 		}
 	}
 #endif
@@ -185,15 +187,15 @@ void WorkerThread::execute_pipeline() {
 
 #ifdef HAVE_CUDA
 		for (auto &inflight_probe : inflight_probes) {
-			if (inflight_probe.is_gpu_available()) {
+			if (inflight_probe->is_gpu_available()) {
 				// get the keys to probe
 				uint32_t* tkeys = (uint32_t *)table.columns[0];
 
-				if (inflight_probe.has_done_probing) {
-					uint32_t* results = inflight_probe.probe->get_results();
+				if (inflight_probe->has_done_probing) {
+					std::cout << "hasdone " << std::endl;
+					uint32_t* results = inflight_probe->probe->get_results();
 					assert(results != nullptr);
-					printf("GPU\n");
-					do_cpu_join(table, results, nullptr, inflight_probe.num, inflight_probe.offset);
+					do_cpu_join(table, results, nullptr, inflight_probe->num, inflight_probe->offset);
 				}
 
 				finished_probes++;
@@ -201,8 +203,9 @@ void WorkerThread::execute_pipeline() {
 				auto success = table.get_range(num, offset, morsel_size);
 				if (!success)
 					break;
-				inflight_probe.probe->contains(&tkeys[offset], GPU_MORSEL_SIZE);
-				inflight_probe.has_done_probing = true;
+				std::cout << "probing " << std::endl;
+				inflight_probe->probe->contains(&tkeys[offset], GPU_MORSEL_SIZE);
+				inflight_probe->has_done_probing = true;
 			}
 		}
 #endif
@@ -216,10 +219,10 @@ void WorkerThread::execute_pipeline() {
 	}
 #ifdef HAVE_CUDA
 	for (auto &probe : inflight_probes) {
-		probe.wait();
-		uint32_t* results = probe.probe->get_results();
-		printf("GPU\n");
-		do_cpu_join(table, results, nullptr, probe.num, probe.offset);
+		std::cout << "getting results " << std::endl;
+		probe->wait();
+		uint32_t* results = probe->probe->get_results();
+		do_cpu_join(table, results, nullptr, probe->num, probe->offset);
 
 	}
 #endif
