@@ -65,12 +65,17 @@ int main(int argc, char** argv) {
 
         }
         std::cout << std::endl;
-        //execute probe
-        auto start = std::chrono::system_clock::now();
-        manager.execute_query(pipeline, filter, cf);
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<double> elapsed_seconds = end-start;
-        std::cout << " Probe time:" << elapsed_seconds.count() << std::endl;
+
+        double total_seconds = 0.0;
+        for(auto i = 0; i != params.num_repetitions; ++i) {
+            //execute probe
+            auto start = std::chrono::system_clock::now();
+            manager.execute_query(pipeline, filter, cf);
+            auto end = std::chrono::system_clock::now();
+            total_seconds += std::chrono::duration<double>(end - start).count();
+        }
+        auto final_elapsed_time = total_seconds / params.num_repetitions;
+        std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
     }
 
     return 0;

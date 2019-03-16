@@ -20,7 +20,8 @@ enum {
 	probe_size = 64 * 1024,
 	gpu_morsel_size = 16 * 1024,
 	cpu_morsel_size = 16 * 1024,
-	selectivity = 1
+	selectivity = 1,
+	num_repetitions = 1
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults

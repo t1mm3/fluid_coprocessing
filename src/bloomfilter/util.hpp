@@ -306,6 +306,7 @@ struct params_t {
 	std::size_t gpu_morsel_size   {defaults::gpu_morsel_size};
 	std::size_t cpu_morsel_size   {defaults::cpu_morsel_size};
 	std::size_t selectivity       {defaults::selectivity};
+	std::size_t num_repetitions       {defaults::num_repetitions};
 };
 //===----------------------------------------------------------------------===//
 
@@ -319,6 +320,7 @@ void print_help(int argc, char** argv) {
     fprintf(stderr, "   --gpu_morsel_size=[default:%u]\n", defaults::gpu_morsel_size);
     fprintf(stderr, "   --cpu_morsel_size=[default:%u]\n", defaults::cpu_morsel_size);
     fprintf(stderr, "   --selectivity=[default:%u]\n",     defaults::selectivity);
+    fprintf(stderr, "   --repetitions=[default:%u]\n",     defaults::num_repetitions);
 }
 //===----------------------------------------------------------------------===//
 
@@ -352,6 +354,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.cpu_morsel_size = std::stoi(arg_value);
 		} else if (arg_name == "selectivity") {
 			params.selectivity = std::stoi(arg_value);
+		} else if (arg_name == "repetitions") {
+			params.num_repetitions = std::stoi(arg_value);
 		}
 	}
 	return params;
