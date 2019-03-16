@@ -204,14 +204,14 @@ void WorkerThread::execute_pipeline() {
 				}
 
 				finished_probes++;
-				morsel_size = GPU_MORSEL_SIZE;
+				morsel_size = GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
 				auto success = table.get_range(num, offset, morsel_size);
 				if (!success) {
 					finished_probes = 0;
 					break;
 				}
 				std::cout << "probing " << std::endl;
-				inflight_probe->probe->contains(&tkeys[offset], GPU_MORSEL_SIZE);
+				inflight_probe->probe->contains(&tkeys[offset], num);
 				inflight_probe->has_done_probing = true;
 			}
 		}
