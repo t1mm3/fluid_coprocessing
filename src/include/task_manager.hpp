@@ -106,11 +106,22 @@ struct WorkerThread {
 			int32_t *tkeys = (int32_t*)table.columns[0];
 			auto keys = &tkeys[offset];
 
+			size_t old_num = num;
+
 			if (bf_results) {
+#if 0				
 				int n = num + (8 - 1);
 				n /= 8;
 				n *= 8;
-				// num = Vectorized::select_match_bit(sel1, bf_results + offset/8, n);
+#else
+				const auto n = num;
+#endif
+				num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
+
+				if (!num) {
+					return; // nothing to do with this stride
+				}
+
 				sel = &sel2[0];
 			} else {
 				sel = nullptr;
@@ -124,6 +135,11 @@ struct WorkerThread {
 				//std::cout << "num " << num << std::endl;
 				num = Vectorized::select_match(sel1, matches, sel, num);
 				sel = &sel1[0];
+
+				if (!num) {
+					return; // nothing to do with this stride
+				}
+
 				//std::cout << "num2 " << num << std::endl;
 
 				// TODO: gather some payload columns
