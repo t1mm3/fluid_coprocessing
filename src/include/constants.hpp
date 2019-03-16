@@ -1,6 +1,11 @@
 #pragma once
 #include <climits>
 
+constexpr const size_t GPU_MORSEL_SIZE   = 2*1024;
+constexpr const size_t CPU_MORSEL_SIZE   = 16 * 1024;
+constexpr const size_t NUMBER_OF_STREAMS = 4;
+constexpr const size_t TABLE_SIZE        = 100000;
+
 namespace defaults {
 
 enum {
@@ -16,6 +21,5 @@ enum {
 	filter_size = 256ull * 1024 * 1024 * 8,
 	probe_size = 10000
 };
-constexpr const char kernel_variant[] = "contains_naive";
-
+constexpr const char   kernel_variant[]  = "contains_naive";
 }; // namespace defaults

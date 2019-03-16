@@ -6,7 +6,8 @@
 #include <random>
 
 
-constexpr size_t TABLE_SIZE = 100000;
+
+
 
 
 //===----------------------------------------------------------------------===//
@@ -35,7 +36,7 @@ int main() {
 
     TaskManager manager;
 
-    Table table_build(1,1023);
+    Table table_build(1,1024);
     populate_table(table_build);
 
     auto ht = new HashTablinho(4+4*4, TABLE_SIZE);
@@ -58,7 +59,7 @@ int main() {
         ht->FinalizeBuild();
     });
 
-    Table table_probe(1,16 * 1024);
+    Table table_probe(1,16*1024);
     populate_table(table_probe);
     Pipeline pipeline = { {ht}, table_probe};
     //manager.execute_query(pipeline);
@@ -86,7 +87,11 @@ int main() {
         }
         std::cout << std::endl;
         //execute probe
+        auto start = std::chrono::system_clock::now();
         manager.execute_query(pipeline, filter, cf);
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end-start;
+        std::cout << " Probe time:" << elapsed_seconds.count() << std::endl;
     }
 
     return 0;

@@ -3,6 +3,7 @@
 #include "hash_table.hpp"
 #include "query.hpp"
 #include "vectorized.hpp"
+#include "constants.hpp"
 #include <unistd.h>
 
 
@@ -10,10 +11,6 @@
 #include <atomic>
 #include <thread>
 #include <vector>
-
-constexpr size_t GPU_MORSEL_SIZE = 4*1024;
-constexpr size_t CPU_MORSEL_SIZE = 16 * 1024;
-constexpr size_t NUMBER_OF_STREAMS = 4;
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
@@ -96,7 +93,6 @@ struct WorkerThread {
 		if (sel) {
 			assert(mnum <= kVecSize);
 		}
-		std::cout << " doing join" << std::endl;
 		tuples_morsel += mnum;
 
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
@@ -169,7 +165,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = 2 * std::thread::hardware_concurrency();
+		auto num_threads = std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -213,7 +209,6 @@ void WorkerThread::execute_pipeline() {
 				uint32_t* tkeys = (uint32_t *)table.columns[0];
 
 				if (inflight_probe->has_done_probing) {
-					std::cout << "hasdone " << std::endl;
 					uint32_t* results = inflight_probe->probe->get_results();
 					assert(results != nullptr);
 					do_cpu_join(table, results, nullptr, inflight_probe->num, inflight_probe->offset);
@@ -226,7 +221,6 @@ void WorkerThread::execute_pipeline() {
 					finished_probes = 0;
 					break;
 				}
-				std::cout << "probing " << std::endl;
 				inflight_probe->probe->contains(&tkeys[offset], num);
 				inflight_probe->has_done_probing = true;
 			}
@@ -242,7 +236,6 @@ void WorkerThread::execute_pipeline() {
 	}
 #ifdef HAVE_CUDA
 	for (auto &probe : inflight_probes) {
-		std::cout << "getting results " << std::endl;
 		probe->wait();
 		uint32_t* results = probe->probe->get_results();
 		do_cpu_join(table, results, nullptr, probe->num, probe->offset);
