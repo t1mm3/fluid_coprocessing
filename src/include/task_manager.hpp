@@ -150,7 +150,7 @@ public:
 		auto num_threads = 2; //2 * std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(i == 0 ? 0 : -1, pipeline, filter, cf));
+			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
 		}
 		for (auto &worker : workers) {
 			worker->thread.join();
