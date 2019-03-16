@@ -52,7 +52,7 @@ struct WorkerThread;
 static void ExecuteWorkerThread(WorkerThread *ptr);
 
 struct WorkerThread {
-	std::thread thread;
+	std::thread* thread;
 	int device = -1;
 	uint32_t hashs[kVecSize];
 	bool matches[kVecSize];
@@ -72,7 +72,13 @@ struct WorkerThread {
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
-	    : pipeline(pipeline), device(gpu_device), thread(ExecuteWorkerThread, this), filter(filter), cuda_filter(cf) {
+	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf) {
+	    thread = new std::thread(ExecuteWorkerThread, this);
+	}
+
+	~WorkerThread() {
+		thread->join();
+		delete thread;
 	}
 
 	NO_INLINE void execute_pipeline();
@@ -153,7 +159,6 @@ public:
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
 		}
 		for (auto &worker : workers) {
-			worker->thread.join();
 			delete worker;
 		}
 
