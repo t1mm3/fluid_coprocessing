@@ -258,15 +258,33 @@ template <typename filter_t> struct cuda_filter {
 		cuda_check_error();
 	}
 
+	void contains_baseline(u32 *__restrict__ d_keys, u32 key_cnt, $u32 *__restrict__ device_bitmap) {
+	
+		i32 block_size = 32;
+		// Probe
+		i32 elements_per_thread = warp_size;
+		i32 elements_per_block = block_size * elements_per_thread;
+		i32 block_count = (key_cnt + elements_per_block - 1) / elements_per_block;
+
+		cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
+		// Real Experiment
+		contains_naive_kernel<<<block_count, block_size>>>(filter, device_word_array, d_keys, key_cnt,
+			                                                device_bitmap);
+		cudaDeviceSynchronize();
+	}
+
 	struct probe {
 		/// reference to the CUDA filter instance
-		const cuda_filter &cuda_filter_instance;
+		cuda_filter &cuda_filter_instance;
 
 		/// the key type
 		using key_t = typename filter_t::key_t;
 
 		/// the CUDA stream to use
 		const cudaStream_t &cuda_stream;
+
+	  	/// CUDA device
+	  	u32 device_no_;
 
 		/// CUDA events used for synchronization
 		cudaEvent_t start_event;
@@ -276,33 +294,41 @@ template <typename filter_t> struct cuda_filter {
 		u64 batch_size;
 
 		/// pointer to the keys on the device
-		key_t *device_keys;
+		key_t *device_in_keys;
 
 		/// pointer to the result bitmap on the device
 		$u32 *device_bitmap;
 
 		/// pointer to the result bitmap on the host
-		$u64 *host_bitmap;
+		$u32 *host_bitmap;
 
 		/// c'tor
-		probe(const cuda_filter &cuda_filter_instance, u64 batch_size, const cudaStream_t &cuda_stream)
-		    : cuda_filter_instance(cuda_filter_instance), batch_size(batch_size), cuda_stream(cuda_stream) {
-			/// allocate device memory for the keys and for the result bitmap
-			cudaMalloc(&device_keys, batch_size * sizeof(key_t));
+		probe(cuda_filter &cuda_filter_instance, u64 batch_size, const cudaStream_t &cuda_stream, u32 cuda_device_no)
+		    : cuda_filter_instance(cuda_filter_instance), batch_size(batch_size), cuda_stream(cuda_stream), device_no_(cuda_device_no) {
+		    assert(batch_size > 0);
+
+			cudaSetDevice(device_no_);
 			cuda_check_error();
-			cudaMalloc(&device_bitmap, batch_size / 8);
+			// Allocate device memory for the keys and for the result bitmap
+			std::cout << "allocating keys: " << (batch_size * sizeof(key_t)) << " bytes" << std::endl;
+			cudaMalloc((void **)&device_in_keys, batch_size * sizeof(key_t));
 			cuda_check_error();
-			cudaMallocHost(&host_bitmap, batch_size / 8);
+			std::cout << "allocating device: " << (batch_size / 8) << " bytes" << std::endl;
+			cudaMalloc((void **)&device_bitmap, batch_size / 8);
+			cuda_check_error();
+			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
 			cuda_check_error();
 
 			/// create events
 			cudaEventCreate(&start_event);
 			cudaEventCreate(&stop_event);
+			cuda_check_error();
 		}
 
 		/// d'tor
 		~probe() {
-			cudaFree(device_keys);
+			std::cout << " probe dst" << std::endl;
+			cudaFree(device_in_keys);
 			cudaFree(device_bitmap);
 			cudaFree(host_bitmap);
 			cudaEventDestroy(start_event);
@@ -311,12 +337,15 @@ template <typename filter_t> struct cuda_filter {
 
 		/// asynchronously batch-probe the filter
 		void contains(const key_t *keys, u32 key_cnt) {
+			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			cudaEventRecord(start_event, 0);
 			cuda_check_error();
-			cudaMemcpyAsync(device_keys, keys, batch_size * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
+			cudaMemcpyAsync(device_in_keys, keys, batch_size * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
 			cuda_check_error();
+			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0]);
 			// copy back the result bitmap to pre-allocated host memory
+			std::cout << "copying: " << (batch_size / 8 ) << " bytes" << std::endl;
 			cudaMemcpyAsync(host_bitmap, device_bitmap, batch_size / 8, cudaMemcpyDeviceToHost, cuda_stream);
 			cuda_check_error();
 			cudaEventRecord(stop_event, 0);
@@ -328,6 +357,14 @@ template <typename filter_t> struct cuda_filter {
 			cudaEventSynchronize(stop_event);
 			cuda_check_error();
 		}
+		// checks whether the gpu has finished
+		bool is_done() {
+    		return cudaEventQuery(stop_event) == cudaSuccess;
+  		}
+
+  		$u32* get_results() {
+    		return host_bitmap;
+  		}
 	};
 };
 //===----------------------------------------------------------------------===//

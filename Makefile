@@ -69,12 +69,12 @@ main:
 
 	@mkdir -p build
 	@mkdir -p build/release
-	@cd build/release && cmake -DCMAKE_BUILD_TYPE=Release ../.. && make main_cu
+	@cd build/release && cmake -DCMAKE_BUILD_TYPE=Release ../.. && make -j8 main_cu
 
 debug:
 	@mkdir -p build
 	@mkdir -p build/debug
-	@cd build/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../.. && make main_cu
+	@cd build/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../.. && make -j8 main_cu
 
 format:
 	python format.py
