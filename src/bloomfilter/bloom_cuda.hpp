@@ -51,7 +51,7 @@ public:
 
 		// Allocates Pinned memory on the host
 		filter_data_size = (bloom_filter.word_cnt() + 1024) * sizeof(word_t);
-		cudaError result_code = cudaHostAlloc((void **)&filter_data, filter_data_size, cudaHostAllocDefault);
+		cudaError result_code = cudaHostAlloc((void **)&filter_data, filter_data_size, cudaHostAllocPortable);
 		memset(filter_data, 0, filter_data_size);
 		if (result_code != cudaSuccess)
 			throw std::bad_alloc();
