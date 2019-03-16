@@ -14,6 +14,15 @@ constexpr size_t NUMBER_OF_STREAMS = 4;
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
+	enum Status {
+		FRESH, // No data yet, freshly created
+
+		FILTERING, // Filtering through the bloom filtaar
+		CPU_SHARE, // Filtering done, CPUs consuming results
+	};
+
+	Status status = Status::FRESH;
+
 	FilterWrapper::cuda_probe_t *probe;
 	int64_t num;
 	int64_t offset;
@@ -38,9 +47,86 @@ struct InflightProbe {
 };
 #endif
 
+
+struct GlobalQueue {
+	// cannot be resized @ runtime without mmap() "sorcery"
+	// In any case, we assume that we are no going to have many
+	// of these InflightProbe stored (4 streams per GPU).
+	// Hence the size is in it's 10s rather than 100s.
+	std::vector<InflightProbe*> probes;
+
+	GlobalQueue(int64_t cap) {
+		probes.reserve(cap);
+		for (int64_t i=0; i<cap; i++) {
+			probes.push_back(nullptr);
+		}
+	}
+
+	void add(InflightProbe* mp) {
+		bool found = false;
+		auto num = probes.size();
+
+		do {
+			for (int64_t i=0; i<num; i++) {
+				auto ptr = &probes[i];
+				if (*ptr == nullptr) {
+					bool success = __sync_bool_compare_and_swap(ptr, nullptr, mp);
+					if (success) {
+						found = true;
+						break;
+					}
+				}
+			}
+		} while (!found);
+
+		assert(found);
+	}
+
+	void remove(InflightProbe* mp) {
+		bool found = false;	
+		auto num = probes.size();
+
+		for (int64_t i=0; i<num; i++) {
+			auto ptr = &probes[i];
+			if (*ptr == mp) {
+				bool success = __sync_bool_compare_and_swap(ptr, mp, nullptr);
+				if (success) {
+					// we removed the element
+					found = true;
+					break;
+				} else {
+					// another thread removed the element
+					assert(false);
+				}
+			}
+		}
+
+		assert(found);
+	}
+
+	InflightProbe* get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) {
+		todo
+	}
+};
+
+
 struct Pipeline {
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
+
+	GlobalQueue done_probes(128);
+
+private:
+	std::atomic<int64_t> tuples_processed = 0;
+
+public:
+	bool is_done() const {
+		return tuples_processed >= table.size();
+	}
+
+	void processed_tuples(int64_t num) {
+		tuples_processed += num;
+	}
 };
 
 struct WorkerThread;
@@ -79,6 +165,7 @@ struct WorkerThread {
 	}
 
 	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t num, int64_t offset) {
+		const int64_t num_tuples = num;
 
 		assert(!sel == !!bf_results);
 
@@ -117,7 +204,11 @@ struct WorkerThread {
 
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
+
 		});
+
+		// mark tuples as procssed
+		pipeline.processed_tuples(num_tuples);
 	}
 };
 
@@ -161,6 +252,8 @@ void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
 	auto &table = pipeline.table;
 
+	uint64_t iteration = 0;
+
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe> inflight_probes;
 
@@ -173,12 +266,15 @@ void WorkerThread::execute_pipeline() {
 	}
 #endif
 
-	while (1) {
+	while (!pipeline.is_done()) {
 		int64_t num = 0;
 		int64_t offset = 0;
 		size_t finished_probes = 0;
 
+		iteration++;
+
 #ifdef HAVE_CUDA
+		// keep GPU(s) busy
 		for (auto &inflight_probe : inflight_probes) {
 			if (inflight_probe.is_gpu_available()) {
 				// get the keys to probe
@@ -186,32 +282,51 @@ void WorkerThread::execute_pipeline() {
 				uint32_t *results = 0;
 				// TODO results
 				// inflight_probe.probe->result();
-				if (inflight_probe.has_done_probing)
-					do_cpu_join(table, results, nullptr, inflight_probe.num, inflight_probe.offset);
+				if (inflight_probe.status == InflightProbe::Status::FILTERING) {
+					inflight_probe.status = InflightProbe::Status::CPU_SHARE;
+					pipeline.done_probes.add(inflight_probe);
+				}
+
 				finished_probes++;
 				morsel_size = GPU_MORSEL_SIZE;
 				auto success = table.get_range(num, offset, morsel_size);
 				if (!success)
 					break;
-				inflight_probe.probe->contains(&tkeys[offset], GPU_MORSEL_SIZE);
-				inflight_probe.has_done_probing = true;
+
+				// issue a new GPU BF probe
+				inflight_probe.probe->contains(&tkeys[offset], morsel_size);
+				inflight_probe.status = InflightProbe::Status::FILTERING;
 			}
 		}
 #endif
-		if (finished_probes == 0) {
-			morsel_size = CPU_MORSEL_SIZE;
-			auto success = table.get_range(num, offset, morsel_size);
-			if (!success)
-				break;
-			do_cpu_work(table, num, offset);
+
+		// do CPU work
+		bool success = true;
+		morsel_size = CPU_MORSEL_SIZE;
+
+		{ // preferably do CPU join on GPU filtered data
+			InflightProbe* probe = pipeline.done_probes.get_range(num, offset, morsel_size);
+
+			if (probe) {
+				do_cpu_join();
+
+				if (last) {
+					// re-use or dealloc 
+					pipeline.done_probes.remove(probe);
+					probe->status = InflightProbe::Status::FRESH;
+					delete probe;
+				}
+				continue;
+			}
 		}
+
+		// full CPU join
+		success = table.get_range(num, offset, morsel_size);
+		if (!success) {
+			// busy waiting until the last tuple is processed
+			// give others a chance
+			std::this_thread::yield();
+		}
+		do_cpu_work(table, num, offset);
 	}
-#ifdef HAVE_CUDA
-	for (auto &probe : inflight_probes) {
-		probe.wait();
-		uint32_t *results = 0;
-		// probe.probe->result();
-		do_cpu_join(table, results, nullptr, probe.num, probe.offset);
-	}
-#endif
 }
