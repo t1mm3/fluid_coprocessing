@@ -4,7 +4,7 @@
 #include "query.hpp"
 #include "vectorized.hpp"
 #include <unistd.h>
-
+#include "microprofile.h"
 
 
 #include <atomic>
@@ -92,6 +92,7 @@ struct WorkerThread {
 	}
 
 	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset) {
+		MICROPROFILE_TIMELINE_ENTER_STATIC(MP_BLUE, "join");
 
 		if (sel) {
 			assert(mnum <= kVecSize);
@@ -157,11 +158,15 @@ struct WorkerThread {
 
 			tuples += num;
 		});
+
+		MICROPROFILE_TIMELINE_LEAVE_STATIC("join");
 	}
 };
 
 void ExecuteWorkerThread(WorkerThread *ptr) {
+	MicroProfileOnThreadCreate("Worker");
 	ptr->execute_pipeline();
+	MicroProfileOnThreadExit();
 }
 
 class TaskManager {
