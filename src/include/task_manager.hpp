@@ -1,13 +1,12 @@
 #pragma once
+
 #include "bloomfilter/bloom_cuda.hpp"
 #include "hash_table.hpp"
 #include "query.hpp"
 #include "vectorized.hpp"
 #include "constants.hpp"
+
 #include <unistd.h>
-
-
-
 #include <atomic>
 #include <thread>
 #include <vector>
