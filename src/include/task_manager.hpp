@@ -11,7 +11,7 @@
 #include <thread>
 #include <vector>
 
-constexpr size_t GPU_MORSEL_SIZE = 2*1024*1024;
+constexpr size_t GPU_MORSEL_SIZE = 4*1024;
 constexpr size_t CPU_MORSEL_SIZE = 16 * 1024;
 constexpr size_t NUMBER_OF_STREAMS = 4;
 
@@ -169,7 +169,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = 2; //2 * std::thread::hardware_concurrency();
+		auto num_threads = 2 * std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -189,14 +189,14 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe*> inflight_probes;
 
-	if (device >= 0) {
+	if (device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
-		int64_t tuples = GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
+		int64_t tuples = GPU_MORSEL_SIZE;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
 			inflight_probes.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
-			offset+= GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
+			offset+= GPU_MORSEL_SIZE;
 		}
 	}
 #endif
@@ -220,7 +220,7 @@ void WorkerThread::execute_pipeline() {
 				}
 
 				finished_probes++;
-				morsel_size = GPU_MORSEL_SIZE / NUMBER_OF_STREAMS;
+				morsel_size = GPU_MORSEL_SIZE;
 				auto success = table.get_range(num, offset, morsel_size);
 				if (!success) {
 					finished_probes = 0;

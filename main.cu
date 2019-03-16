@@ -35,7 +35,7 @@ int main() {
 
     TaskManager manager;
 
-    Table table_build(1,1024);
+    Table table_build(1,1023);
     populate_table(table_build);
 
     auto ht = new HashTablinho(4+4*4, TABLE_SIZE);
@@ -58,7 +58,7 @@ int main() {
         ht->FinalizeBuild();
     });
 
-    Table table_probe(1,2*1024*1024);
+    Table table_probe(1,16 * 1024);
     populate_table(table_probe);
     Pipeline pipeline = { {ht}, table_probe};
     //manager.execute_query(pipeline);
