@@ -338,7 +338,10 @@ params_t parse_command_line(int argc, char **argv) {
 		auto p = split_once(arg, '=');
 		auto &arg_name = p.first;
 		auto &arg_value = p.second;
-		if (arg_name == "num_blocks") {
+		if(arg_value == "") {
+			print_help(argc, argv);
+			exit(EXIT_FAILURE);
+		} else if (arg_name == "num_blocks") {
 			params.num_blocks = std::stoi(arg_value);
 		} else if (arg_name == "threads-per-block") {
 			params.num_threads_per_block = std::stoi(arg_value);
@@ -356,6 +359,9 @@ params_t parse_command_line(int argc, char **argv) {
 			params.selectivity = std::stoi(arg_value);
 		} else if (arg_name == "repetitions") {
 			params.num_repetitions = std::stoi(arg_value);
+		} else {
+			print_help(argc, argv);
+			exit(EXIT_FAILURE);
 		}
 	}
 	return params;
