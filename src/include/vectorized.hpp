@@ -9,10 +9,9 @@
 #include <cassert>
 #include <stdint.h>
 #include <string>
+#include "constants.hpp"
 
 #define bucket_t uint32_t
-
-#define kVecSize 5
 
 struct Vectorized {
 	template <typename T> static void map(int *sel, int num, T &&fun) {

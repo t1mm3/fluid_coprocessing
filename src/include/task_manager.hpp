@@ -1,19 +1,15 @@
 #pragma once
+
 #include "bloomfilter/bloom_cuda.hpp"
 #include "hash_table.hpp"
 #include "query.hpp"
 #include "vectorized.hpp"
+#include "constants.hpp"
+
 #include <unistd.h>
-
-
-
 #include <atomic>
 #include <thread>
 #include <vector>
-
-constexpr size_t GPU_MORSEL_SIZE = 4*1024;
-constexpr size_t CPU_MORSEL_SIZE = 16 * 1024;
-constexpr size_t NUMBER_OF_STREAMS = 4;
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
@@ -107,7 +103,8 @@ struct GlobalQueue {
 	}
 
 	InflightProbe* get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) {
-		todo
+		// FIXME: todo
+		return nullptr;
 	}
 };
 
@@ -116,12 +113,17 @@ struct Pipeline {
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
 
-	GlobalQueue done_probes(128);
+	GlobalQueue done_probes;
 
 private:
-	std::atomic<int64_t> tuples_processed = 0;
+	std::atomic<int64_t> tuples_processed;
 
 public:
+	Pipeline(std::vector<HashTablinho *>& htables, Table& t)
+		: hts(htables), table(t), done_probes(128) {
+		tuples_processed = 0;
+	}
+
 	bool is_done() const {
 		return tuples_processed >= table.size();
 	}
@@ -182,8 +184,9 @@ struct WorkerThread {
 		if (sel) {
 			assert(mnum <= kVecSize);
 		}
-		std::cout << " doing join" << std::endl;
 		tuples_morsel += mnum;
+
+		size_t num_tuples = num;
 
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
 
@@ -258,7 +261,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = 2 * std::thread::hardware_concurrency();
+		auto num_threads = std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -319,6 +322,7 @@ void WorkerThread::execute_pipeline() {
 				if (!success) {
 					finished_probes = 0;
 					break;
+				}
 
 				// issue a new GPU BF probe
 				inflight_probe.probe->contains(&tkeys[offset], num);

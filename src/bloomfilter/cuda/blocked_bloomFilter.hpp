@@ -310,10 +310,8 @@ template <typename filter_t> struct cuda_filter {
 			cudaSetDevice(device_no_);
 			cuda_check_error();
 			// Allocate device memory for the keys and for the result bitmap
-			std::cout << "allocating keys: " << (batch_size * sizeof(key_t)) << " bytes" << std::endl;
 			cudaMalloc((void **)&device_in_keys, batch_size * sizeof(key_t));
 			cuda_check_error();
-			std::cout << "allocating device: " << (batch_size / 8) << " bytes" << std::endl;
 			cudaMalloc((void **)&device_bitmap, batch_size / 8);
 			cuda_check_error();
 			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
@@ -327,7 +325,6 @@ template <typename filter_t> struct cuda_filter {
 
 		/// d'tor
 		~probe() {
-			std::cout << " probe dst" << std::endl;
 			cudaFree(device_in_keys);
 			cudaFree(device_bitmap);
 			cudaFree(host_bitmap);
@@ -345,7 +342,6 @@ template <typename filter_t> struct cuda_filter {
 			cuda_check_error();
 			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0]);
 			// copy back the result bitmap to pre-allocated host memory
-			std::cout << "copying: " << (batch_size / 8 ) << " bytes" << std::endl;
 			cudaMemcpyAsync(host_bitmap, device_bitmap, batch_size / 8, cudaMemcpyDeviceToHost, cuda_stream);
 			cuda_check_error();
 			cudaEventRecord(stop_event, 0);

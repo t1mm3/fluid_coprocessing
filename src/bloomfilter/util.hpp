@@ -14,13 +14,12 @@
 
 //===----------------------------------------------------------------------===//
 using vector_t = std::vector<uint32_t>;
-// using numa_vector_t = std::vector<uint32_t,
-// dtl::mem::numa_allocator<uint32_t>>;
 
 // The (static) unrolling factor
 constexpr size_t UNROLL_FACTOR = 16;
 //===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 template <class Container> void set_uniform_distributed_values(Container &container) {
 	// thread_local allows unique seed for each thread
 	thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
@@ -33,6 +32,7 @@ template <class Container> void set_uniform_distributed_values(Container &contai
 	              sampler); // Initializes the container with random uniform
 	                        // distributed values
 }
+//===----------------------------------------------------------------------===//
 
 //===----------------------------------------------------------------------===//
 namespace internal {
@@ -78,7 +78,9 @@ static void gen_random_data(vector_t &data, const std::size_t element_cnt, const
 		}
 	}
 }
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 static void gen_random_data_64(std::vector<uint64_t> &data, const std::size_t element_cnt, const bool unique_elements,
                                const std::function<uint64_t()> &rnd) {
 	data.clear();
@@ -109,12 +111,16 @@ static void gen_random_data_64(std::vector<uint64_t> &data, const std::size_t el
 }
 
 } // namespace internal
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 enum rnd_engine_t {
 	RANDOM_DEVICE,
 	MERSENNE_TWISTER,
 };
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 static void gen_data(std::vector<uint32_t> &data, const std::size_t element_cnt, const rnd_engine_t rnd_engine,
                      const bool unique) {
 
@@ -137,7 +143,9 @@ static void gen_data(std::vector<uint32_t> &data, const std::size_t element_cnt,
 	}
 	}
 }
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 static void gen_data(std::vector<uint64_t> &data, const std::size_t element_cnt, const rnd_engine_t rnd_engine,
                      const bool unique) {
 
@@ -216,7 +224,9 @@ struct data_generator_32 {
 
 	virtual uint32_t next() = 0;
 };
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 struct data_generator_32_rnd : data_generator_32 {
 
 	std::random_device rnd_device;
@@ -237,7 +247,9 @@ struct data_generator_32_rnd : data_generator_32 {
 		}
 	}
 };
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 template <class Container> void set_random_values(Container &container) {
 	thread_local std::random_device rd;
 	thread_local std::mt19937 engine(rd());
@@ -246,7 +258,9 @@ template <class Container> void set_random_values(Container &container) {
 	auto sampler = [&]() { return distribution(engine); };
 	std::generate(std::begin(container), std::end(container), sampler);
 }
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 struct data_generator_32_mt : data_generator_32 {
 
 	std::random_device rnd_device;
@@ -274,34 +288,59 @@ std::pair<std::string, std::string> split_once(std::string delimited, char delim
 	auto pos = delimited.find_first_of(delimiter);
 	return {delimited.substr(0, pos), delimited.substr(pos + 1)};
 }
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
 struct params_t {
 
 	// Command-line-settable parameters
-	std::string kernel_variant{defaults::kernel_variant};
-	bool should_print_results{defaults::should_print_results};
-	int num_gpu_streams{defaults::num_gpu_streams};
-	cuda::grid_block_dimension_t num_threads_per_block{defaults::num_threads_per_block};
-	int num_blocks{defaults::num_blocks};
-	int num_query_execution_runs{defaults::num_query_execution_runs};
-	bool use_coprocessing{false};
-	std::size_t filter_size{defaults::filter_size};
-	std::size_t probe_size{defaults::probe_size};
+	std::string kernel_variant    {defaults::kernel_variant};
+	bool should_print_results     {defaults::should_print_results};
+	int num_gpu_streams           {defaults::num_gpu_streams};
+	size_t num_threads_per_block  {defaults::num_threads_per_block};
+	int num_blocks                {defaults::num_blocks};
+	int num_query_execution_runs  {defaults::num_query_execution_runs};
+	std::size_t filter_size       {defaults::filter_size};
+	std::size_t probe_size        {defaults::probe_size};
+	std::size_t build_size        {defaults::build_size};
+	std::size_t gpu_morsel_size   {defaults::gpu_morsel_size};
+	std::size_t cpu_morsel_size   {defaults::cpu_morsel_size};
+	std::size_t selectivity       {defaults::selectivity};
+	std::size_t num_repetitions       {defaults::num_repetitions};
 };
+//===----------------------------------------------------------------------===//
 
+//===----------------------------------------------------------------------===//
+void print_help(int argc, char** argv) {
+    fprintf(stderr, "Unrecognized command line option.\n");
+    fprintf(stderr, "Usage: %s [args]\n", argv[0]);
+    fprintf(stderr, "   --filter_size=[default:%u]\n",     defaults::filter_size);
+    fprintf(stderr, "   --probe_size=[default:%u]\n",      defaults::probe_size);
+    fprintf(stderr, "   --build_size=[default:%u]\n",      defaults::build_size);
+    fprintf(stderr, "   --gpu_morsel_size=[default:%u]\n", defaults::gpu_morsel_size);
+    fprintf(stderr, "   --cpu_morsel_size=[default:%u]\n", defaults::cpu_morsel_size);
+    fprintf(stderr, "   --selectivity=[default:%u]\n",     defaults::selectivity);
+    fprintf(stderr, "   --repetitions=[default:%u]\n",     defaults::num_repetitions);
+}
+//===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
 params_t parse_command_line(int argc, char **argv) {
 	params_t params;
+
 	for (int i = 1; i < argc; i++) {
 		auto arg = std::string(argv[i]);
 		if (arg.substr(0, 2) != "--") {
+			print_help(argc, argv);
 			exit(EXIT_FAILURE);
 		}
 		arg = arg.substr(2);
 		auto p = split_once(arg, '=');
 		auto &arg_name = p.first;
 		auto &arg_value = p.second;
-		if (arg_name == "kernel") {
-			params.kernel_variant = arg_value;
+		if(arg_value == "") {
+			print_help(argc, argv);
+			exit(EXIT_FAILURE);
 		} else if (arg_name == "num_blocks") {
 			params.num_blocks = std::stoi(arg_value);
 		} else if (arg_name == "threads-per-block") {
@@ -310,84 +349,42 @@ params_t parse_command_line(int argc, char **argv) {
 			params.filter_size = std::stoi(arg_value);
 		} else if (arg_name == "probe_size") {
 			params.probe_size = std::stoi(arg_value);
+		} else if (arg_name == "build_size") {
+			params.build_size = std::stoi(arg_value);
+		} else if (arg_name == "gpu_morsel_size") {
+			params.gpu_morsel_size = std::stoi(arg_value);
+		} else if (arg_name == "cpu_morsel_size") {
+			params.cpu_morsel_size = std::stoi(arg_value);
+		} else if (arg_name == "selectivity") {
+			params.selectivity = std::stoi(arg_value);
+		} else if (arg_name == "repetitions") {
+			params.num_repetitions = std::stoi(arg_value);
+		} else {
+			print_help(argc, argv);
+			exit(EXIT_FAILURE);
 		}
 	}
 	return params;
 }
 //===----------------------------------------------------------------------===//
 
-/** Zipf-like random distribution.
- *
- * "Rejection-inversion to generate variates from monotone discrete
- * distributions", Wolfgang Hörmann and Gerhard Derflinger
- * ACM TOMACS 6.3 (1996): 169-184
- */
-template <class IntType = unsigned long, class RealType = double> class zipf_distribution {
-public:
-	typedef RealType input_type;
-	typedef IntType result_type;
+//===----------------------------------------------------------------------===//
+template<typename T>
+void set_uniform_distributed_values(T* column, size_t range_size) {
+    //thread_local allows unique seed for each thread
+    thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
+    thread_local std::mt19937 engine(rd()); //Standard mersenne_twister_engine seeded with rd()
 
-	static_assert(std::numeric_limits<IntType>::is_integer, "");
-	static_assert(!std::numeric_limits<RealType>::is_integer, "");
+    std::uniform_int_distribution<T> distribution;
+    auto sampler = [&]() { return distribution(engine); };   //Use distribution to transform the random unsigned int generated by engine into an int in [0, u32]
+    auto increment_one = [n = 0]() mutable { return ++n; };   //Use distribution to transform the random unsigned int generated by engine into an int in [0, u32]
+    std::generate(&column[0], column + range_size, increment_one); // Initializes the container with random uniform distributed values
+}
+//===----------------------------------------------------------------------===//
 
-	zipf_distribution(const IntType n = std::numeric_limits<IntType>::max(), const RealType q = 1.0)
-	    : n(n), q(q), H_x1(H(1.5) - 1.0), H_n(H(n + 0.5)), dist(H_x1, H_n) {
-	}
-
-	IntType operator()(std::mt19937 &rng) {
-		while (true) {
-			const RealType u = dist(rng);
-			const RealType x = H_inv(u);
-			const IntType k = clamp<IntType>(std::round(x), 1, n);
-			if (u >= H(k + 0.5) - h(k)) {
-				return k;
-			}
-		}
-	}
-
-private:
-	/** Clamp x to [min, max]. */
-	template <typename T> static constexpr T clamp(const T x, const T min, const T max) {
-		return std::max(min, std::min(max, x));
-	}
-
-	/** exp(x) - 1 / x */
-	static double expxm1bx(const double x) {
-		return (std::abs(x) > epsilon) ? std::expm1(x) / x : (1.0 + x / 2.0 * (1.0 + x / 3.0 * (1.0 + x / 4.0)));
-	}
-
-	/** H(x) = log(x) if q == 1, (x^(1-q) - 1)/(1 - q) otherwise.
-	 * H(x) is an integral of h(x).
-	 *
-	 * Note the numerator is one less than in the paper order to work with all
-	 * positive q.
-	 */
-	const RealType H(const RealType x) {
-		const RealType log_x = std::log(x);
-		return expxm1bx((1.0 - q) * log_x) * log_x;
-	}
-
-	/** log(1 + x) / x */
-	static RealType log1pxbx(const RealType x) {
-		return (std::abs(x) > epsilon) ? std::log1p(x) / x : 1.0 - x * ((1 / 2.0) - x * ((1 / 3.0) - x * (1 / 4.0)));
-	}
-
-	/** The inverse function of H(x) */
-	const RealType H_inv(const RealType x) {
-		const RealType t = std::max(-1.0, x * (1.0 - q));
-		return std::exp(log1pxbx(t) * x);
-	}
-
-	/** That hat function h(x) = 1 / (x ^ q) */
-	const RealType h(const RealType x) {
-		return std::exp(-q * std::log(x));
-	}
-
-	static constexpr RealType epsilon = 1e-8;
-
-	IntType n;                                     ///< Number of elements
-	RealType q;                                    ///< Exponent
-	RealType H_x1;                                 ///< H(x_1)
-	RealType H_n;                                  ///< H(n)
-	std::uniform_real_distribution<RealType> dist; ///< [H(x_1), H(n)]
-};
+//===----------------------------------------------------------------------===//
+void populate_table(Table &table) {
+    for(auto &column : table.columns)
+        set_uniform_distributed_values((int32_t*)column, table.size());
+}
+//===----------------------------------------------------------------------===//
