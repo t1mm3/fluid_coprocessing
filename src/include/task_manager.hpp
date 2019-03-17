@@ -26,6 +26,7 @@ struct InflightProbe {
 	int64_t num{1};
 	int64_t offset{1};
 
+	std::atomic<int64_t> cpu_offset;
 	std::atomic<int64_t> processed;
 
 	cudaStream_t stream;
@@ -105,7 +106,24 @@ struct GlobalQueue {
 	}
 
 	InflightProbe* get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) {
-		// FIXME: todo
+		auto num = probes.size();
+		for (int64_t i=0; i<num; i++) {
+			auto probe = probes[i];
+			if (!probe) {
+				continue;
+			}
+
+			int64_t off = std::atomic_fetch_add(&probe->cpu_offset, morsel_size);
+
+			if (off >= probe->num) {
+				continue;
+			}
+
+			size_t n = std::min(morsel_size, probe->num - off);
+			onum = n;
+			ooffset = off;
+			return probe;
+		}
 		return nullptr;
 	}
 };
