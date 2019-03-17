@@ -188,7 +188,7 @@ struct WorkerThread {
 		}
 		tuples_morsel += mnum;
 
-		size_t num_tuples = num;
+		size_t num_tuples = mnum;
 
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
 
@@ -307,7 +307,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 		// keep GPU(s) busy
 		for (auto &inflight_probe : inflight_probes) {
-			if (inflight_probe->status == InflightProbe::SHARED) {
+			if (inflight_probe->status == InflightProbe::Status::CPU_SHARE) {
 				continue;
 			}
 			if (!inflight_probe->is_gpu_available()) {
@@ -317,8 +317,8 @@ void WorkerThread::execute_pipeline() {
 			uint32_t *tkeys = (uint32_t *)table.columns[0];
 
 			// inflight_probe.probe->result();
-			if (inflight_probe.status == InflightProbe::Status::FILTERING) {
-				inflight_probe.status = InflightProbe::Status::CPU_SHARE;
+			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
+				inflight_probe->status = InflightProbe::Status::CPU_SHARE;
 				pipeline.done_probes.add(inflight_probe);
 			}
 
@@ -331,8 +331,8 @@ void WorkerThread::execute_pipeline() {
 			}
 
 			// issue a new GPU BF probe
-			inflight_probe.probe->contains(&tkeys[offset], num);
-			inflight_probe.status = InflightProbe::Status::FILTERING;
+			inflight_probe->probe->contains(&tkeys[offset], num);
+			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}
 #endif
 
