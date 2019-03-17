@@ -25,7 +25,9 @@ struct InflightProbe {
 	FilterWrapper::cuda_probe_t *probe;
 	int64_t num{1};
 	int64_t offset{1};
-	bool has_done_probing = false;
+
+	std::atomic<int64_t> processed;
+
 	cudaStream_t stream;
 	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
 			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
@@ -305,29 +307,32 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 		// keep GPU(s) busy
 		for (auto &inflight_probe : inflight_probes) {
-			if (inflight_probe->is_gpu_available()) {
-				// get the keys to probe
-				uint32_t *tkeys = (uint32_t *)table.columns[0];
-				uint32_t *results = 0;
-				// TODO results
-				// inflight_probe.probe->result();
-				if (inflight_probe.status == InflightProbe::Status::FILTERING) {
-					inflight_probe.status = InflightProbe::Status::CPU_SHARE;
-					pipeline.done_probes.add(inflight_probe);
-				}
-
-				finished_probes++;
-				morsel_size = GPU_MORSEL_SIZE;
-				auto success = table.get_range(num, offset, morsel_size);
-				if (!success) {
-					finished_probes = 0;
-					break;
-				}
-
-				// issue a new GPU BF probe
-				inflight_probe.probe->contains(&tkeys[offset], num);
-				inflight_probe.status = InflightProbe::Status::FILTERING;
+			if (inflight_probe->status == InflightProbe::SHARED) {
+				continue;
 			}
+			if (!inflight_probe->is_gpu_available()) {
+				continue;
+			}
+			// get the keys to probe
+			uint32_t *tkeys = (uint32_t *)table.columns[0];
+
+			// inflight_probe.probe->result();
+			if (inflight_probe.status == InflightProbe::Status::FILTERING) {
+				inflight_probe.status = InflightProbe::Status::CPU_SHARE;
+				pipeline.done_probes.add(inflight_probe);
+			}
+
+			finished_probes++;
+			morsel_size = GPU_MORSEL_SIZE;
+			auto success = table.get_range(num, offset, morsel_size);
+			if (!success) {
+				finished_probes = 0;
+				break;
+			}
+
+			// issue a new GPU BF probe
+			inflight_probe.probe->contains(&tkeys[offset], num);
+			inflight_probe.status = InflightProbe::Status::FILTERING;
 		}
 #endif
 
@@ -341,13 +346,13 @@ void WorkerThread::execute_pipeline() {
 			if (probe) {
 				uint32_t* results = probe->probe->get_results();
 				assert(results != nullptr);
-				do_cpu_join(table, results, nullptr, probe->num, probe->offset);
+				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
 
-				if (last) {
+				int64_t old = std::atomic_fetch_add(&probe->processed, num);
+				if (old == probe->num) {
 					// re-use or dealloc 
 					pipeline.done_probes.remove(probe);
 					probe->status = InflightProbe::Status::FRESH;
-					delete probe;
 				}
 				continue;
 			}
