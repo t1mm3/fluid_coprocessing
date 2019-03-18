@@ -70,6 +70,11 @@ struct Vectorized {
 	}
 
 		for (; i + 8 < num; i += 8) {
+			if (a[i / 8] == 0) {
+				// nothing set
+				continue;
+			}
+
 			A(i);
 			A(i + 1);
 			A(i + 2);
@@ -97,6 +102,11 @@ struct Vectorized {
 	}
 
 		for (; i + 8 < num; i += 8) {
+			if (a[i / 8] == 0) {
+				// nothing set
+				continue;
+			}
+
 			A(i);
 			A(i + 1);
 			A(i + 2);
@@ -115,9 +125,9 @@ struct Vectorized {
 
 	static int select_match_bit(bool branch, int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		if (branch) {
-			select_match_bit_branch(osel, a ,num);
+			return select_match_bit_branch(osel, a ,num);
 		} else {
-			select_match_bit_pred(osel, a, num);
+			return select_match_bit_pred(osel, a, num);
 		}
 	}
 
