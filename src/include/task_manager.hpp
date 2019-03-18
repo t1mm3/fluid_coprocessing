@@ -36,6 +36,9 @@ struct InflightProbe {
 			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
 		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking  & cudaEventDisableTiming);
 		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device);
+
+		cpu_offset = 0;
+		processed = 0;
 	}
 	bool is_gpu_available() {
 		return probe->is_done();
@@ -126,7 +129,9 @@ static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t
 		onum = n;
 		ooffset = off;
 
+
 		rwticket_rdunlock(&g_queue_rwlock);
+		assert(n > 0);
 		return p;
 	}
 	rwticket_rdunlock(&g_queue_rwlock);
@@ -223,13 +228,18 @@ struct WorkerThread {
 
 			if (bf_results) {
 				const auto n = num;
-				num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
+				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + offset/8, n);
 
 				if (!num) {
 					return; // nothing to do with this stride
 				}
 
-				sel = &sel2[0];
+				if (num == n) {
+					sel = nullptr;
+				} else {
+					sel = &sel2[0];
+				}
+
 			} else {
 				sel = nullptr;
 			}
@@ -239,12 +249,19 @@ struct WorkerThread {
 
 			for (auto ht : pipeline.hts) {
 				ht->Probe(ctx, matches, keys, hashs, sel, num);
+
+				size_t old = num;
+
 				//std::cout << "num " << num << std::endl;
 				num = Vectorized::select_match(sel1, matches, sel, num);
-				sel = &sel1[0];
-
 				if (!num) {
 					return; // nothing to do with this stride
+				}
+
+				if (old == num) {
+					// same selection vector
+				} else {
+					sel = &sel1[0];
 				}
 
 				//std::cout << "num2 " << num << std::endl;
@@ -279,7 +296,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = std::thread::hardware_concurrency();
+		auto num_threads = std::thread::hardware_concurrency()/2;
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -353,6 +370,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
+			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
 			inflight_probe->probe->contains(&tkeys[offset], num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}

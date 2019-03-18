@@ -58,17 +58,15 @@ struct Vectorized {
 		return select(osel, sel, num, [&](auto i) { return !b[i]; });
 	}
 
-	static int NO_INLINE select_match_bit(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		int res = 0;
 		int i = 0;
-#define A(z)                                                                                                           \
-	{                                                                                                                  \
-		int i = z;                                                                                                     \
-		int w = a[i / 8];                                                                                              \
-		uint8_t m = 1 << (i % 8);                                                                                      \
-		if (w & m) {                                                                                                   \
-			osel[res++] = i;                                                                                           \
-		}                                                                                                              \
+#define A(z) { \
+		uint8_t w = a[z / 8]; \
+		uint8_t m = 1 << (z % 8); \
+		if (w & m) { \
+			osel[res++] = z; \
+		} \
 	}
 
 		for (; i + 8 < num; i += 8) {
@@ -86,6 +84,41 @@ struct Vectorized {
 		}
 #undef A
 		return res;
+	}
+
+	static int NO_INLINE select_match_bit_pred(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		int res = 0;
+		int i = 0;
+#define A(z) { \
+		uint8_t w = a[z / 8]; \
+		uint8_t m = 1 << (z % 8); \
+		osel[res] = z; \
+		res += !!(w & m); \
+	}
+
+		for (; i + 8 < num; i += 8) {
+			A(i);
+			A(i + 1);
+			A(i + 2);
+			A(i + 3);
+			A(i + 4);
+			A(i + 5);
+			A(i + 6);
+			A(i + 7);
+		}
+		for (; i < num; i++) {
+			A(i);
+		}
+#undef A
+		return res;
+	}
+
+	static int select_match_bit(bool branch, int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		if (branch) {
+			select_match_bit_branch(osel, a ,num);
+		} else {
+			select_match_bit_pred(osel, a, num);
+		}
 	}
 
 	inline static uint32_t hash32(uint32_t a) {
