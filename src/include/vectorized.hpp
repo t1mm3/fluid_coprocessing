@@ -51,6 +51,8 @@ struct Vectorized {
 		map(sel, num, [&](auto i) { out[i] = a[i] != b; });
 	}
 
+	static_assert(sizeof(bool) == 1, "Bool must be uint8_t");
+
 	static int NO_INLINE select_match(int *CPU_R osel, bool *CPU_R b, int *CPU_R sel, int num) {
 		return select(osel, sel, num, [&](auto i) { return b[i]; });
 	}

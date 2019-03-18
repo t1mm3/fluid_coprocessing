@@ -60,7 +60,7 @@ static rwticket g_queue_rwlock;
 static InflightProbe* g_queue_head = nullptr;
 static InflightProbe* g_queue_tail = nullptr;
 
-static void g_queue_add(InflightProbe* p) noexcept {
+NO_INLINE static void g_queue_add(InflightProbe* p) noexcept {
 	assert(!p->q_next);
 	assert(!p->q_prev);
 	p->q_next = nullptr;
@@ -82,7 +82,7 @@ static void g_queue_add(InflightProbe* p) noexcept {
 	rwticket_wrunlock(&g_queue_rwlock);
 }
 
-static void g_queue_remove(InflightProbe* p) noexcept {
+NO_INLINE static void g_queue_remove(InflightProbe* p) noexcept {
 	rwticket_wrlock(&g_queue_rwlock);
 
 	if (p->q_next) {
@@ -109,12 +109,16 @@ static void g_queue_remove(InflightProbe* p) noexcept {
 	p->q_prev = nullptr;
 }
 
-static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
+NO_INLINE static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
+#if 0
 	int busy = rwticket_rdtrylock(&g_queue_rwlock);
 
 	if (busy) {
 		return nullptr; // just do CPU work instead
 	}
+#else
+	rwticket_rdlock(&g_queue_rwlock);
+#endif
 	for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
 		if (p->cpu_offset >= p->num) {
 			continue;
