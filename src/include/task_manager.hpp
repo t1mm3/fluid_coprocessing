@@ -234,12 +234,7 @@ struct WorkerThread {
 					return; // nothing to do with this stride
 				}
 
-				if (num == n) {
-					sel = nullptr;
-				} else {
-					sel = &sel2[0];
-				}
-
+				sel = &sel2[0];
 			} else {
 				sel = nullptr;
 			}
@@ -249,22 +244,12 @@ struct WorkerThread {
 
 			for (auto ht : pipeline.hts) {
 				ht->Probe(ctx, matches, keys, hashs, sel, num);
-
-				size_t old = num;
-
-				//std::cout << "num " << num << std::endl;
 				num = Vectorized::select_match(sel1, matches, sel, num);
 				if (!num) {
 					return; // nothing to do with this stride
 				}
 
-				if (old == num) {
-					// same selection vector
-				} else {
-					sel = &sel1[0];
-				}
-
-				//std::cout << "num2 " << num << std::endl;
+				sel = &sel1[0];
 
 				// TODO: gather some payload columns
 				/*for (int i = 1; i < 4; i++) {
@@ -272,12 +257,9 @@ struct WorkerThread {
 				        ctx.tmp_buckets, i, sel, num);
 				}*/
 			}
-			//Vectorized::map(sel, num, [&](auto i) {
-			//	std::cout << "key " << keys[i] << " i " << i << std::endl;
-			//});
+
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
-			//std::cout << " thread "<< std::this_thread::get_id() << " KSum inside " << ksum << std::endl;
 
 			tuples += num;
 		});
