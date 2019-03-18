@@ -344,6 +344,12 @@ void WorkerThread::execute_pipeline() {
 			}
 
 			// issue a new GPU BF probe
+			assert(num <= GPU_MORSEL_SIZE);
+
+			if (inflight_probe->status != InflightProbe::Status::FRESH) {
+				assert(inflight_probe->processed >= inflight_probe->num);
+			}
+
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
