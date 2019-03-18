@@ -58,9 +58,13 @@ static InflightProbe* g_queue_head = nullptr;
 static InflightProbe* g_queue_tail = nullptr;
 
 static void g_queue_add(InflightProbe* p) noexcept {
+	assert(!p->q_next);
+	assert(!p->q_prev);
 	p->q_next = nullptr;
 
 	rwticket_wrlock(&g_queue_rwlock);
+
+	p->status = InflightProbe::Status::CPU_SHARE;
 	p->q_prev = g_queue_tail;
 
 	if (!g_queue_head) {
@@ -94,12 +98,25 @@ static void g_queue_remove(InflightProbe* p) noexcept {
 	if (p == g_queue_head) {
 		g_queue_head = p->q_next;
 	}
+
+	p->status = InflightProbe::Status::FRESH;
 	rwticket_wrunlock(&g_queue_rwlock);
+
+	p->q_next = nullptr;
+	p->q_prev = nullptr;
 }
 
 static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
-	rwticket_rdlock(&g_queue_rwlock);
+	int busy = rwticket_rdtrylock(&g_queue_rwlock);
+
+	if (busy) {
+		return nullptr; // just do CPU work instead
+	}
 	for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
+		if (p->cpu_offset >= p->num) {
+			continue;
+		}
+
 		int64_t off = std::atomic_fetch_add(&p->cpu_offset, morsel_size);
 		if (off >= p->num) {
 			continue;
@@ -206,7 +223,7 @@ struct WorkerThread {
 
 			if (bf_results) {
 				const auto n = num;
-				// num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
+				num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
 
 				if (!num) {
 					return; // nothing to do with this stride
@@ -262,7 +279,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = 1; // std::thread::hardware_concurrency();
+		auto num_threads = std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -299,7 +316,6 @@ void WorkerThread::execute_pipeline() {
 	while (!pipeline.is_done()) {
 		int64_t num = 0;
 		int64_t offset = 0;
-		size_t finished_probes = 0;
 
 		iteration++;
 
@@ -317,26 +333,26 @@ void WorkerThread::execute_pipeline() {
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
-				inflight_probe->status = InflightProbe::Status::CPU_SHARE;
 				g_queue_add(inflight_probe);
+				break;
 			}
 
-			finished_probes++;
 			morsel_size = GPU_MORSEL_SIZE;
 			auto success = table.get_range(num, offset, morsel_size);
 			if (!success) {
-				finished_probes = 0;
 				break;
 			}
 
 			// issue a new GPU BF probe
+			inflight_probe->processed = 0;
+			inflight_probe->num = num;
+			inflight_probe->offset = offset;
 			inflight_probe->probe->contains(&tkeys[offset], num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}
 #endif
 
 		// do CPU work
-		bool success = true;
 		morsel_size = CPU_MORSEL_SIZE;
 
 		{ // preferably do CPU join on GPU filtered data
@@ -351,14 +367,13 @@ void WorkerThread::execute_pipeline() {
 				if (old == probe->num) {
 					// re-use or dealloc 
 					g_queue_remove(probe);
-					probe->status = InflightProbe::Status::FRESH;
 				}
 				continue;
 			}
 		}
 
 		// full CPU join
-		success = table.get_range(num, offset, morsel_size);
+		bool success = table.get_range(num, offset, morsel_size);
 		if (!success) {
 			// busy waiting until the last tuple is processed
 			// give others a chance
