@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rwticket.hpp"
+
 #include "bloomfilter/bloom_cuda.hpp"
 #include "hash_table.hpp"
 #include "query.hpp"
@@ -45,102 +47,87 @@ struct InflightProbe {
 		cudaStreamDestroy(stream);
 		probe = nullptr;	
 	}
+
+	InflightProbe* q_next = nullptr;
+	InflightProbe* q_prev = nullptr;
 };
 #endif
 
+static rwticket g_queue_rwlock;
+static InflightProbe* g_queue_head = nullptr;
+static InflightProbe* g_queue_tail = nullptr;
 
-struct GlobalQueue {
-	// cannot be resized @ runtime without mmap() "sorcery"
-	// In any case, we assume that we are no going to have many
-	// of these InflightProbe stored (4 streams per GPU).
-	// Hence the size is in it's 10s rather than 100s.
-	std::vector<InflightProbe*> probes;
+static void g_queue_add(InflightProbe* p) noexcept {
+	p->q_next = nullptr;
 
-	GlobalQueue(int64_t cap) {
-		probes.reserve(cap);
-		for (int64_t i=0; i<cap; i++) {
-			probes.push_back(nullptr);
-		}
+	rwticket_wrlock(&g_queue_rwlock);
+	p->q_prev = g_queue_tail;
+
+	if (!g_queue_head) {
+		g_queue_head = p;
 	}
 
-	void add(InflightProbe* mp) {
-		bool found = false;
-		auto num = probes.size();
-
-		do {
-			for (int64_t i=0; i<num; i++) {
-				auto ptr = &probes[i];
-				if (*ptr == nullptr) {
-					bool success = __sync_bool_compare_and_swap(ptr, (InflightProbe*)nullptr, mp);
-					if (success) {
-						found = true;
-						break;
-					}
-				}
-			}
-		} while (!found);
-
-		assert(found);
+	if (g_queue_tail) {
+		g_queue_tail->q_next = p;
 	}
 
-	void remove(InflightProbe* mp) {
-		bool found = false;	
-		auto num = probes.size();
+	g_queue_tail = p;
+	rwticket_wrunlock(&g_queue_rwlock);
+}
 
-		for (int64_t i=0; i<num; i++) {
-			auto ptr = &probes[i];
-			if (*ptr == mp) {
-				bool success = __sync_bool_compare_and_swap(ptr, mp, (InflightProbe*)nullptr);
-				if (success) {
-					// we removed the element
-					found = true;
-					break;
-				} else {
-					// another thread removed the element
-					assert(false);
-				}
-			}
+static void g_queue_remove(InflightProbe* p) noexcept {
+	rwticket_wrlock(&g_queue_rwlock);
+
+	if (p->q_next) {
+		p->q_next->q_prev = p->q_prev;
+	}
+
+	if (p->q_prev) {
+		p->q_prev->q_next = p->q_next;
+	}
+
+	// adapt head & tails
+	if (p == g_queue_tail) {
+		g_queue_tail = p->q_prev;
+	}
+
+	if (p == g_queue_head) {
+		g_queue_head = p->q_next;
+	}
+	rwticket_wrunlock(&g_queue_rwlock);
+}
+
+static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
+	rwticket_rdlock(&g_queue_rwlock);
+	for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
+		int64_t off = std::atomic_fetch_add(&p->cpu_offset, morsel_size);
+		if (off >= p->num) {
+			continue;
 		}
 
-		assert(found);
+		size_t n = std::min(morsel_size, p->num - off);
+		onum = n;
+		ooffset = off;
+
+		rwticket_rdunlock(&g_queue_rwlock);
+		return p;
 	}
+	rwticket_rdunlock(&g_queue_rwlock);
+	return nullptr;
+}
 
-	InflightProbe* get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) {
-		auto num = probes.size();
-		for (int64_t i=0; i<num; i++) {
-			auto probe = probes[i];
-			if (!probe) {
-				continue;
-			}
-
-			int64_t off = std::atomic_fetch_add(&probe->cpu_offset, morsel_size);
-
-			if (off >= probe->num) {
-				continue;
-			}
-
-			size_t n = std::min(morsel_size, probe->num - off);
-			onum = n;
-			ooffset = off;
-			return probe;
-		}
-		return nullptr;
-	}
-};
 
 
 struct Pipeline {
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
 
-	GlobalQueue done_probes;
-
 private:
 	std::atomic<int64_t> tuples_processed;
 
 public:
 	Pipeline(std::vector<HashTablinho *>& htables, Table& t)
-		: hts(htables), table(t), done_probes(128) {
+		: hts(htables), table(t) {
 		tuples_processed = 0;
 	}
 
@@ -218,14 +205,8 @@ struct WorkerThread {
 			size_t old_num = num;
 
 			if (bf_results) {
-#if 0				
-				int n = num + (8 - 1);
-				n /= 8;
-				n *= 8;
-#else
 				const auto n = num;
-#endif
-				num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
+				// num = Vectorized::select_match_bit(sel1, (uint8_t*)bf_results + offset/8, n);
 
 				if (!num) {
 					return; // nothing to do with this stride
@@ -281,7 +262,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = std::thread::hardware_concurrency();
+		auto num_threads = 1; // std::thread::hardware_concurrency();
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -301,7 +282,7 @@ void WorkerThread::execute_pipeline() {
 	uint64_t iteration = 0;
 
 #ifdef HAVE_CUDA
-	std::vector<InflightProbe*> inflight_probes;
+	std::vector<InflightProbe*> local_inflight;
 
 	if (device == 0) {
 		cudaSetDevice(device);
@@ -309,7 +290,7 @@ void WorkerThread::execute_pipeline() {
 		int64_t tuples = GPU_MORSEL_SIZE;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
-			inflight_probes.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
+			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
 			offset+= GPU_MORSEL_SIZE;
 		}
 	}
@@ -324,7 +305,7 @@ void WorkerThread::execute_pipeline() {
 
 #ifdef HAVE_CUDA
 		// keep GPU(s) busy
-		for (auto &inflight_probe : inflight_probes) {
+		for (auto &inflight_probe : local_inflight) {
 			if (inflight_probe->status == InflightProbe::Status::CPU_SHARE) {
 				continue;
 			}
@@ -337,7 +318,7 @@ void WorkerThread::execute_pipeline() {
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
 				inflight_probe->status = InflightProbe::Status::CPU_SHARE;
-				pipeline.done_probes.add(inflight_probe);
+				g_queue_add(inflight_probe);
 			}
 
 			finished_probes++;
@@ -359,7 +340,7 @@ void WorkerThread::execute_pipeline() {
 		morsel_size = CPU_MORSEL_SIZE;
 
 		{ // preferably do CPU join on GPU filtered data
-			InflightProbe* probe = pipeline.done_probes.get_range(num, offset, morsel_size);
+			InflightProbe* probe = g_queue_get_range(num, offset, morsel_size);
 
 			if (probe) {
 				uint32_t* results = probe->probe->get_results();
@@ -369,7 +350,7 @@ void WorkerThread::execute_pipeline() {
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
 				if (old == probe->num) {
 					// re-use or dealloc 
-					pipeline.done_probes.remove(probe);
+					g_queue_remove(probe);
 					probe->status = InflightProbe::Status::FRESH;
 				}
 				continue;

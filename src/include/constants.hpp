@@ -16,8 +16,8 @@ enum {
 	should_print_results = false,
 	num_query_execution_runs = 5,
 	filter_size = 64ull * 1024 * 1024 * 8, // 64MiB
-	build_size = 1024,
-	probe_size = 64 * 1024,
+	build_size = CPU_MORSEL_SIZE * 10,
+	probe_size = build_size * 10,
 	gpu_morsel_size = 16 * 1024,
 	cpu_morsel_size = 16 * 1024,
 	selectivity = 1,
