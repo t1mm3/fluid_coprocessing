@@ -323,7 +323,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe*> local_inflight;
 
-	if (false && device == 0) {
+	if (device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
 		int64_t tuples = GPU_MORSEL_SIZE;

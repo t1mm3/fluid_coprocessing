@@ -59,7 +59,7 @@ private:
 #endif
 	}
 
-	static void BucketInit(bucket_t *CPU_R buckets, bucket_t *CPU_R heads, uint32_t *CPU_R hash, uint32_t mod_mask,
+	NO_INLINE static void BucketInit(bucket_t *CPU_R buckets, bucket_t *CPU_R heads, uint32_t *CPU_R hash, uint32_t mod_mask,
 	                       int *CPU_R sel, int num) {
 		Vectorized::map(sel, num, [&](auto i) {
 			size_t slot = hash[i] & mod_mask;
