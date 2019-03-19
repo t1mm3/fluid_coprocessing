@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     Table table_probe(1,params.probe_size);
     populate_table(table_probe);
     std::vector<HashTablinho*> hts = {ht};
-    Pipeline pipeline(hts, table_probe);
+    Pipeline pipeline(hts, table_probe, params);
     //manager.execute_query(pipeline);
 
     // Build 128 bytes Blocked Bloom Filter on CPU

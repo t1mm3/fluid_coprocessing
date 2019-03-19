@@ -3,6 +3,8 @@
 #include "rwticket.hpp"
 
 #include "bloomfilter/bloom_cuda.hpp"
+#include "bloomfilter/util.hpp"
+
 #include "hash_table.hpp"
 #include "query.hpp"
 #include "vectorized.hpp"
@@ -152,12 +154,14 @@ struct Pipeline {
 
 	std::atomic<int64_t> tuples_gpu_probe;
 	std::atomic<int64_t> tuples_gpu_consume;
+
+	params_t& params;
 private:
 	std::atomic<int64_t> tuples_processed;
 
 public:
-	Pipeline(std::vector<HashTablinho *>& htables, Table& t)
-		: hts(htables), table(t) {
+	Pipeline(std::vector<HashTablinho *>& htables, Table& t, params_t& params)
+		: hts(htables), table(t), params(params) {
 		tuples_processed = 0;
 		tuples_morsel = 0;
 		tuples_gpu_probe = 0;
@@ -323,7 +327,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe*> local_inflight;
 
-	if (device == 0) {
+	if (pipeline.params.gpu && device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
 		int64_t tuples = GPU_MORSEL_SIZE;

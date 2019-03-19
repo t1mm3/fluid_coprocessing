@@ -307,6 +307,7 @@ struct params_t {
 	std::size_t cpu_morsel_size   {defaults::cpu_morsel_size};
 	std::size_t selectivity       {defaults::selectivity};
 	std::size_t num_repetitions       {defaults::num_repetitions};
+	bool gpu  {true};
 };
 //===----------------------------------------------------------------------===//
 
@@ -359,6 +360,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.selectivity = std::stoi(arg_value);
 		} else if (arg_name == "repetitions") {
 			params.num_repetitions = std::stoi(arg_value);
+		} else if (arg_name == "gpu") {
+			params.gpu = std::stoi(arg_value) != 0;
 		} else {
 			print_help(argc, argv);
 			exit(EXIT_FAILURE);
