@@ -7,6 +7,8 @@ constexpr const size_t NUMBER_OF_STREAMS = 4;
 constexpr const size_t TABLE_SIZE        = 100000;
 constexpr const size_t kVecSize          = 1024;
 
+#define NUM_PAYLOAD 32
+
 namespace defaults {
 
 enum {

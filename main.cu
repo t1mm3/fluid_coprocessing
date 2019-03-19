@@ -18,7 +18,10 @@ int main(int argc, char** argv) {
     Table table_build(1,build_size);
     populate_table(table_build);
 
-    auto ht = new HashTablinho(4+4*4, build_size);
+    auto ht = new HashTablinho(
+        sizeof(int32_t) + // key 
+        NUM_PAYLOAD * sizeof(int32_t), // payload cols
+        build_size);
 
      //build table
     uint32_t hashs[kVecSize];

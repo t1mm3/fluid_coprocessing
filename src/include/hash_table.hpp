@@ -178,7 +178,7 @@ public:
 		}
 	};
 
-	void Probe(ProbeContext &ctx, bool *matches, int32_t *keys, uint32_t *hash, int *in_sel, int in_num) {
+	NO_INLINE void Probe(ProbeContext &ctx, bool *matches, int32_t *keys, uint32_t *hash, int *in_sel, int in_num) {
 		assert(heads);
 
 		int *tmp_sel = ctx.tmp_sel;
@@ -211,5 +211,9 @@ public:
 
 	// Gathers payload column, supposed to be run after Probe for fetching the
 	// buckets However, the selection vector should only contain matching keys
-	void ProbeGather(ProbeContext &ctx, int32_t *coldata, int64_t colidx, int *sel, int n);
+	NO_INLINE void ProbeGather(ProbeContext &ctx, int32_t *coldata, int64_t colidx, int *sel, int n) {
+		bucket_t *tmp_buckets = ctx.tmp_buckets;
+		char* column = value_space + sizeof(int32_t) * colidx;
+		Vectorized::gather(coldata, (int32_t*)column, tmp_buckets, next_stride, sel, n);
+	}
 };

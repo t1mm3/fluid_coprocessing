@@ -192,7 +192,7 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	uint64_t ksum = 0;
-	int32_t payload[kVecSize * 16];
+	int32_t payload[kVecSize * NUM_PAYLOAD];
 
 	int64_t tuples = 0;
 	int64_t tuples_morsel = 0;
@@ -269,10 +269,9 @@ struct WorkerThread {
 				sel = &sel1[0];
 
 				// TODO: gather some payload columns
-				/*for (int i = 1; i < 4; i++) {
-				    Vectorized::gather_next<int32_t>(payload + (i-1)*kVecSize,
-				        ctx.tmp_buckets, i, sel, num);
-				}*/
+				for (int i = 1; i < NUM_PAYLOAD; i++) {
+					ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
+				}
 			}
 
 			// global sum

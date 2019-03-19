@@ -227,7 +227,7 @@ struct Vectorized {
 		}
 	}
 
-	static void NO_INLINE gather_next(bucket_t *CPU_R out, bucket_t *CPU_R table, bucket_t *CPU_R idx, size_t stride,
+	static void gather_next(bucket_t *CPU_R out, bucket_t *CPU_R table, bucket_t *CPU_R idx, size_t stride,
 	                                  int *CPU_R sel, int num) {
 		Vectorized::gather<bucket_t>(out, table, idx, stride, sel, num);
 	}
