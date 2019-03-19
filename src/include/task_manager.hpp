@@ -178,6 +178,10 @@ public:
 	}
 
 	void reset() {
+		printf("TOTAL filter sel %f%% -> join sel %f%%\n",
+			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
+			(double)num_postjoin.load() / (double)num_postfilter.load()* 100.0);
+		
 		tuples_processed = 0;
 		tuples_morsel = 0;
 		tuples_gpu_probe = 0;
@@ -201,12 +205,6 @@ public:
 
 	int64_t get_tuples_processed() {
 		return tuples_processed.load();
-	}
-
-	~Pipeline() {
-		printf("TOTAL filter sel %f%% -> join sel %f%%\n",
-			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
-			(double)num_postjoin.load() / (double)num_postfilter.load());
 	}
 
 	std::atomic<uint64_t> ksum;
@@ -267,8 +265,6 @@ struct WorkerThread {
 
 		// TODO: CPU bloom filter
 
-		num_prefilter += num;
-
 		do_cpu_join(table, nullptr, sel, num, offset);
 	}
 
@@ -299,6 +295,7 @@ struct WorkerThread {
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
 #if 1
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
+				assert(num <= n);
 #else
 				num = n;
 #endif
@@ -435,6 +432,7 @@ void WorkerThread::execute_pipeline() {
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 
 			inflight_probe->processed = 0;
+			num_prefilter += num;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
 			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
@@ -471,7 +469,9 @@ void WorkerThread::execute_pipeline() {
 			// busy waiting until the last tuple is processed
 			// give others a chance
 			std::this_thread::yield();
+			continue;
 		}
+		num_prefilter += num;
 		do_cpu_work(table, num, offset);
 	}
 
