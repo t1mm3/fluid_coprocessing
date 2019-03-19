@@ -46,7 +46,7 @@ public:
 	using cuda_probe_t = typename cuda_filter<filter_t>::probe;
 	using key_t = word_t;
 
-	FilterWrapper(size_t bloom_size = DEFAULT_BLOOM_SIZE) : bloom_filter(bloom_size) {
+	FilterWrapper(size_t bloom_size) : bloom_filter(bloom_size) {
 		// set the device to be used for CUDA execution
 
 		// Allocates Pinned memory on the host
