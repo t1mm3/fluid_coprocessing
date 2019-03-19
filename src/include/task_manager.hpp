@@ -62,6 +62,7 @@ struct InflightProbe {
 
 struct Pipeline {
 	rwticket g_queue_rwlock;
+
 	InflightProbe* g_queue_head;
 	InflightProbe* g_queue_tail;
 
@@ -118,7 +119,7 @@ public:
 		g_queue_tail = nullptr;
 		g_queue_head = nullptr;
 #endif
-		memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
+		// memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
 
 		tuples_processed = 0;
 		tuples_morsel = 0;
@@ -374,9 +375,6 @@ struct WorkerThread {
 
 			tuples += num;
 		});
-
-		// mark tuples as procssed
-		pipeline.processed_tuples(num_tuples);
 	}
 };
 
@@ -502,10 +500,13 @@ void WorkerThread::execute_pipeline() {
 				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
-				if (old == probe->num) {
+				if (old + num == probe->num) {
 					// re-use or dealloc 
+					printf("remove\n");
 					pipeline.g_queue_remove(probe);
 				}
+
+				pipeline.processed_tuples(num);
 				continue;
 			}
 		}
@@ -519,6 +520,7 @@ void WorkerThread::execute_pipeline() {
 			continue;
 		}
 		do_cpu_work(table, num, offset);
+		pipeline.processed_tuples(num);
 	}
 
 	std::atomic_fetch_add(&pipeline.ksum, ksum);
