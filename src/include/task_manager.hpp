@@ -178,7 +178,7 @@ public:
 	}
 
 	void reset() {
-		printf("TOTAL filter sel %f%% -> join sel %f%%\n",
+		printf("TOTAL filter sel %4.2f%% -> join sel %4.2f%%\n",
 			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
 			(double)num_postjoin.load() / (double)num_postfilter.load()* 100.0);
 		
@@ -261,11 +261,8 @@ struct WorkerThread {
 	NO_INLINE void execute_pipeline();
 
 	NO_INLINE void do_cpu_work(Table &table, int64_t num, int64_t offset) {
-		int *sel = nullptr;
-
-		// TODO: CPU bloom filter
-
-		do_cpu_join(table, nullptr, sel, num, offset);
+		num_prefilter += num;
+		do_cpu_join(table, nullptr, nullptr, num, offset);
 	}
 
 
@@ -482,7 +479,7 @@ void WorkerThread::execute_pipeline() {
 	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
 	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
 
-	printf("THREAD filter sel %f -> join sel %f \n",
+	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
 		(double)num_postjoin / (double)num_postfilter * 100.0);
 }
