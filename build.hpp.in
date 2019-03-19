@@ -5,6 +5,8 @@
 
 #define HAVE_CUDA
 
+#define PROFILE
+
 #define NO_INLINE __attribute__((noinline))
 #define CPU_R __restrict
 

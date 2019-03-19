@@ -70,6 +70,7 @@ struct Pipeline {
 
 	std::atomic<int64_t> tuples_morsel;
 
+#ifdef PROFILE
 	std::atomic<int64_t> tuples_gpu_probe;
 	std::atomic<int64_t> tuples_gpu_consume;
 
@@ -77,6 +78,7 @@ struct Pipeline {
 	std::atomic<uint64_t> num_postfilter;
 	std::atomic<uint64_t> num_prejoin;
 	std::atomic<uint64_t> num_postjoin;
+#endif
 
 	params_t& params;
 private:
@@ -87,14 +89,18 @@ public:
 		: hts(htables), table(t), params(params) {
 		tuples_processed = 0;
 		tuples_morsel = 0;
+#ifdef PROFILE
 		tuples_gpu_probe = 0;
 		tuples_gpu_consume = 0;
+#endif
 		ksum = 0;
 
+#ifdef PROFILE
 		num_prefilter = 0;
 		num_postfilter = 0;
 		num_prejoin = 0;
 		num_postjoin = 0;
+#endif
 
 		g_queue_head = nullptr;
 		g_queue_tail = nullptr;
@@ -102,9 +108,11 @@ public:
 	}
 
 	void reset() {
+#ifdef PROFILE
 		printf("TOTAL filter sel %4.2f%% -> join sel %4.2f%%\n",
 			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
 			(double)num_postjoin.load() / (double)num_prejoin.load()* 100.0);
+#endif
 
 #ifdef NOT_SURE_WHY
 		assert(g_queue_head == nullptr);
@@ -117,14 +125,19 @@ public:
 
 		tuples_processed = 0;
 		tuples_morsel = 0;
+#ifdef PROFILE
 		tuples_gpu_probe = 0;
 		tuples_gpu_consume = 0;
+#endif
 		ksum = 0;
 
+#ifdef PROFILE
 		num_prefilter = 0;
 		num_postfilter = 0;
 		num_prejoin = 0;
 		num_postjoin = 0;
+#endif
+
 
 		table.reset();
 	}
@@ -261,11 +274,12 @@ struct WorkerThread {
 
 	std::vector<InflightProbe*> local_inflight;
 
+#ifdef PROFILE
 	uint64_t num_prefilter = 0;
 	uint64_t num_postfilter = 0;
 	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
-
+#endif
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
@@ -289,7 +303,6 @@ struct WorkerThread {
 	NO_INLINE void execute_pipeline();
 
 	NO_INLINE void do_cpu_work(Table &table, int64_t num, int64_t offset) {
-		num_prefilter += num;
 		do_cpu_join(table, nullptr, nullptr, num, offset);
 	}
 
@@ -318,14 +331,16 @@ struct WorkerThread {
 				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
-
+#ifdef PROFILE
 				num_prefilter += n;
-
+#endif
 				num = Vectorized::select_match_bit(true, sel2,
 					(uint8_t*)bf_results + (offset - moffset)/8, n);
 				assert(num <= n);
 
+#ifdef PROFILE
 				num_postfilter += num;
+#endif
 				if (!num) {
 					return; // nothing to do with this stride
 				}
@@ -339,8 +354,9 @@ struct WorkerThread {
 			// probe
 
 			Vectorized::map_hash(hashs, keys, sel, num);
-
+#ifdef PROFILE
 			num_prejoin += num;
+#endif
 			for (auto ht : pipeline.hts) {
 				ht->Probe(ctx, matches, keys, hashs, sel, num);
 				num = Vectorized::select_match(sel1, matches, sel, num);
@@ -356,7 +372,9 @@ struct WorkerThread {
 				}
 			}
 
+#ifdef PROFILE
 			num_postjoin += num;
+#endif
 
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
@@ -397,9 +415,11 @@ public:
 			pipeline.ksum.load(),
 			pipeline.get_tuples_processed(), pipeline.tuples_morsel.load());
 
+#ifdef PROFILE
 		printf("gpu probe %ld gpu consumed %ld\n",
 			pipeline.tuples_gpu_probe.load(),
 			pipeline.tuples_gpu_consume.load());
+#endif
 	}
 };
 
@@ -459,7 +479,9 @@ void WorkerThread::execute_pipeline() {
 				assert(inflight_probe->processed >= inflight_probe->num);
 			}
 
+#ifdef PROFILE
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
+#endif
 
 			// printf("probe schedule(%p)\n", inflight_probe);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
@@ -478,7 +500,9 @@ void WorkerThread::execute_pipeline() {
 			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, morsel_size);
 
 			if (probe) {
+#ifdef PROFILE
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
+#endif
 				uint32_t* results = probe->probe->get_results();
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
@@ -506,13 +530,16 @@ void WorkerThread::execute_pipeline() {
 
 	std::atomic_fetch_add(&pipeline.ksum, ksum);
 	std::atomic_fetch_add(&pipeline.tuples_morsel, tuples_morsel);
-
+#ifdef PROFILE
 	std::atomic_fetch_add(&pipeline.num_prefilter, num_prefilter);
 	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
 	std::atomic_fetch_add(&pipeline.num_prejoin, num_prejoin);
 	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
+#endif
 
+#ifdef PROFILE
 	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
 		(double)num_postjoin / (double)num_prejoin * 100.0);
+#endif
 }
