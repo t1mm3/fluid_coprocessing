@@ -89,19 +89,16 @@ public:
 		: hts(htables), table(t), params(params) {
 		tuples_processed = 0;
 		tuples_morsel = 0;
+
 #ifdef PROFILE
 		tuples_gpu_probe = 0;
 		tuples_gpu_consume = 0;
-#endif
-		ksum = 0;
-
-#ifdef PROFILE
 		num_prefilter = 0;
 		num_postfilter = 0;
 		num_prejoin = 0;
 		num_postjoin = 0;
 #endif
-
+		ksum = 0;
 		g_queue_head = nullptr;
 		g_queue_tail = nullptr;
 		memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
@@ -125,20 +122,16 @@ public:
 
 		tuples_processed = 0;
 		tuples_morsel = 0;
+
 #ifdef PROFILE
 		tuples_gpu_probe = 0;
 		tuples_gpu_consume = 0;
-#endif
-		ksum = 0;
-
-#ifdef PROFILE
 		num_prefilter = 0;
 		num_postfilter = 0;
 		num_prejoin = 0;
 		num_postjoin = 0;
 #endif
-
-
+		ksum = 0;
 		table.reset();
 	}
 
