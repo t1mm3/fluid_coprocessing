@@ -17,6 +17,9 @@
 
 #ifdef HAVE_CUDA
 struct InflightProbe {
+	InflightProbe* q_next = nullptr;
+	InflightProbe* q_prev = nullptr;
+
 	enum Status {
 		FRESH, // No data yet, freshly created
 
@@ -48,12 +51,12 @@ struct InflightProbe {
 	void wait() {
 		return probe->wait();
 	}
+
 	~InflightProbe() {
 		cudaStreamDestroy(stream);
+		delete probe;
 	}
 
-	InflightProbe* q_next = nullptr;
-	InflightProbe* q_prev = nullptr;
 };
 #endif
 
@@ -257,6 +260,7 @@ struct WorkerThread {
 	~WorkerThread() {
 		for (auto &inflight_probe : local_inflight) {
 			delete inflight_probe;
+			inflight_probe = nullptr;
 		}
 		delete thread;
 	}
@@ -296,7 +300,8 @@ struct WorkerThread {
 
 				num_prefilter += n;
 
-				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
+				num = Vectorized::select_match_bit(true, sel2,
+					(uint8_t*)bf_results + (offset - moffset)/8, n);
 				assert(num <= n);
 
 				num_postfilter += num;
@@ -305,7 +310,7 @@ struct WorkerThread {
 				}
 
 
-				sel = &sel1[0];
+				sel = &sel2[0];
 			} else {
 				sel = nullptr;
 			}
@@ -358,9 +363,11 @@ public:
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
 		}
+
 		for (auto &worker : workers) {
 			worker->join();
 		}
+
 		for (auto &worker : workers) {
 			delete worker;
 		}

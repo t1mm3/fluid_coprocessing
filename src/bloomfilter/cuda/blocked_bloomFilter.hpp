@@ -314,8 +314,10 @@ template <typename filter_t> struct cuda_filter {
 			cuda_check_error();
 			cudaMalloc((void **)&device_bitmap, batch_size / 8);
 			cuda_check_error();
+			host_bitmap = nullptr;
 			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
 			cuda_check_error();
+			assert(host_bitmap != nullptr);
 
 			/// create events
 			cudaEventCreate(&start_event);

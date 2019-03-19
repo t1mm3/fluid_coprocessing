@@ -17,10 +17,17 @@ struct Vectorized {
 	template <typename T> static void map(int *sel, int num, T &&fun) {
 		if (sel) {
 			for (int i = 0; i < num; i++) {
+#ifdef DEBUG
+				assert(sel[i] < kVecSize);
+#endif
 				fun(sel[i]);
 			}
 		} else {
 			for (int i = 0; i < num; i++) {
+#ifdef DEBUG
+				assert(i < kVecSize);
+#endif
+
 				fun(i);
 			}
 		}
@@ -31,12 +38,18 @@ struct Vectorized {
 
 		if (sel) {
 			for (int i = 0; i < num; i++) {
+#ifdef DEBUG
+				assert(sel[i] < kVecSize);
+#endif
 				if (fun(sel[i])) {
 					osel[res++] = sel[i];
 				}
 			}
 		} else {
 			for (int i = 0; i < num; i++) {
+#ifdef DEBUG
+				assert(i < kVecSize);
+#endif
 				if (fun(i)) {
 					osel[res++] = i;
 				}
@@ -46,59 +59,8 @@ struct Vectorized {
 		return res;
 	}
 
-	template <typename T> static int select_quickskip(int *osel, int *sel, int num, T &&fun) {
-		int res = 0;
-		int i = 0;
-
-#define KSKIP(X) fun(X(0)) | fun(X(1)) | fun(X(2)) | fun(X(3)) | fun(X(4)) | fun(X(5)) | fun(X(6)) | fun(X(7))
-#define ID(x) (i+x)
-#define SEL(x) (sel[ID(x)])
-#define UNROLL(K, x) K(x, 0); K(x, 1); K(x, 2); K(x, 3); K(x, 4); K(x, 5); K(x, 6); K(x, 7);
-
-#define A(X, offset) { \
-	int p = X(offset); \
-	if (fun(p)) { \
-		osel[res++] = p; \
-	} }
-
-		if (sel) {
-			for (; i+8 < num; i+=8) {
-				bool any = KSKIP(SEL);
-				if (!any) {
-					continue;
-				}
-
-				UNROLL(A, SEL);
-			}
-
-			for (; i < num; i++) {
-				A(SEL, 0);
-			}
-		} else {
-			for (; i+8 < num; i+=8) {
-				bool any = KSKIP(ID);
-				if (!any) {
-					continue;
-				}
-
-				UNROLL(A, ID);
-			}
-
-			for (; i < num; i++) {
-				A(ID, 0);
-			}
-		}
-
-#undef KSKIP
-#undef ID
-#undef SEL
-#undef UNROLL
-#undef A
-		return res;
-	}
-
-	static void NO_INLINE map_not_match_bucket_t(bool *CPU_R out, bucket_t *CPU_R a, bucket_t b, int *CPU_R sel,
-	                                             int num) {
+	static void NO_INLINE map_not_match_bucket_t(bool *CPU_R out, bucket_t *CPU_R a, bucket_t b,
+			int *CPU_R sel, int num) {
 		map(sel, num, [&](auto i) { out[i] = a[i] != b; });
 	}
 
@@ -146,6 +108,7 @@ struct Vectorized {
 		}
 #undef A
 #undef B
+
 		return res;
 	}
 
