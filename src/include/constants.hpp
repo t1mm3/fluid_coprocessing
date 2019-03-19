@@ -22,7 +22,6 @@ enum {
 	probe_size = build_size * 100,
 	num_repetitions = 3,
 	gpu = true,
-	num_payload_cols = 32,
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
