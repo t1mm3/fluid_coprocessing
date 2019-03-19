@@ -12,16 +12,15 @@ int main(int argc, char** argv) {
     auto params = parse_command_line(argc, argv);
     TaskManager manager;
 
-    auto build_size = ((params.selectivity * params.probe_size) / 100);
-    std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << build_size << " -- Selectivity: " << params.selectivity << std::endl;
+    std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
-    Table table_build(1,build_size);
+    Table table_build(1,params.build_size);
     populate_table(table_build);
 
     auto ht = new HashTablinho(
         sizeof(int32_t) + // key 
         NUM_PAYLOAD * sizeof(int32_t), // payload cols
-        build_size);
+        params.build_size);
 
      //build table
     uint32_t hashs[kVecSize];

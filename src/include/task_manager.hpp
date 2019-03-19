@@ -240,6 +240,9 @@ struct WorkerThread {
 
 	uint64_t num_postjoin = 0;
 
+	uint64_t num_bf_pre = 0;
+	uint64_t num_bf_post = 0;
+
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
@@ -290,12 +293,16 @@ struct WorkerThread {
 				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
+
+				num_bf_pre += n;
 #if 1
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
 				assert(num <= n);
 #else
 				num = n;
 #endif
+
+				num_bf_post += num;
 				if (!num) {
 					return; // nothing to do with this stride
 				}
@@ -479,7 +486,8 @@ void WorkerThread::execute_pipeline() {
 	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
 	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
 
-	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
+	printf("THREAD filter sel %4.2f%% (bf %4.2f%%)-> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
+		(double)num_bf_post / (double)num_bf_pre * 100.0,
 		(double)num_postjoin / (double)num_postfilter * 100.0);
 }
