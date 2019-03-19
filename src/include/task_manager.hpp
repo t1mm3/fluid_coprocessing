@@ -262,8 +262,11 @@ struct WorkerThread {
 				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
+#if 1
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
-
+#else
+				num = n;
+#endif
 				if (!num) {
 					return; // nothing to do with this stride
 				}

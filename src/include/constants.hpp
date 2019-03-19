@@ -9,7 +9,7 @@ constexpr const size_t kVecSize          = 1024;
 namespace defaults {
 
 enum {
-	gpu_morsel_size = 64 * 1024,
+	gpu_morsel_size = 32ull * 1024ull * 1024ull,
 	cpu_morsel_size = 16 * 1024,
 
 	selectivity = 1,
@@ -19,8 +19,8 @@ enum {
 	should_print_results = false,
 	num_query_execution_runs = 5,
 	filter_size = 64ull * 1024 * 1024 * 8, // 64MiB
-	build_size = cpu_morsel_size * 1000,
-	probe_size = build_size * 100,
+	build_size = filter_size / 16,
+	probe_size = build_size * 400,
 	num_repetitions = 3,
 	gpu = true,
 	num_payload_cols = 32,

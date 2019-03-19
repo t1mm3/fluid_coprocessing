@@ -116,7 +116,7 @@ public:
 		Vectorized::write(key_vector, key, offset, key_stride, sel, num);
 		Vectorized::write(hash_vector, hash, offset, hash_stride, sel, num);
 	}
-	void FinalizeBuild() {
+	NO_INLINE void FinalizeBuild() {
 		std::lock_guard<std::mutex> guard(finalize_build_mutex);
 
 		if (heads) {
