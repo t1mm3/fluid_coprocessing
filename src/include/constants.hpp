@@ -2,7 +2,6 @@
 #include <climits>
 
 constexpr const size_t NUMBER_OF_STREAMS = 4;
-constexpr const size_t TABLE_SIZE        = 100000;
 constexpr const size_t kVecSize          = 1024;
 
 #define NUM_PAYLOAD 32
@@ -23,6 +22,7 @@ enum {
 	build_size = cpu_morsel_size * 1000,
 	probe_size = build_size * 100,
 	num_repetitions = 3,
+	gpu = true,
 	num_payload_cols = 32,
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";

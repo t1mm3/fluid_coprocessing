@@ -122,6 +122,7 @@ struct Vectorized {
 		} \
 	}
 
+#if 0
 		for (; i + 8 < num; i += 8) {
 			if (a[i / 8] == 0) {
 				// nothing set
@@ -137,6 +138,7 @@ struct Vectorized {
 			A(i + 6);
 			A(i + 7);
 		}
+#endif
 		for (; i < num; i++) {
 			A(i);
 		}

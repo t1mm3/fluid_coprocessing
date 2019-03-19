@@ -307,7 +307,8 @@ struct params_t {
 	std::size_t cpu_morsel_size   {defaults::cpu_morsel_size};
 	std::size_t selectivity       {defaults::selectivity};
 	std::size_t num_repetitions       {defaults::num_repetitions};
-	bool gpu  {true};
+	bool gpu  {defaults::gpu};
+	std::size_t num_threads {std::thread::hardware_concurrency()};
 };
 //===----------------------------------------------------------------------===//
 
@@ -321,7 +322,8 @@ void print_help(int argc, char** argv) {
     fprintf(stderr, "   --gpu_morsel_size=[default:%u]\n", defaults::gpu_morsel_size);
     fprintf(stderr, "   --cpu_morsel_size=[default:%u]\n", defaults::cpu_morsel_size);
     fprintf(stderr, "   --selectivity=[default:%u]\n",     defaults::selectivity);
-    fprintf(stderr, "   --repetitions=[default:%u]\n",     defaults::num_repetitions);
+    fprintf(stderr, "   --gpu=[default:%u]\n",     defaults::gpu);
+    fprintf(stderr, "   --num_threads=[default:%u]\n",     std::thread::hardware_concurrency());
 }
 //===----------------------------------------------------------------------===//
 
@@ -362,6 +364,13 @@ params_t parse_command_line(int argc, char **argv) {
 			params.num_repetitions = std::stoi(arg_value);
 		} else if (arg_name == "gpu") {
 			params.gpu = std::stoi(arg_value) != 0;
+		} else if (arg_name == "num_threads") {
+			int64_t n = std::stoi(arg_value);
+			if (n > 0) {
+				params.num_threads = n;
+			} else {
+				fprintf(stderr, "Invalid num_threads. Using default = %ld.\n", params.num_threads);
+			}
 		} else {
 			print_help(argc, argv);
 			exit(EXIT_FAILURE);

@@ -247,6 +247,8 @@ struct WorkerThread {
 			size_t old_num = num;
 
 			if (bf_results) {
+				printf("cpu morsel bf_results %p offset %ld num %ld moffset %ld mnum %ld\n",
+					bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + offset/8, n);
@@ -298,7 +300,7 @@ public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
 		std::vector<WorkerThread*> workers;
-		auto num_threads = std::thread::hardware_concurrency()/2;
+		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
@@ -381,7 +383,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
-			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
+			printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
 			inflight_probe->probe->contains(&tkeys[offset], num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}
@@ -396,6 +398,7 @@ void WorkerThread::execute_pipeline() {
 			if (probe) {
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 				uint32_t* results = probe->probe->get_results();
+				printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
 				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
 
@@ -408,6 +411,7 @@ void WorkerThread::execute_pipeline() {
 			}
 		}
 
+		sleep(1);
 		// full CPU join
 		bool success = table.get_range(num, offset, morsel_size);
 		if (!success) {
