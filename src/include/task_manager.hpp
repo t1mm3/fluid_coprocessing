@@ -157,6 +157,7 @@ struct Pipeline {
 
 	std::atomic<uint64_t> num_prefilter;
 	std::atomic<uint64_t> num_postfilter;
+	std::atomic<uint64_t> num_prejoin;
 	std::atomic<uint64_t> num_postjoin;
 
 	params_t& params;
@@ -174,13 +175,14 @@ public:
 
 		num_prefilter = 0;
 		num_postfilter = 0;
+		num_prejoin = 0;
 		num_postjoin = 0;
 	}
 
 	void reset() {
 		printf("TOTAL filter sel %4.2f%% -> join sel %4.2f%%\n",
 			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
-			(double)num_postjoin.load() / (double)num_postfilter.load()* 100.0);
+			(double)num_postjoin.load() / (double)num_prejoin.load()* 100.0);
 		
 		tuples_processed = 0;
 		tuples_morsel = 0;
@@ -190,6 +192,7 @@ public:
 
 		num_prefilter = 0;
 		num_postfilter = 0;
+		num_prejoin = 0;
 		num_postjoin = 0;
 
 		table.reset();
@@ -237,11 +240,8 @@ struct WorkerThread {
 
 	uint64_t num_prefilter = 0;
 	uint64_t num_postfilter = 0;
-
+	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
-
-	uint64_t num_bf_pre = 0;
-	uint64_t num_bf_post = 0;
 
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
@@ -294,7 +294,7 @@ struct WorkerThread {
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
 
-				num_bf_pre += n;
+				num_prefilter += n;
 #if 1
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
 				assert(num <= n);
@@ -302,7 +302,7 @@ struct WorkerThread {
 				num = n;
 #endif
 
-				num_bf_post += num;
+				num_postfilter += num;
 				if (!num) {
 					return; // nothing to do with this stride
 				}
@@ -312,11 +312,12 @@ struct WorkerThread {
 			} else {
 				sel = nullptr;
 			}
-			num_postfilter += num;
 
 			// probe
+
 			Vectorized::map_hash(hashs, keys, sel, num);
 
+			num_prejoin += num;
 			for (auto ht : pipeline.hts) {
 				ht->Probe(ctx, matches, keys, hashs, sel, num);
 				num = Vectorized::select_match(sel1, matches, sel, num);
@@ -436,7 +437,6 @@ void WorkerThread::execute_pipeline() {
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 
 			inflight_probe->processed = 0;
-			num_prefilter += num;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
 			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
@@ -475,7 +475,6 @@ void WorkerThread::execute_pipeline() {
 			std::this_thread::yield();
 			continue;
 		}
-		num_prefilter += num;
 		do_cpu_work(table, num, offset);
 	}
 
@@ -484,10 +483,10 @@ void WorkerThread::execute_pipeline() {
 
 	std::atomic_fetch_add(&pipeline.num_prefilter, num_prefilter);
 	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
+	std::atomic_fetch_add(&pipeline.num_prejoin, num_prejoin);
 	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
 
-	printf("THREAD filter sel %4.2f%% (bf %4.2f%%)-> join sel %4.2f%% \n",
+	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
-		(double)num_bf_post / (double)num_bf_pre * 100.0,
-		(double)num_postjoin / (double)num_postfilter * 100.0);
+		(double)num_postjoin / (double)num_prejoin * 100.0);
 }
