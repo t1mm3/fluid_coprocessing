@@ -148,6 +148,10 @@ struct Pipeline {
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
 
+	std::atomic<int64_t> tuples_morsel;
+
+	std::atomic<int64_t> tuples_gpu_probe;
+	std::atomic<int64_t> tuples_gpu_consume;
 private:
 	std::atomic<int64_t> tuples_processed;
 
@@ -155,6 +159,10 @@ public:
 	Pipeline(std::vector<HashTablinho *>& htables, Table& t)
 		: hts(htables), table(t) {
 		tuples_processed = 0;
+		tuples_morsel = 0;
+		tuples_gpu_probe = 0;
+		tuples_gpu_consume = 0;
+		ksum = 0;
 	}
 
 	bool is_done() const {
@@ -165,7 +173,11 @@ public:
 		tuples_processed += num;
 	}
 
-	volatile uint64_t ksum = 0;
+	int64_t get_tuples_processed() {
+		return tuples_processed.load();
+	}
+
+	std::atomic<uint64_t> ksum;
 };
 
 struct WorkerThread;
@@ -232,6 +244,7 @@ struct WorkerThread {
 
 			if (bf_results) {
 				const auto n = num;
+				static_assert(GPU_MORSEL_SIZE % 8 == 0, "Otherwise select_match_bit does not work");
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + offset/8, n);
 
 				if (!num) {
@@ -292,6 +305,13 @@ public:
 		}
 
 		std::cout << "KSum " << pipeline.ksum << std::endl;
+		printf("KSum %ld tuples procssed %ld tuplesmorsel %ld\n",
+			pipeline.ksum.load(),
+			pipeline.get_tuples_processed(), pipeline.tuples_morsel.load());
+
+		printf("gpu probe %ld gpu consumed %ld\n",
+			pipeline.tuples_gpu_probe.load(),
+			pipeline.tuples_gpu_consume.load());
 	}
 };
 
@@ -304,7 +324,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef HAVE_CUDA
 	std::vector<InflightProbe*> local_inflight;
 
-	if (device == 0) {
+	if (false && device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
 		int64_t tuples = GPU_MORSEL_SIZE;
@@ -353,6 +373,8 @@ void WorkerThread::execute_pipeline() {
 				assert(inflight_probe->processed >= inflight_probe->num);
 			}
 
+			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
+
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
@@ -369,6 +391,7 @@ void WorkerThread::execute_pipeline() {
 			InflightProbe* probe = g_queue_get_range(num, offset, morsel_size);
 
 			if (probe) {
+				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 				uint32_t* results = probe->probe->get_results();
 				assert(results != nullptr);
 				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
@@ -392,5 +415,6 @@ void WorkerThread::execute_pipeline() {
 		do_cpu_work(table, num, offset);
 	}
 
-	__sync_fetch_and_add(&pipeline.ksum, ksum);
+	std::atomic_fetch_add(&pipeline.ksum, ksum);
+	std::atomic_fetch_add(&pipeline.tuples_morsel, tuples_morsel);
 }

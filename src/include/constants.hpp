@@ -21,7 +21,7 @@ enum {
 	gpu_morsel_size = 16 * 1024,
 	cpu_morsel_size = 16 * 1024,
 	selectivity = 1,
-	num_repetitions = 1
+	num_repetitions = 3
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
