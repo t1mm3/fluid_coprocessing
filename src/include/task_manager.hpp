@@ -27,8 +27,8 @@ struct InflightProbe {
 	Status status = Status::FRESH;
 
 	FilterWrapper::cuda_probe_t *probe;
-	int64_t num{1};
-	int64_t offset{1};
+	int64_t num;
+	int64_t offset;
 
 	std::atomic<int64_t> cpu_offset;
 	std::atomic<int64_t> processed;
@@ -50,7 +50,6 @@ struct InflightProbe {
 	}
 	~InflightProbe() {
 		cudaStreamDestroy(stream);
-		probe = nullptr;	
 	}
 
 	InflightProbe* q_next = nullptr;
@@ -251,6 +250,7 @@ struct WorkerThread {
 	}
 
 	void join() {
+		assert(thread->joinable());
 		thread->join();
 	}
 
