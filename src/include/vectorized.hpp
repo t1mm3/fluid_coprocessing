@@ -114,76 +114,44 @@ struct Vectorized {
 	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		int res = 0;
 		int i = 0;
-#define A(z) { \
-		uint8_t w = a[z / 8]; \
-		uint8_t m = 1 << (z % 8); \
-		if (w & m) { \
-			osel[res++] = z; \
-		} \
-	}
 
-#if 0
-		for (; i + 8 < num; i += 8) {
-			if (a[i / 8] == 0) {
-				// nothing set
-				continue;
-			}
-
-			A(i);
-			A(i + 1);
-			A(i + 2);
-			A(i + 3);
-			A(i + 4);
-			A(i + 5);
-			A(i + 6);
-			A(i + 7);
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
 		}
-#endif
-		for (; i < num; i++) {
-			A(i);
-		}
-#undef A
-		return res;
-	}
 
-	static int NO_INLINE select_match_bit_pred(int *CPU_R osel, uint8_t *CPU_R a, int num) {
-		int res = 0;
-		int i = 0;
-#define A(z) { \
-		uint8_t w = a[z / 8]; \
-		uint8_t m = 1 << (z % 8); \
-		osel[res] = z; \
-		res += !!(w & m); \
+#define A(z, o) { \
+		B(w, 1 << o, z+o); \
 	}
 
 		for (; i + 8 < num; i += 8) {
-			if (a[i / 8] == 0) {
-				// nothing set
+			const uint8_t w = a[i / 8];
+			if (!w) {
+				// nothing set, fast forward
 				continue;
 			}
 
-			A(i);
-			A(i + 1);
-			A(i + 2);
-			A(i + 3);
-			A(i + 4);
-			A(i + 5);
-			A(i + 6);
-			A(i + 7);
+			A(i, 0);
+			A(i, 1);
+			A(i, 2);
+			A(i, 3);
+			A(i, 4);
+			A(i, 5);
+			A(i, 6);
+			A(i, 7);
 		}
+
 		for (; i < num; i++) {
-			A(i);
+			const uint8_t w = a[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
 		}
 #undef A
+#undef B
 		return res;
 	}
 
 	static int select_match_bit(bool branch, int *CPU_R osel, uint8_t *CPU_R a, int num) {
-		if (branch) {
-			return select_match_bit_branch(osel, a ,num);
-		} else {
-			return select_match_bit_pred(osel, a, num);
-		}
+		return select_match_bit_branch(osel, a ,num);
 	}
 
 	inline static uint32_t hash32(uint32_t a) {

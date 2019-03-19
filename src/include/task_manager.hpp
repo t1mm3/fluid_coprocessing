@@ -207,14 +207,23 @@ struct WorkerThread {
 
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 
+	std::vector<InflightProbe*> local_inflight;
+
+
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
 	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf) {
 	    thread = new std::thread(ExecuteWorkerThread, this);
 	}
 
-	~WorkerThread() {
+	void join() {
 		thread->join();
+	}
+
+	~WorkerThread() {
+		for (auto &inflight_probe : local_inflight) {
+			delete inflight_probe;
+		}
 		delete thread;
 	}
 
@@ -302,14 +311,17 @@ public:
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
+		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
 			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
+		}
+		for (auto &worker : workers) {
+			worker->join();
 		}
 		for (auto &worker : workers) {
 			delete worker;
 		}
 
-		std::cout << "KSum " << pipeline.ksum << std::endl;
 		printf("KSum %ld tuples procssed %ld tuplesmorsel %ld\n",
 			pipeline.ksum.load(),
 			pipeline.get_tuples_processed(), pipeline.tuples_morsel.load());
@@ -327,16 +339,14 @@ void WorkerThread::execute_pipeline() {
 	uint64_t iteration = 0;
 
 #ifdef HAVE_CUDA
-	std::vector<InflightProbe*> local_inflight;
-
 	if (pipeline.params.gpu && device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
-		int64_t tuples = pipeline.params.gpu_morsel_size;
+		const int64_t tuples = pipeline.params.gpu_morsel_size;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
-			offset += pipeline.params.gpu_morsel_size;
+			offset += tuples;
 		}
 	}
 #endif

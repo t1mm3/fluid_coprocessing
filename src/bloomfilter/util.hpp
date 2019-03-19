@@ -369,7 +369,9 @@ params_t parse_command_line(int argc, char **argv) {
 			if (n > 0) {
 				params.num_threads = n;
 			} else {
-				fprintf(stderr, "Invalid num_threads. Using default = %ld.\n", params.num_threads);
+				fprintf(stderr, "Invalid num_threads\n");
+				print_help(argc, argv);
+				exit(EXIT_FAILURE);
 			}
 		} else {
 			print_help(argc, argv);
