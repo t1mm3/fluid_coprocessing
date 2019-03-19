@@ -40,10 +40,6 @@ public:
 	void reset() {
 		done = 0;
 		start = 0;
-
-		for (auto &col : columns) {
-			free(col);
-		}
 	}
 
 	template <typename T> void fill_columns(T &&f) {

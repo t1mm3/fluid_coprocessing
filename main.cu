@@ -77,6 +77,8 @@ int main(int argc, char** argv) {
             manager.execute_query(pipeline, filter, cf);
             auto end = std::chrono::system_clock::now();
             total_seconds += std::chrono::duration<double>(end - start).count();
+
+            pipeline.reset();
         }
         auto final_elapsed_time = total_seconds / params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;

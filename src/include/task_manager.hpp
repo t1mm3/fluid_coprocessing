@@ -155,6 +155,10 @@ struct Pipeline {
 	std::atomic<int64_t> tuples_gpu_probe;
 	std::atomic<int64_t> tuples_gpu_consume;
 
+	std::atomic<uint64_t> num_prefilter;
+	std::atomic<uint64_t> num_postfilter;
+	std::atomic<uint64_t> num_postjoin;
+
 	params_t& params;
 private:
 	std::atomic<int64_t> tuples_processed;
@@ -167,6 +171,24 @@ public:
 		tuples_gpu_probe = 0;
 		tuples_gpu_consume = 0;
 		ksum = 0;
+
+		num_prefilter = 0;
+		num_postfilter = 0;
+		num_postjoin = 0;
+	}
+
+	void reset() {
+		tuples_processed = 0;
+		tuples_morsel = 0;
+		tuples_gpu_probe = 0;
+		tuples_gpu_consume = 0;
+		ksum = 0;
+
+		num_prefilter = 0;
+		num_postfilter = 0;
+		num_postjoin = 0;
+
+		table.reset();
 	}
 
 	bool is_done() const {
@@ -179,6 +201,12 @@ public:
 
 	int64_t get_tuples_processed() {
 		return tuples_processed.load();
+	}
+
+	~Pipeline() {
+		printf("TOTAL filter sel %f%% -> join sel %f%%\n",
+			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
+			(double)num_postjoin.load() / (double)num_postfilter.load());
 	}
 
 	std::atomic<uint64_t> ksum;
@@ -209,6 +237,11 @@ struct WorkerThread {
 
 	std::vector<InflightProbe*> local_inflight;
 
+	uint64_t num_prefilter = 0;
+	uint64_t num_postfilter = 0;
+
+	uint64_t num_postjoin = 0;
+
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
@@ -233,6 +266,8 @@ struct WorkerThread {
 		int *sel = nullptr;
 
 		// TODO: CPU bloom filter
+
+		num_prefilter += num;
 
 		do_cpu_join(table, nullptr, sel, num, offset);
 	}
@@ -271,10 +306,12 @@ struct WorkerThread {
 					return; // nothing to do with this stride
 				}
 
+
 				sel = &sel2[0];
 			} else {
 				sel = nullptr;
 			}
+			num_postfilter += num;
 
 			// probe
 			Vectorized::map_hash(hashs, keys, sel, num);
@@ -293,6 +330,8 @@ struct WorkerThread {
 					ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
 				}
 			}
+
+			num_postjoin += num;
 
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
@@ -438,4 +477,12 @@ void WorkerThread::execute_pipeline() {
 
 	std::atomic_fetch_add(&pipeline.ksum, ksum);
 	std::atomic_fetch_add(&pipeline.tuples_morsel, tuples_morsel);
+
+	std::atomic_fetch_add(&pipeline.num_prefilter, num_prefilter);
+	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
+	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
+
+	printf("THREAD filter sel %f -> join sel %f \n",
+		(double)num_postfilter / (double)num_prefilter * 100.0,
+		(double)num_postjoin / (double)num_postfilter * 100.0);
 }
