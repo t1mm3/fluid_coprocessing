@@ -248,7 +248,7 @@ struct WorkerThread {
 
 			if (bf_results) {
 				const auto n = num;
-				static_assert(GPU_MORSEL_SIZE % 8 == 0, "Otherwise select_match_bit does not work");
+				assert(pipeline.params.gpu_morsel_size % 8 == 0);
 				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + offset/8, n);
 
 				if (!num) {
@@ -330,11 +330,11 @@ void WorkerThread::execute_pipeline() {
 	if (pipeline.params.gpu && device == 0) {
 		cudaSetDevice(device);
 		int64_t offset = 0;
-		int64_t tuples = GPU_MORSEL_SIZE;
+		int64_t tuples = pipeline.params.gpu_morsel_size;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
-			offset+= GPU_MORSEL_SIZE;
+			offset += pipeline.params.gpu_morsel_size;
 		}
 	}
 #endif
@@ -363,14 +363,14 @@ void WorkerThread::execute_pipeline() {
 				break;
 			}
 
-			morsel_size = GPU_MORSEL_SIZE;
+			morsel_size = pipeline.params.gpu_morsel_size;
 			auto success = table.get_range(num, offset, morsel_size);
 			if (!success) {
 				break;
 			}
 
 			// issue a new GPU BF probe
-			assert(num <= GPU_MORSEL_SIZE);
+			assert(num <= pipeline.params.gpu_morsel_size);
 
 			if (inflight_probe->status != InflightProbe::Status::FRESH) {
 				assert(inflight_probe->processed >= inflight_probe->num);
@@ -388,7 +388,7 @@ void WorkerThread::execute_pipeline() {
 #endif
 
 		// do CPU work
-		morsel_size = CPU_MORSEL_SIZE;
+		morsel_size = pipeline.params.cpu_morsel_size;
 
 		{ // preferably do CPU join on GPU filtered data
 			InflightProbe* probe = g_queue_get_range(num, offset, morsel_size);
