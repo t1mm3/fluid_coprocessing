@@ -253,14 +253,16 @@ struct WorkerThread {
 			int32_t *tkeys = (int32_t*)table.columns[0];
 			auto keys = &tkeys[offset];
 
+			assert(offset >= moffset);
+
 			size_t old_num = num;
 
 			if (bf_results) {
-				printf("cpu morsel bf_results %p offset %ld num %ld moffset %ld mnum %ld\n",
-					bf_results, offset, num, moffset, mnum);
+				//printf("cpu morsel bf_results %p offset %ld num %ld moffset %ld mnum %ld\n",
+				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
-				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + offset/8, n);
+				num = Vectorized::select_match_bit(true, sel1, (uint8_t*)bf_results + (offset - moffset)/8, n);
 
 				if (!num) {
 					return; // nothing to do with this stride
@@ -393,7 +395,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
-			printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
+			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
 			inflight_probe->probe->contains(&tkeys[offset], num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}
@@ -408,7 +410,7 @@ void WorkerThread::execute_pipeline() {
 			if (probe) {
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 				uint32_t* results = probe->probe->get_results();
-				printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
+				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
 				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
 
@@ -421,7 +423,6 @@ void WorkerThread::execute_pipeline() {
 			}
 		}
 
-		sleep(1);
 		// full CPU join
 		bool success = table.get_range(num, offset, morsel_size);
 		if (!success) {

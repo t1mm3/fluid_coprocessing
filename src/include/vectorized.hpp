@@ -113,15 +113,14 @@ struct Vectorized {
 
 	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		int res = 0;
+
 		int i = 0;
 
 #define B(w, m, pos) if ((w) & (m)) { \
 			osel[res++] = (pos); \
 		}
 
-#define A(z, o) { \
-		B(w, 1 << o, z+o); \
-	}
+#define A(z, o) B(w, 1 << o, z+o)
 
 		for (; i + 8 < num; i += 8) {
 			const uint8_t w = a[i / 8];
