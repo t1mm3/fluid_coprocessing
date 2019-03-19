@@ -153,10 +153,23 @@ struct Vectorized {
 		return select_match_bit_branch(osel, a ,num);
 	}
 
+#if 1
+	// https://nullprogram.com/blog/2018/07/31/
+	inline static uint32_t
+	hash32(uint32_t x)
+	{
+		x ^= x >> 16;
+		x *= UINT32_C(0x45d9f3b);
+		x ^= x >> 16;
+		x *= UINT32_C(0x45d9f3b);
+		x ^= x >> 16;
+		return x;
+	}
+#else
 	inline static uint32_t hash32(uint32_t a) {
 		return a * 2654435761;
 	}
-
+#endif
 	static void NO_INLINE map_hash(uint32_t *CPU_R out, int32_t *CPU_R a, int *CPU_R sel, int num) {
 		map(sel, num, [&](auto i) { out[i] = hash32((uint32_t)(a[i])); });
 	}
