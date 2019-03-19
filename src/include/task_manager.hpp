@@ -60,95 +60,11 @@ struct InflightProbe {
 };
 #endif
 
-static rwticket g_queue_rwlock;
-static InflightProbe* g_queue_head = nullptr;
-static InflightProbe* g_queue_tail = nullptr;
-
-NO_INLINE static void g_queue_add(InflightProbe* p) noexcept {
-	assert(!p->q_next);
-	assert(!p->q_prev);
-	p->q_next = nullptr;
-
-	rwticket_wrlock(&g_queue_rwlock);
-
-	p->status = InflightProbe::Status::CPU_SHARE;
-	p->q_prev = g_queue_tail;
-
-	if (!g_queue_head) {
-		g_queue_head = p;
-	}
-
-	if (g_queue_tail) {
-		g_queue_tail->q_next = p;
-	}
-
-	g_queue_tail = p;
-	rwticket_wrunlock(&g_queue_rwlock);
-}
-
-NO_INLINE static void g_queue_remove(InflightProbe* p) noexcept {
-	rwticket_wrlock(&g_queue_rwlock);
-
-	if (p->q_next) {
-		p->q_next->q_prev = p->q_prev;
-	}
-
-	if (p->q_prev) {
-		p->q_prev->q_next = p->q_next;
-	}
-
-	// adapt head & tails
-	if (p == g_queue_tail) {
-		g_queue_tail = p->q_prev;
-	}
-
-	if (p == g_queue_head) {
-		g_queue_head = p->q_next;
-	}
-
-	p->status = InflightProbe::Status::FRESH;
-	rwticket_wrunlock(&g_queue_rwlock);
-
-	p->q_next = nullptr;
-	p->q_prev = nullptr;
-}
-
-NO_INLINE static InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
-#if 0
-	int busy = rwticket_rdtrylock(&g_queue_rwlock);
-
-	if (busy) {
-		return nullptr; // just do CPU work instead
-	}
-#else
-	rwticket_rdlock(&g_queue_rwlock);
-#endif
-	for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
-		if (p->cpu_offset >= p->num) {
-			continue;
-		}
-
-		int64_t off = std::atomic_fetch_add(&p->cpu_offset, morsel_size);
-		if (off >= p->num) {
-			continue;
-		}
-
-		size_t n = std::min(morsel_size, p->num - off);
-		onum = n;
-		ooffset = off;
-
-
-		rwticket_rdunlock(&g_queue_rwlock);
-		assert(n > 0);
-		return p;
-	}
-	rwticket_rdunlock(&g_queue_rwlock);
-	return nullptr;
-}
-
-
-
 struct Pipeline {
+	rwticket g_queue_rwlock;
+	InflightProbe* g_queue_head;
+	InflightProbe* g_queue_tail;
+
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
 
@@ -179,13 +95,26 @@ public:
 		num_postfilter = 0;
 		num_prejoin = 0;
 		num_postjoin = 0;
+
+		g_queue_head = nullptr;
+		g_queue_tail = nullptr;
+		memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
 	}
 
 	void reset() {
 		printf("TOTAL filter sel %4.2f%% -> join sel %4.2f%%\n",
 			(double)num_postfilter.load() / (double)num_prefilter.load() * 100.0,
 			(double)num_postjoin.load() / (double)num_prejoin.load()* 100.0);
-		
+
+#ifdef NOT_SURE_WHY
+		assert(g_queue_head == nullptr);
+		assert(g_queue_tail == nullptr);
+#else
+		g_queue_tail = nullptr;
+		g_queue_head = nullptr;
+#endif
+		memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
+
 		tuples_processed = 0;
 		tuples_morsel = 0;
 		tuples_gpu_probe = 0;
@@ -211,6 +140,98 @@ public:
 	int64_t get_tuples_processed() {
 		return tuples_processed.load();
 	}
+
+	NO_INLINE void g_queue_add(InflightProbe* p) noexcept {
+		assert(!p->q_next);
+		assert(!p->q_prev);
+		p->q_next = nullptr;
+
+		rwticket_wrlock(&g_queue_rwlock);
+		// printf("g_queue_add(%p)\n", p);
+
+		p->status = InflightProbe::Status::CPU_SHARE;
+		p->q_prev = g_queue_tail;
+
+		if (!g_queue_head) {
+			g_queue_head = p;
+		}
+
+		if (g_queue_tail) {
+			g_queue_tail->q_next = p;
+		}
+
+		g_queue_tail = p;
+
+		rwticket_wrunlock(&g_queue_rwlock);
+	}
+
+	NO_INLINE void g_queue_remove(InflightProbe* p) noexcept {
+		rwticket_wrlock(&g_queue_rwlock);
+		// printf("g_queue_remove(%p)\n", p);
+
+		if (p->q_next) {
+			p->q_next->q_prev = p->q_prev;
+		}
+
+		if (p->q_prev) {
+			p->q_prev->q_next = p->q_next;
+		}
+
+		// adapt head & tails
+		if (p == g_queue_tail) {
+			g_queue_tail = p->q_prev;
+		}
+
+		if (p == g_queue_head) {
+			g_queue_head = p->q_next;
+		}
+
+		p->status = InflightProbe::Status::FRESH;
+		rwticket_wrunlock(&g_queue_rwlock);
+
+
+		p->q_next = nullptr;
+		p->q_prev = nullptr;
+	}
+
+	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
+	#if 0
+		int busy = rwticket_rdtrylock(&g_queue_rwlock);
+
+		if (busy) {
+			return nullptr; // just do CPU work instead
+		}
+	#else
+		rwticket_rdlock(&g_queue_rwlock);
+	#endif
+		for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
+			if (p->cpu_offset >= p->num) {
+				continue;
+			}
+
+			int64_t off = std::atomic_fetch_add(&p->cpu_offset, morsel_size);
+			if (off >= p->num) {
+				continue;
+			}
+			// printf("g_queue_get_range(%p)\n", p);
+	#ifdef DEBUG
+			assert(p->status == InflightProbe::Status::CPU_SHARE);
+	#endif
+
+			size_t n = std::min(morsel_size, p->num - off);
+			onum = n;
+			ooffset = off;
+
+
+			rwticket_rdunlock(&g_queue_rwlock);
+			assert(n > 0);
+			return p;
+		}
+		rwticket_rdunlock(&g_queue_rwlock);
+		return nullptr;
+	}
+
+
 
 	std::atomic<uint64_t> ksum;
 };
@@ -421,7 +442,7 @@ void WorkerThread::execute_pipeline() {
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
-				g_queue_add(inflight_probe);
+				pipeline.g_queue_add(inflight_probe);
 				break;
 			}
 
@@ -440,12 +461,13 @@ void WorkerThread::execute_pipeline() {
 
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 
+			// printf("probe schedule(%p)\n", inflight_probe);
+			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->processed = 0;
 			inflight_probe->num = num;
 			inflight_probe->offset = offset;
 			// printf("schedule probe %p offset %ld num %ld\n", inflight_probe, offset, num);
 			inflight_probe->probe->contains(&tkeys[offset], num);
-			inflight_probe->status = InflightProbe::Status::FILTERING;
 		}
 #endif
 
@@ -453,7 +475,7 @@ void WorkerThread::execute_pipeline() {
 		morsel_size = pipeline.params.cpu_morsel_size;
 
 		{ // preferably do CPU join on GPU filtered data
-			InflightProbe* probe = g_queue_get_range(num, offset, morsel_size);
+			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, morsel_size);
 
 			if (probe) {
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
@@ -465,7 +487,7 @@ void WorkerThread::execute_pipeline() {
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
 				if (old == probe->num) {
 					// re-use or dealloc 
-					g_queue_remove(probe);
+					pipeline.g_queue_remove(probe);
 				}
 				continue;
 			}
