@@ -466,8 +466,10 @@ void WorkerThread::execute_pipeline() {
 
 				// inflight_probe.probe->result();
 				if (inflight_probe->status == InflightProbe::Status::FILTERING) {
+#if 0
 					printf("%d: cpu share %p\n",
 						std::this_thread::get_id(), inflight_probe);
+#endif
 					pipeline.g_queue_add(inflight_probe);
 					break;
 				}
@@ -493,8 +495,10 @@ void WorkerThread::execute_pipeline() {
 				inflight_probe->reset(offset, num);
 				inflight_probe->status = InflightProbe::Status::FILTERING;
 				inflight_probe->probe->contains(&tkeys[offset], num);
+#if 0
 				printf("%d: schedule probe %p offset %ld num %ld\n",
 					std::this_thread::get_id(), inflight_probe, offset, num);
+#endif
 			}
 #endif
 			// rwticket_wrunlock(&pipeline.g_queue_rwlock);
@@ -520,8 +524,10 @@ void WorkerThread::execute_pipeline() {
 #if 1
 				if (old + num == probe->num) {
 					// re-use or dealloc 
+#if 0
 					printf("%d: remove %p\n",
 						std::this_thread::get_id(), probe);
+#endif
 					pipeline.g_queue_remove(probe);
 				}
 #endif
