@@ -25,6 +25,8 @@ struct InflightProbe {
 
 		FILTERING, // Filtering through the bloom filtaar
 		CPU_SHARE, // Filtering done, CPUs consuming results
+
+		DONE, // Done ready to be reused
 	};
 
 	Status status = Status::FRESH;
@@ -50,6 +52,13 @@ struct InflightProbe {
 	}
 	void wait() {
 		return probe->wait();
+	}
+
+	void reset(int64_t noffset, int64_t nnum) {
+		num = nnum;
+		offset = noffset;
+		processed = 0;
+		cpu_offset = 0;
 	}
 
 	~InflightProbe() {
@@ -193,7 +202,7 @@ public:
 			g_queue_head = p->q_next;
 		}
 
-		p->status = InflightProbe::Status::FRESH;
+		p->status = InflightProbe::Status::DONE;
 		rwticket_wrunlock(&g_queue_rwlock);
 
 
@@ -230,9 +239,6 @@ public:
 			size_t n = std::min(morsel_size, p->num - off);
 			onum = n;
 			ooffset = off;
-
-			printf("%d: g_queue_get_range %p offset %ld num %ld\n",
-				std::this_thread::get_id(), p, ooffset, onum);
 
 			rwticket_rdunlock(&g_queue_rwlock);
 			assert(n > 0);
@@ -484,10 +490,8 @@ void WorkerThread::execute_pipeline() {
 #endif
 
 				// printf("probe schedule(%p)\n", inflight_probe);
+				inflight_probe->reset(offset, num);
 				inflight_probe->status = InflightProbe::Status::FILTERING;
-				inflight_probe->processed = 0;
-				inflight_probe->num = num;
-				inflight_probe->offset = offset;
 				inflight_probe->probe->contains(&tkeys[offset], num);
 				printf("%d: schedule probe %p offset %ld num %ld\n",
 					std::this_thread::get_id(), inflight_probe, offset, num);
