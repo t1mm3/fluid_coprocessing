@@ -55,10 +55,13 @@ struct InflightProbe {
 	}
 
 	void reset(int64_t noffset, int64_t nnum) {
+		status = Status::FRESH;
 		num = nnum;
 		offset = noffset;
 		processed = 0;
 		cpu_offset = 0;
+		assert(!q_next);
+		assert(!q_prev);
 	}
 
 	~InflightProbe() {
@@ -121,13 +124,8 @@ public:
 			(double)num_postjoin.load() / (double)num_prejoin.load()* 100.0);
 #endif
 
-#ifdef NOT_SURE_WHY
 		assert(g_queue_head == nullptr);
 		assert(g_queue_tail == nullptr);
-#else
-		g_queue_tail = nullptr;
-		g_queue_head = nullptr;
-#endif
 		// memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
 
 		tuples_processed = 0;
@@ -239,6 +237,9 @@ public:
 			size_t n = std::min(morsel_size, p->num - off);
 			onum = n;
 			ooffset = off;
+
+			printf("%d: g_queue_get_range %p offset %ld num %ld\n",
+				std::this_thread::get_id(), p, ooffset, onum);
 
 			rwticket_rdunlock(&g_queue_rwlock);
 			assert(n > 0);
@@ -426,8 +427,6 @@ public:
 
 void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
-	auto &table = pipeline.table;
-
 	uint64_t iteration = 0;
 
 #ifdef HAVE_CUDA
@@ -451,58 +450,49 @@ void WorkerThread::execute_pipeline() {
 
 #ifdef HAVE_CUDA
 		// keep GPU(s) busy
-		if (local_inflight.size() > 0) {
-			// rwticket_wrlock(&pipeline.g_queue_rwlock);
+		for (auto &inflight_probe : local_inflight) {
+			if (inflight_probe->status == InflightProbe::Status::CPU_SHARE) {
+				continue;
+			}
+			if (!inflight_probe->is_gpu_available()) {
+				continue;
+			}
+			// get the keys to probe
+			uint32_t *tkeys = (uint32_t *)pipeline.table.columns[0];
 
-			for (auto &inflight_probe : local_inflight) {
-				if (inflight_probe->status == InflightProbe::Status::CPU_SHARE) {
-					continue;
-				}
-				if (!inflight_probe->is_gpu_available()) {
-					continue;
-				}
-				// get the keys to probe
-				uint32_t *tkeys = (uint32_t *)table.columns[0];
+			// inflight_probe.probe->result();
+			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
+				printf("%d: cpu share %p\n",
+					std::this_thread::get_id(), inflight_probe);
+				pipeline.g_queue_add(inflight_probe);
+				break;
+			}
 
-				// inflight_probe.probe->result();
-				if (inflight_probe->status == InflightProbe::Status::FILTERING) {
-#if 0
-					printf("%d: cpu share %p\n",
-						std::this_thread::get_id(), inflight_probe);
-#endif
-					pipeline.g_queue_add(inflight_probe);
-					break;
-				}
+			morsel_size = pipeline.params.gpu_morsel_size;
+			auto success = pipeline.table.get_range(num, offset, morsel_size);
+			if (!success) {
+				break;
+			}
 
-				morsel_size = pipeline.params.gpu_morsel_size;
-				auto success = table.get_range(num, offset, morsel_size);
-				if (!success) {
-					break;
-				}
+			// issue a new GPU BF probe
+			assert(num <= pipeline.params.gpu_morsel_size);
 
-				// issue a new GPU BF probe
-				assert(num <= pipeline.params.gpu_morsel_size);
-
-				if (inflight_probe->status != InflightProbe::Status::FRESH) {
-					assert(inflight_probe->processed >= inflight_probe->num);
-				}
+			if (inflight_probe->status != InflightProbe::Status::FRESH) {
+				assert(inflight_probe->processed >= inflight_probe->num);
+			}
 
 #ifdef PROFILE
-				std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
+			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 #endif
 
-				// printf("probe schedule(%p)\n", inflight_probe);
-				inflight_probe->reset(offset, num);
-				inflight_probe->status = InflightProbe::Status::FILTERING;
-				inflight_probe->probe->contains(&tkeys[offset], num);
-#if 0
-				printf("%d: schedule probe %p offset %ld num %ld\n",
-					std::this_thread::get_id(), inflight_probe, offset, num);
-#endif
-			}
-#endif
-			// rwticket_wrunlock(&pipeline.g_queue_rwlock);
+			// printf("probe schedule(%p)\n", inflight_probe);
+			inflight_probe->reset(offset, num);
+			inflight_probe->status = InflightProbe::Status::FILTERING;
+			inflight_probe->probe->contains(&tkeys[offset], num);
+			printf("%d: schedule probe %p offset %ld num %ld\n",
+				std::this_thread::get_id(), inflight_probe, offset, num);
 		}
+#endif
 
 		// do CPU work
 		morsel_size = pipeline.params.cpu_morsel_size;
@@ -517,17 +507,15 @@ void WorkerThread::execute_pipeline() {
 				uint32_t* results = probe->probe->get_results();
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
-				do_cpu_join(table, results, nullptr, num, offset + probe->offset);
+				do_cpu_join(pipeline.table, results, nullptr, num, offset + probe->offset);
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
 				assert(old + num <= probe->num);
 #if 1
 				if (old + num == probe->num) {
 					// re-use or dealloc 
-#if 0
 					printf("%d: remove %p\n",
 						std::this_thread::get_id(), probe);
-#endif
 					pipeline.g_queue_remove(probe);
 				}
 #endif
@@ -537,7 +525,7 @@ void WorkerThread::execute_pipeline() {
 		}
 
 		// full CPU join
-		bool success = table.get_range(num, offset, morsel_size);
+		bool success = pipeline.table.get_range(num, offset, morsel_size);
 		if (!success) {
 			// busy waiting until the last tuple is processed
 			// give others a chance
@@ -545,7 +533,7 @@ void WorkerThread::execute_pipeline() {
 			usleep(8*1024);
 			continue;
 		}
-		do_cpu_work(table, num, offset);
+		do_cpu_work(pipeline.table, num, offset);
 		pipeline.processed_tuples(num);
 	}
 
