@@ -9,15 +9,30 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="91.537643mm"
-   height="60.078857mm"
-   viewBox="0 0 91.537644 60.078857"
+   width="72.799812mm"
+   height="52.141354mm"
+   viewBox="0 0 72.799813 52.141352"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
    sodipodi:docname="query.svg">
   <defs
      id="defs2">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker2946"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         inkscape:connector-curvature="0"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2944" />
+    </marker>
     <marker
        inkscape:isstock="true"
        style="overflow:visible"
@@ -55,7 +70,8 @@
        refX="0"
        id="marker1762"
        style="overflow:visible"
-       inkscape:isstock="true">
+       inkscape:isstock="true"
+       inkscape:collect="always">
       <path
          id="path1760"
          d="M 0,0 5,-5 -12.5,0 5,5 Z"
@@ -162,8 +178,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="112.75619"
-     inkscape:cy="78.182753"
+     inkscape:cx="-87.635457"
+     inkscape:cy="-20.054584"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -180,8 +196,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid834"
-       originx="-35.79436"
-       originy="-230.7499" />
+       originx="-54.53219"
+       originy="-236.04152" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -199,7 +215,7 @@
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-35.794361,-6.1712412)">
+     transform="translate(-54.532192,-8.8170724)">
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -293,5 +309,27 @@
        d="M 88.370831,14.954169 V 25.537503"
        id="path987-4"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="54.012844"
+       y="49.0854"
+       id="text842-7-8-9-1"><tspan
+         sodipodi:role="line"
+         id="tspan840-5-3-6-7"
+         x="54.012844"
+         y="49.0854"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.29166651px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">Bloom filter</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.26458332, 0.26458332;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker2946)"
+       d="m 63.500001,50.9375 10.583333,2.645833"
+       id="path2910"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.26458332, 0.26458332;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker1762)"
+       d="m 84.666668,27.125 c 0,0 -13.131124,-1.75879 -17.962785,1.829857 C 62.632494,31.978823 60.854168,43 60.854168,43"
+       id="path2912"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cac" />
   </g>
 </svg>
