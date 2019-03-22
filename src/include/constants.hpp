@@ -24,7 +24,8 @@ enum {
 	gpu = true,
 	cpu_bloomfilter = false,
 	selectivity = 1,
-	num_columns = 1
+	num_columns = 1,
+	only_generate = false,
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults

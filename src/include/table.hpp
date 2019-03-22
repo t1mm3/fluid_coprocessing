@@ -37,6 +37,13 @@ public:
 			columns.push_back(col);
 		}
 	}
+
+	Table(const Table& t) {
+		capacity = t.capacity;
+		start = t.start.load();
+		done = t.done.load();
+		columns = t.columns;
+	}
 	void reset() {
 		done = 0;
 		start = 0;

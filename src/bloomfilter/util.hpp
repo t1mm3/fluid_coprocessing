@@ -312,6 +312,7 @@ struct params_t {
 	bool cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
 	std::size_t selectivity 	  {defaults::selectivity};
 	std::string csv_path		  {""};
+	bool only_generate {defaults::only_generate};
 
 	std::size_t num_threads 	  {std::thread::hardware_concurrency()};
 	std::size_t num_columns 	  {defaults::num_columns};
@@ -332,6 +333,7 @@ void print_help(int argc, char** argv) {
     fprintf(stderr, "   --cpu_bloomfilter=[default:%u]\n",     defaults::cpu_bloomfilter);
     fprintf(stderr, "   --selectivity=[default:%u]\n",     defaults::selectivity);
     fprintf(stderr, "   --num_threads=[default:%u]\n",     std::thread::hardware_concurrency());
+    fprintf(stderr, "	--only_generate=[default:%u]\n", 	defaults::only_generate);
 }
 //===----------------------------------------------------------------------===//
 
@@ -362,8 +364,14 @@ params_t parse_command_line(int argc, char **argv) {
 			params.filter_size = std::stoi(arg_value);
 		} else if (arg_name == "probe_size") {
 			params.probe_size = std::stoi(arg_value);
+			if (!params.probe_size) {
+				params.probe_size = defaults::probe_size;
+			}
 		} else if (arg_name == "build_size") {
 			params.build_size = std::stoi(arg_value);
+			if (!params.build_size) {
+				params.build_size = defaults::build_size;
+			}
 		} else if (arg_name == "gpu_morsel_size") {
 			params.gpu_morsel_size = std::stoi(arg_value);
 		} else if (arg_name == "cpu_morsel_size") {
@@ -374,6 +382,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.selectivity = std::stoi(arg_value);
 		} else if (arg_name == "gpu") {
 			params.gpu = std::stoi(arg_value) != 0;
+		} else if (arg_name == "only_generate") {
+			params.only_generate = std::stoi(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
 			params.cpu_bloomfilter = std::stoi(arg_value) != 0;
 		} else if (arg_name == "num_threads") {
@@ -444,14 +454,17 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
 
     for(auto column_probe : table_probe.columns) {
     	auto column = static_cast<int32_t*>(column_probe);
-   		for(size_t i = number_of_matches; i != table_probe.size();) {
+    	const size_t num = table_probe.size();
+
+   		for(size_t i = number_of_matches; i < num;) {
         	int32_t new_random = distribution(engine);
         	if(build_set.find(new_random) == build_set.end()){
         		column[i] =  new_random;
         		i++;
         	}
         }
-    
+
+        std::shuffle(&column[0], column + num, engine);   
     }
 }
 //===----------------------------------------------------------------------===//

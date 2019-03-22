@@ -26,6 +26,39 @@ void gen_csv(const std::string& fname, const Table& t, bool probe) {
     f.close();
 };
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+size_t file_size(const std::string& fname) {
+    struct stat st;
+    stat(fname.c_str(), &st);
+    return st.st_size;
+}
+
+void write_column(const std::string& file, Table& table, size_t col, size_t num) {
+    std::ofstream out(file, std::ios::out | std::ios::binary);
+    assert(out.is_open());
+    int32_t *d = (int32_t *)table.columns[col];
+
+    out.write((char*)d, sizeof(int32_t) * num);
+    out.close();
+};
+
+void read_column(Table& table, const std::string& file, size_t col, size_t num) {
+    std::ifstream in(file, std::ios::in | std::ios::binary);
+    assert(in.is_open());
+
+    int32_t *d = (int32_t *)table.columns[col];
+
+    in.read((char*)d, sizeof(int32_t) * num);
+
+    in.close();
+};
+
+
+#include <tuple>
+#include <sstream>
+
 //===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
     auto params = parse_command_line(argc, argv);
@@ -35,20 +68,66 @@ int main(int argc, char** argv) {
 
     std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
-    // Build relation
-    Table table_build(params.num_columns, params.build_size);
-    populate_table(table_build);
+    size_t build_size = params.build_size;
+    size_t probe_size = params.probe_size;
+    size_t selectivity = params.selectivity;
+    size_t num_columns = params.num_columns;
+    Table table_build(num_columns, build_size);
+    Table table_probe(1,probe_size);
 
-    Table table_probe(1,params.probe_size);
-    populate_table(table_probe);
+    auto gen_fname = [&] (size_t id) {
+        std::ostringstream s;
+        s << "data_" << id << "_" << "_s_" << selectivity
+            << "_b_" << build_size << "_p_" << probe_size << ".bin";
+        return s.str();
+    };
 
-    set_selectivity(table_build, table_probe, params.selectivity);
+    const std::string bfile(gen_fname(0));
+    const std::string pfile(gen_fname(1));
+    bool cached = true;
+
+    if (!file_size(bfile) || !file_size(pfile)) {
+        std::cout << "Files not cached. Recreating ..." << std::endl;
+        // not cached, create files
+        cached = false;
+
+        populate_table(table_build);
+        populate_table(table_probe);
+
+        set_selectivity(table_build, table_probe, selectivity);
+
+        std::cout << "Writing 'build' to disk ..." << std::endl;
+        write_column(bfile, table_build, 0, build_size);
+        std::cout << "Writing 'probe' to disk ..." << std::endl;
+        write_column(pfile, table_probe, 0, probe_size);
+
+        std::cout << "Done" << std::endl;
+    }
+
+    if (params.only_generate) {
+        exit(0);
+    }
+
+    // load data
+    assert(file_size(bfile) > 0);
+    assert(file_size(pfile) > 0);
+    assert(file_size(bfile) == sizeof(int32_t) * build_size);
+    assert(file_size(pfile) == sizeof(int32_t) * probe_size);
+
+    read_column(table_build, bfile, 0, build_size);
+    read_column(table_probe, pfile, 0, probe_size);
+
+
 
     if (!params.csv_path.empty()) {
-        printf("Generating CSV ...\n");
+        std::cout << "Writing build relation ..." <<std::endl;
 
         gen_csv(params.csv_path + "build.csv", table_build, false);
+
+        std::cout << "Writing probe relation ..." <<std::endl;
         gen_csv(params.csv_path + "probe.csv", table_probe, true);
+
+        std::cout << "Done" <<std::endl;
         exit(0);
     }
 
