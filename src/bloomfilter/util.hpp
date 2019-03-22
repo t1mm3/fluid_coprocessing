@@ -316,7 +316,8 @@ struct params_t {
 
 	std::size_t num_threads 	  {std::thread::hardware_concurrency()};
 	std::size_t num_columns 	  {defaults::num_columns};
-	std::size_t slowdown 	  {defaults::slowdown};
+	std::size_t slowdown 	  	{defaults::slowdown};
+	std::size_t num_warmup 		{defaults::num_warmup};
 };
 //===----------------------------------------------------------------------===//
 

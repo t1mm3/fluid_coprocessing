@@ -27,6 +27,7 @@ enum {
 	num_columns = 1,
 	only_generate = false,
 	slowdown = 0,
+	num_warmup = 2,
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
