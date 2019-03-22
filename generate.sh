@@ -12,12 +12,7 @@ SPROBE="${PROBE:-0}"
 SBUILD="${BUILD:-0}"
 CMD="build/release/main_cu"
 
-for ((i=1;i<=10;i++)); 
-do
-	$CMD --only_generate=1 --probe_size=${SPROBE} --build_size=${SBUILD} --selectivity=${i} &
-done
-
-wait
+$CMD --only_generate=1 --probe_size=${SPROBE} --build_size=${SBUILD} --selectivity=1 &
 
 for ((i=0;i<=100;i+=5)); 
 do
