@@ -318,6 +318,7 @@ struct params_t {
 	std::size_t num_columns 	  {defaults::num_columns};
 	std::size_t slowdown 	  	{defaults::slowdown};
 	std::size_t num_warmup 		{defaults::num_warmup};
+	bool emulate_gpu			{defaults::emulate_gpu};
 };
 //===----------------------------------------------------------------------===//
 
@@ -391,6 +392,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.only_generate = std::stoi(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
 			params.cpu_bloomfilter = std::stoi(arg_value) != 0;
+		} else if (arg_name == "emulate_gpu") {
+			params.emulate_gpu = std::stoi(arg_value) != 0;
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoi(arg_value);
 			if (n > 0) {

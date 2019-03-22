@@ -30,8 +30,14 @@ struct InflightProbe {
 	Profiling::Time prof_start;
 
 	cudaStream_t stream;
+
+	bool emulate;
+
+	FilterWrapper &filter;
+
 	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
-			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
+			int64_t start, int64_t tuples_to_process, bool emulate)
+			: num(tuples_to_process), offset(start), emulate(emulate), filter(filter) {
 		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking  & cudaEventDisableTiming);
 		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device);
 
@@ -39,10 +45,24 @@ struct InflightProbe {
 		processed = 0;
 	}
 	bool is_gpu_available() {
+		if (emulate) {
+			return true;
+		}
 		return probe->is_done();
 	}
 	void wait() {
+		if (emulate) {
+			return;
+		}
 		return probe->wait();
+	}
+
+	void contains(uint32_t* keys, int64_t num) {
+		if (emulate) {
+			filter.contains_bit((uint8_t*)probe->get_results(), keys, num);
+			return;
+		}
+		probe->contains(keys, num);
 	}
 
 	void reset(int64_t noffset, int64_t nnum) {

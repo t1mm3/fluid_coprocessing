@@ -238,7 +238,8 @@ void WorkerThread::execute_pipeline() {
 		const int64_t tuples = pipeline.params.gpu_morsel_size;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
-			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
+			local_inflight.push_back(new InflightProbe(filter,
+				cuda_filter, device, offset, tuples, pipeline.params.emulate_gpu));
 			offset += tuples;
 		}
 	}
@@ -295,7 +296,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
-			inflight_probe->probe->contains(&tkeys[offset], num);
+			inflight_probe->contains(&tkeys[offset], num);
 #ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
 				std::this_thread::get_id(), inflight_probe, offset, num);

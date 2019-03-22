@@ -94,6 +94,36 @@ public:
 		});
 	}
 
+	NO_INLINE void contains_bit(uint8_t* CPU_R res, uint32_t* CPU_R keys, int num) {
+		int i=0;
+
+		i = 0;
+#define A(idx, off) if (contains((key_t)keys[idx+off])) { r |= 1 << off; } 
+
+		for (; i+8<num; i+=8) {
+			uint8_t r = 0;
+			A(i, 0);
+			A(i, 1);
+			A(i, 2);
+			A(i, 3);
+			A(i, 4);
+			A(i, 5);
+			A(i, 6);
+			A(i, 7);
+
+			res[i/8] = r;
+		}
+
+		res[i/8] = 0;
+
+		for (;i<num; i++) {
+			uint8_t r = res[i/8];
+			A(i, 0);
+			res[i/8] = r;
+		}
+#undef A
+	}	
+
 	filter_t bloom_filter;
 	word_t *filter_data;
 	size_t filter_data_size;
