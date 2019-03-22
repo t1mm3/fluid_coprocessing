@@ -29,6 +29,7 @@ struct WorkerThread {
 	bool matches[kVecSize];
 	int sel1[kVecSize];
 	int sel2[kVecSize];
+	int sel3[kVecSize];
 	uint64_t ksum = 0;
 	uint64_t psum = 0;
 
@@ -77,9 +78,10 @@ struct WorkerThread {
 
 	NO_INLINE void execute_pipeline();
 
-	NO_INLINE void do_cpu_work(Table &table, int64_t num, int64_t offset) {
+	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
-		do_cpu_join(table, nullptr, nullptr, num, offset);
+
+		do_cpu_join(table, nullptr, nullptr, mnum, moffset);
 	}
 
 
@@ -127,8 +129,19 @@ struct WorkerThread {
 				sel = nullptr;
 			}
 
-			// probe
+			// CPU bloom filter, if nothing else filters (creates a 'sel')
+			if (!sel && pipeline.params.cpu_bloomfilter) {
+#ifdef PROFILE
+				num_prefilter += num;
+#endif
+				num = filter.contains_sel(&sel3[0], keys, sel, num);
+				sel = &sel3[0];
+#ifdef PROFILE
+				num_postfilter += num;
+#endif
+			}
 
+			// Hash probe
 			Vectorized::map_hash(hashs, keys, sel, num);
 #ifdef PROFILE
 			num_prejoin += num;
@@ -142,7 +155,7 @@ struct WorkerThread {
 
 				sel = &sel1[0];
 
-				// TODO: gather some payload columns
+				// gather some payload columns
 				for (int i = 1; i < NUM_PAYLOAD; i++) {
 					ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
 				}

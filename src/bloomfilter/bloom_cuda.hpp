@@ -80,6 +80,20 @@ public:
 		return bloom_filter.contains(&filter_data[0], key);
 	}
 
+	NO_INLINE int contains_sel(int* CPU_R res, int32_t* CPU_R keys,
+			int* CPU_R sel, int num) {
+		return Vectorized::select(res, sel, num, [&] (auto i) {
+			return contains((key_t)keys[i]);
+		});
+	}
+
+	NO_INLINE void contains_chr(uint8_t* CPU_R res, int32_t* CPU_R keys,
+			int* CPU_R sel, int num) {
+		Vectorized::map(sel, num, [&] (auto i) {
+			res[i] = (uint8_t)contains((key_t)keys[i]);
+		});
+	}
+
 	filter_t bloom_filter;
 	word_t *filter_data;
 	size_t filter_data_size;
