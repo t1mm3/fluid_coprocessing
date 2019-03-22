@@ -4,6 +4,7 @@
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <random>
+#include <iostream>
 #include "bloomfilter/util.hpp"
 
 void gen_csv(const std::string& fname, const Table& t, bool probe) {
@@ -29,14 +30,19 @@ void gen_csv(const std::string& fname, const Table& t, bool probe) {
 int main(int argc, char** argv) {
     auto params = parse_command_line(argc, argv);
     TaskManager manager;
+    std::ofstream results_file;
+    results_file.open("results.csv", std::ios::out);
 
     std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
-    Table table_build(1,params.build_size);
+    // Build relation
+    Table table_build(params.num_columns, params.build_size);
     populate_table(table_build);
 
     Table table_probe(1,params.probe_size);
     populate_table(table_probe);
+
+    set_selectivity(table_build, table_probe, params.selectivity);
 
     if (!params.csv_path.empty()) {
         printf("Generating CSV ...\n");
@@ -71,9 +77,8 @@ int main(int argc, char** argv) {
 
     std::vector<HashTablinho*> hts = {ht};
     Pipeline pipeline(hts, table_probe, params);
-    //manager.execute_query(pipeline);
 
-    // Build 128 bytes Blocked Bloom Filter on CPU
+    // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
         size_t m = params.filter_size;
         FilterWrapper filter(m);
@@ -108,7 +113,9 @@ int main(int argc, char** argv) {
         }
         auto final_elapsed_time = total_seconds / params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
+        results_file << "Total time :" << final_elapsed_time << std::endl;
     }
+    results_file.close();
 
     return 0;
 }

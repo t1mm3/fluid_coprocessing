@@ -23,6 +23,8 @@ enum {
 	num_repetitions = 3,
 	gpu = true,
 	cpu_bloomfilter = false,
+	selectivity = 1,
+	num_columns = 1
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
