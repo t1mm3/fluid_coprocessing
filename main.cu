@@ -1,4 +1,5 @@
 #include "hash_table.hpp"
+#include "profile_printer.hpp"
 #include "bloomfilter.hpp"
 #include "task_manager.hpp"
 #include <thrust/host_vector.h>
@@ -6,6 +7,7 @@
 #include <random>
 #include <iostream>
 #include "bloomfilter/util.hpp"
+
 
 void gen_csv(const std::string& fname, const Table& t, bool probe) {
     uint32_t *table_keys = (uint32_t *)t.columns[0];
@@ -180,6 +182,9 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
 
+        ProfilePrinter profile_info(params.num_repetitions);
+        profile_info.write_header(results_file);
+
         double total_seconds = 0.0;
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe
@@ -189,13 +194,16 @@ int main(int argc, char** argv) {
 
             if (i >= params.num_warmup) {
                 total_seconds += std::chrono::duration<double>(end - start).count();
+                // Profile output
+                profile_info.pipeline_time += total_seconds;
             }
 
             pipeline.reset();
         }
         auto final_elapsed_time = total_seconds / params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
-        results_file << "Total time :" << final_elapsed_time << std::endl;
+
+        profile_info.write_profile(results_file);
     }
     results_file.close();
 
