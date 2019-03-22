@@ -1,5 +1,7 @@
 #pragma once
 
+// #define GPU_DEBUG
+
 #include "rwticket.hpp"
 
 #include "bloomfilter/bloom_cuda.hpp"
@@ -238,9 +240,10 @@ public:
 			onum = n;
 			ooffset = off;
 
+#ifdef GPU_DEBUG
 			printf("%d: g_queue_get_range %p offset %ld num %ld\n",
 				std::this_thread::get_id(), p, ooffset, onum);
-
+#endif
 			rwticket_rdunlock(&g_queue_rwlock);
 			assert(n > 0);
 			return p;
@@ -462,8 +465,10 @@ void WorkerThread::execute_pipeline() {
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
+#ifdef GPU_DEBUG
 				printf("%d: cpu share %p\n",
 					std::this_thread::get_id(), inflight_probe);
+#endif
 				pipeline.g_queue_add(inflight_probe);
 				break;
 			}
@@ -489,8 +494,10 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->probe->contains(&tkeys[offset], num);
+#ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
 				std::this_thread::get_id(), inflight_probe, offset, num);
+#endif
 		}
 #endif
 
@@ -514,8 +521,10 @@ void WorkerThread::execute_pipeline() {
 #if 1
 				if (old + num == probe->num) {
 					// re-use or dealloc 
+#ifdef GPU_DEBUG
 					printf("%d: remove %p\n",
 						std::this_thread::get_id(), probe);
+#endif
 					pipeline.g_queue_remove(probe);
 				}
 #endif
