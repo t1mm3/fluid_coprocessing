@@ -6,6 +6,24 @@
 #include <random>
 #include "bloomfilter/util.hpp"
 
+void gen_csv(const std::string& fname, const Table& t, bool probe) {
+    uint32_t *table_keys = (uint32_t *)t.columns[0];
+    std::ofstream f;
+    f.open(fname);
+
+    auto num = t.size();
+    for (size_t row=0; row<num; row++) {
+        f << table_keys[row];
+        if (!probe) {
+            for (int k=0; k<NUM_PAYLOAD; k++) {
+                f << "|";
+                f << "0";
+            }
+        }
+        f << "\n";
+    }
+    f.close();
+};
 
 //===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
@@ -16,6 +34,17 @@ int main(int argc, char** argv) {
 
     Table table_build(1,params.build_size);
     populate_table(table_build);
+
+    Table table_probe(1,params.probe_size);
+    populate_table(table_probe);
+
+    if (!params.csv_path.empty()) {
+        printf("Generating CSV ...\n");
+
+        gen_csv(params.csv_path + "build.csv", table_build, false);
+        gen_csv(params.csv_path + "probe.csv", table_probe, true);
+        exit(0);
+    }
 
     auto ht = new HashTablinho(
         sizeof(int32_t) + // key 
@@ -40,8 +69,6 @@ int main(int argc, char** argv) {
         ht->FinalizeBuild();
     });
 
-    Table table_probe(1,params.probe_size);
-    populate_table(table_probe);
     std::vector<HashTablinho*> hts = {ht};
     Pipeline pipeline(hts, table_probe, params);
     //manager.execute_query(pipeline);

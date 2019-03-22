@@ -307,6 +307,7 @@ struct params_t {
 	std::size_t cpu_morsel_size   {defaults::cpu_morsel_size};
 	std::size_t num_repetitions       {defaults::num_repetitions};
 	bool gpu  {defaults::gpu};
+	std::string csv_path  {""};
 	std::size_t num_threads {std::thread::hardware_concurrency()};
 };
 //===----------------------------------------------------------------------===//
@@ -315,6 +316,7 @@ struct params_t {
 void print_help(int argc, char** argv) {
     fprintf(stderr, "Unrecognized command line option.\n");
     fprintf(stderr, "Usage: %s [args]\n", argv[0]);
+    fprintf(stderr, "   --csv_path=\n");
     fprintf(stderr, "   --filter_size=[default:%u]\n",     defaults::filter_size);
     fprintf(stderr, "   --probe_size=[default:%u]\n",      defaults::probe_size);
     fprintf(stderr, "   --build_size=[default:%u]\n",      defaults::build_size);
@@ -342,6 +344,8 @@ params_t parse_command_line(int argc, char **argv) {
 		if(arg_value == "") {
 			print_help(argc, argv);
 			exit(EXIT_FAILURE);
+		} else if (arg_name == "csv_path") {
+			params.csv_path = arg_value;
 		} else if (arg_name == "num_blocks") {
 			params.num_blocks = std::stoi(arg_value);
 		} else if (arg_name == "threads-per-block") {
