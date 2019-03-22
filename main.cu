@@ -180,13 +180,18 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
 
+        static constexpr size_t num_warmup = 2;
+
         double total_seconds = 0.0;
-        for(auto i = 0; i != params.num_repetitions; ++i) {
+        for(auto i = 0; i < params.num_repetitions + num_warmup; ++i) {
             //execute probe
             auto start = std::chrono::system_clock::now();
             manager.execute_query(pipeline, filter, cf);
             auto end = std::chrono::system_clock::now();
-            total_seconds += std::chrono::duration<double>(end - start).count();
+
+            if (i >= num_warmup) {
+                total_seconds += std::chrono::duration<double>(end - start).count();
+            }
 
             pipeline.reset();
         }
