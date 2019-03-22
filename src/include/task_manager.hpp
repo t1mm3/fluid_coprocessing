@@ -40,6 +40,8 @@ struct InflightProbe {
 	std::atomic<int64_t> cpu_offset;
 	std::atomic<int64_t> processed;
 
+	Profiling::Time prof_start;
+
 	cudaStream_t stream;
 	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
 			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
@@ -83,6 +85,10 @@ struct Pipeline {
 	std::vector<HashTablinho *> hts;
 	Table &table; //!< Probe relation
 
+	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_aggr_gpu;
+	Profiling::Time prof_aggr_gpu_cpu_join;
+
 	std::atomic<int64_t> tuples_morsel;
 
 #ifdef PROFILE
@@ -114,6 +120,7 @@ public:
 		num_postjoin = 0;
 #endif
 		ksum = 0;
+		psum = 0;
 		g_queue_head = nullptr;
 		g_queue_tail = nullptr;
 		memset(&g_queue_rwlock, 0, sizeof(g_queue_rwlock));
@@ -142,6 +149,11 @@ public:
 		num_postjoin = 0;
 #endif
 		ksum = 0;
+		psum = 0;
+
+		prof_aggr_cpu.reset();
+		prof_aggr_gpu.reset();
+		prof_aggr_gpu_cpu_join.reset();
 		table.reset();
 	}
 
@@ -255,6 +267,7 @@ public:
 
 
 	std::atomic<uint64_t> ksum;
+	std::atomic<uint64_t> psum;
 };
 
 struct WorkerThread;
@@ -269,6 +282,8 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	uint64_t ksum = 0;
+	uint64_t psum = 0;
+
 	int32_t payload[kVecSize * NUM_PAYLOAD];
 
 	int64_t tuples = 0;
@@ -281,6 +296,10 @@ struct WorkerThread {
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 
 	std::vector<InflightProbe*> local_inflight;
+
+	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_aggr_gpu;
+	Profiling::Time prof_aggr_gpu_cpu_join;
 
 #ifdef PROFILE
 	uint64_t num_prefilter = 0;
@@ -311,6 +330,7 @@ struct WorkerThread {
 	NO_INLINE void execute_pipeline();
 
 	NO_INLINE void do_cpu_work(Table &table, int64_t num, int64_t offset) {
+		Profiling::Scope profile(prof_aggr_cpu);
 		do_cpu_join(table, nullptr, nullptr, num, offset);
 	}
 
@@ -387,6 +407,10 @@ struct WorkerThread {
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
 
+			for (int i = 1; i < NUM_PAYLOAD; i++) {
+				Vectorized::glob_sum(&psum, payload + (i-1)*kVecSize, sel, num);
+			}
+
 			tuples += num;
 		});
 	}
@@ -416,8 +440,8 @@ public:
 			delete worker;
 		}
 
-		printf("KSum %ld tuples procssed %ld tuplesmorsel %ld\n",
-			pipeline.ksum.load(),
+		printf("KSum %ld PSum %ld tuples procssed %ld tuplesmorsel %ld\n",
+			pipeline.ksum.load(), pipeline.psum.load(),
 			pipeline.get_tuples_processed(), pipeline.tuples_morsel.load());
 
 #ifdef PROFILE
@@ -465,6 +489,8 @@ void WorkerThread::execute_pipeline() {
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
+				prof_aggr_gpu.aggregate(Profiling::Time::diff(Profiling::stop(false),
+					inflight_probe->prof_start));
 #ifdef GPU_DEBUG
 				printf("%d: cpu share %p\n",
 					std::this_thread::get_id(), inflight_probe);
@@ -493,6 +519,7 @@ void WorkerThread::execute_pipeline() {
 			// printf("probe schedule(%p)\n", inflight_probe);
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
+			inflight_probe->prof_start = Profiling::start(true);
 			inflight_probe->probe->contains(&tkeys[offset], num);
 #ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
@@ -514,7 +541,11 @@ void WorkerThread::execute_pipeline() {
 				uint32_t* results = probe->probe->get_results();
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
-				do_cpu_join(pipeline.table, results, nullptr, num, offset + probe->offset);
+
+				{
+					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
+					do_cpu_join(pipeline.table, results, nullptr, num, offset + probe->offset);
+				}
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
 				assert(old + num <= probe->num);
@@ -546,7 +577,11 @@ void WorkerThread::execute_pipeline() {
 		pipeline.processed_tuples(num);
 	}
 
+	pipeline.prof_aggr_cpu.atomic_aggregate(prof_aggr_cpu);
+	pipeline.prof_aggr_gpu.atomic_aggregate(prof_aggr_gpu);
+	pipeline.prof_aggr_gpu_cpu_join.atomic_aggregate(prof_aggr_gpu_cpu_join);
 	std::atomic_fetch_add(&pipeline.ksum, ksum);
+	std::atomic_fetch_add(&pipeline.psum, psum);
 	std::atomic_fetch_add(&pipeline.tuples_morsel, tuples_morsel);
 #ifdef PROFILE
 	std::atomic_fetch_add(&pipeline.num_prefilter, num_prefilter);
