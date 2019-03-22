@@ -316,6 +316,7 @@ struct params_t {
 
 	std::size_t num_threads 	  {std::thread::hardware_concurrency()};
 	std::size_t num_columns 	  {defaults::num_columns};
+	std::size_t slowdown 	  {defaults::slowdown};
 };
 //===----------------------------------------------------------------------===//
 
@@ -334,6 +335,7 @@ void print_help(int argc, char** argv) {
     fprintf(stderr, "   --selectivity=[default:%u]\n",     defaults::selectivity);
     fprintf(stderr, "   --num_threads=[default:%u]\n",     std::thread::hardware_concurrency());
     fprintf(stderr, "	--only_generate=[default:%u]\n", 	defaults::only_generate);
+    fprintf(stderr, "	--slowdown=[default:%u]\n", 	defaults::slowdown);
 }
 //===----------------------------------------------------------------------===//
 
@@ -372,6 +374,8 @@ params_t parse_command_line(int argc, char **argv) {
 			if (!params.build_size) {
 				params.build_size = defaults::build_size;
 			}
+		} else if (arg_name == "slowdown") {
+			params.slowdown = std::stoi(arg_value);
 		} else if (arg_name == "gpu_morsel_size") {
 			params.gpu_morsel_size = std::stoi(arg_value);
 		} else if (arg_name == "cpu_morsel_size") {

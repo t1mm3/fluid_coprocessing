@@ -30,6 +30,7 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	int sel3[kVecSize];
+
 	uint64_t ksum = 0;
 	uint64_t psum = 0;
 
@@ -56,6 +57,13 @@ struct WorkerThread {
 	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
 #endif
+
+	// temporary vectors for slowdown
+	int64_t tmp1[kVecSize];
+	int64_t tmp2[kVecSize];
+	int64_t tmp3[kVecSize];
+
+
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf)
@@ -139,6 +147,12 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_postfilter += num;
 #endif
+			}
+
+			// Other pipeline stuff
+			if (pipeline.params.slowdown > 0) {
+				Vectorized::expensive_op(pipeline.params.slowdown,
+					tmp1, tmp2, tmp3, sel, num);
 			}
 
 			// Hash probe

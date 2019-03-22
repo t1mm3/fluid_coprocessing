@@ -59,6 +59,38 @@ struct Vectorized {
 		return res;
 	}
 
+	static void NO_INLINE map_div64(int64_t* CPU_R r, int64_t* CPU_R a, int64_t* CPU_R b,
+			int* CPU_R sel, int num) {
+		map(sel, num, [&] (auto i) { r[i] = a[i] / b[i]; });
+	}
+
+	static void NO_INLINE expensive_op(size_t repeats, int64_t* CPU_R t1, int64_t* CPU_R t2,
+			int64_t* CPU_R t3, int* CPU_R sel, int num) {
+		for (size_t i=0; i<repeats; i++) {
+			int64_t* r, * a, * b;
+
+			switch (i % 3) {
+			case 0:
+				r = t1;
+				a = t2;
+				b = t3;
+				break;
+			case 1:
+				a = t1;
+				b = t2;
+				r = t3;
+				break;
+			case 2:
+				b = t1;
+				a = t2;
+				r = t3;
+				break;
+			}	
+
+			map_div64(r, a, b, sel, num);
+		}
+	}
+
 	static void NO_INLINE map_not_match_bucket_t(bool *CPU_R out, bucket_t *CPU_R a, bucket_t b,
 			int *CPU_R sel, int num) {
 		map(sel, num, [&](auto i) { out[i] = a[i] != b; });
