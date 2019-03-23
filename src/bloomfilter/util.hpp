@@ -434,9 +434,6 @@ void set_incremental_values(T* column, size_t range_size) {
 
     auto increment_one = [n = 0]() mutable { return ++n; };   
     std::generate(&column[0], column + range_size, increment_one); // Initializes the container with random uniform distributed values
-
-	// random shuffle to break sequential access
-	//std::shuffle(&column[0], column + range_size, engine);
 }
 //===----------------------------------------------------------------------===//
 
@@ -461,6 +458,19 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
     	auto column = static_cast<int32_t*>(column_probe);
     	const size_t num = table_probe.size();
 
+    	{
+    		// require 'number_of_matches' ... copy build-side multiple times into probe
+    		// THIS MIGHT OVERLAP AND MIGHT BE OVERWRITTEN BY THE CONSEQUENT PASS
+    		size_t offset = 0;
+    		size_t num_copy = (number_of_matches + table_build.size()-1) / table_build.size();
+    		for (size_t c=0; c<num_copy; c++) {
+    			memcpy(&column[offset], column_build, table_build.size() * sizeof(int32_t));
+
+    			offset += table_build.size();
+    		}
+    	}
+
+    	// replace
    		for(size_t i = number_of_matches; i < num;) {
         	int32_t new_random = distribution(engine);
         	if(build_set.find(new_random) == build_set.end()){

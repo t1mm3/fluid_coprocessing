@@ -86,6 +86,16 @@ struct WorkerThread {
 
 	NO_INLINE void execute_pipeline();
 
+	void _execute_pipeline() {
+		Profiling::Time prof_pipeline_cycles;
+		{
+			Profiling::Scope __prof(prof_pipeline_cycles);	
+			execute_pipeline();
+		}
+
+		pipeline.prof_pipeline_cycles.atomic_aggregate(prof_pipeline_cycles);
+	}
+
 	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
 
@@ -192,7 +202,7 @@ struct WorkerThread {
 };
 
 void ExecuteWorkerThread(WorkerThread *ptr) {
-	ptr->execute_pipeline();
+	ptr->_execute_pipeline();
 }
 
 class TaskManager {
@@ -230,6 +240,7 @@ public:
 void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
 	uint64_t iteration = 0;
+
 
 #ifdef HAVE_CUDA
 	if (pipeline.params.gpu && device == 0) {

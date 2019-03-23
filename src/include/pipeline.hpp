@@ -20,6 +20,7 @@ struct Pipeline {
 	Profiling::Time prof_aggr_cpu;
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
+	Profiling::Time prof_pipeline_cycles;
 
 	std::atomic<int64_t> tuples_morsel;
 
@@ -86,6 +87,7 @@ public:
 		prof_aggr_cpu.reset();
 		prof_aggr_gpu.reset();
 		prof_aggr_gpu_cpu_join.reset();
+		prof_pipeline_cycles.reset();
 		table.reset();
 	}
 

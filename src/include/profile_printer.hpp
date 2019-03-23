@@ -6,6 +6,8 @@ struct ProfilePrinter {
 	ProfilePrinter(size_t repetitions) : repetitions(repetitions){}
 
 	void write_header (std::ofstream& os) {
+		os << "Pipeline Cycles"   << "|";
+		os << "Pipeline Sum Thread Cycles" << "|";
 		os << "Pipeline Time"  	  << "|";
 		os << "CPU Join Time"  	  << "|";
 		os << "GPU Probe Time" 	  << "|";
@@ -21,6 +23,8 @@ struct ProfilePrinter {
 	}
 
 	void write_profile(std::ofstream& os) {
+		os << (pipeline_cycles / repetitions) << "|";
+		os << (pipeline_sum_thread_cycles / repetitions) << "|";
 		os << (pipeline_time 	 / repetitions)	<< "|";
 		os << (cpu_time 	 	 / repetitions)	<< "|";
 		os << (gpu_time 	 	 / repetitions)	<< "|";
@@ -35,15 +39,17 @@ struct ProfilePrinter {
 
 	}
 
-	int64_t pipeline_time{0};
-	int64_t cpu_time{0};
-	int64_t gpu_time{0};
-	int64_t cpu_gpu_time{0};
+	double pipeline_cycles{0};
+	double pipeline_time{0};
+	double pipeline_sum_thread_cycles{0};
+	double cpu_time{0};
+	double gpu_time{0};
+	double cpu_gpu_time{0};
 	int64_t pre_filter_tuples{0};
 	int64_t fitered_tuples{0};
 	int64_t pos_join_tuples{0};
 	size_t selectivity{0};
 	size_t pre_join_tuples{0};
-	size_t repetitions{0};
+	double repetitions{0};
 
 };
