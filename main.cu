@@ -207,10 +207,8 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
 
-        ProfilePrinter profile_info(params.num_repetitions);
+        ProfilePrinter profile_info(params);
         profile_info.write_header(results_file);
-        profile_info.selectivity = params.selectivity;
-        profile_info.cpu_bloomfilter = params.cpu_bloomfilter;
 
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "constants.hpp"
-
+#include "table.hpp"
+#include <thread>
 #include <algorithm>
 #include <bitset>
 #include <cmath>

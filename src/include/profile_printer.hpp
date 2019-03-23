@@ -1,9 +1,13 @@
 #pragma once
 
 #include <fstream>
+#include "bloomfilter/util.hpp"
 
 struct ProfilePrinter {
-	ProfilePrinter(size_t repetitions) : repetitions(repetitions){}
+	const params_t& params;
+	const int64_t repetitions;
+
+	ProfilePrinter(const params_t& params) : repetitions(params.num_repetitions), params(params) {}
 
 	void write_header (std::ofstream& os) {
 		os << "Pipeline Cycles"   << "|";
@@ -21,8 +25,10 @@ struct ProfilePrinter {
 		os << "Pos Join Tuples"   << "|";
 #endif
 
-		os << "CPUBloomFilter" << "|";
-		os << "Selectivity"       << '\n';
+		os << "CPUBloomFilter"	<< "|";
+		os << "FilterSize"		<< "|";
+		os << "Slowdown"		<< "|";
+		os << "Selectivity"		<< '\n';
 
 	}
 
@@ -41,9 +47,10 @@ struct ProfilePrinter {
 		os << (pre_join_tuples   / repetitions)	<< "|";
 #endif
 		os << (pos_join_tuples   / repetitions)	<< "|";
-		os << (cpu_bloomfilter) 				<< "|";
-		os << (selectivity)						<< "\n";
-
+		os << (params.cpu_bloomfilter) 			<< "|";
+		os << (params.filter_size)				<< "|";
+		os << (params.slowdown)					<< "|";
+		os << (params.selectivity)				<< "\n";
 	}
 
 	double pipeline_cycles{0};
@@ -58,9 +65,6 @@ struct ProfilePrinter {
 	int64_t fitered_tuples{0};
 	int64_t pos_join_tuples{0};
 
-	int cpu_bloomfilter{0};
-	size_t selectivity{0};
 	size_t pre_join_tuples{0};
-	double repetitions{0};
 
 };

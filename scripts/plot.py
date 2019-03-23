@@ -27,12 +27,14 @@ hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 
 
 framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime", "CPUExpOpTime", "GPUProbeTime",
-        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "CPUBloomFilter", "Selectivity"]
+        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "CPUBloomFilter", "FilterSize", "Slowdown", "Selectivity"]
 result_path = "results/"
 
 def plot_sel():
     df = pd.read_csv("{}/selectivity/results-selectivity_cpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
+
+    df = df[df['Slowdown']==0]
 
     filter0 = df[df['CPUBloomFilter']==0]
     filter1 = df[df['CPUBloomFilter']==1]
@@ -52,17 +54,17 @@ def plot_sel():
     # ax1.grid(True)
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
-    ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.plot(filter0['Selectivity'], filter0['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[2], label="Probe pipeline, no CPU filter")
+    #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
+    ax1.plot(filter0['Selectivity'], filter0['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[1], label="Probe pipeline, no CPU filter")
 
-    ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
-    ax1.plot(filter1['Selectivity'], filter1['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[4], label="Probe pipeline CPU filter")
+    #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
+    ax1.plot(filter1['Selectivity'], filter1['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[2], label="Probe pipeline CPU filter")
+
+    ax1.plot(filter2['Selectivity'], filter2['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[3], label="Probe pipeline CPU filter 2")
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
-
-    # ax1.set_ylim([0, 100])  
 
     # Put a legend below current axis
     legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
