@@ -27,7 +27,7 @@ hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 
 
 framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime", "CPUExpOpTime", "GPUProbeTime",
-        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "CPUBloomFilter", "Slowdown", "Selectivity"]
+        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "CPUBloomFilter", "FilterSize", "Slowdown", "Selectivity"]
 result_path = "results/"
 
 def plot_sel():
