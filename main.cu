@@ -188,19 +188,22 @@ int main(int argc, char** argv) {
         profile_info.write_header(results_file);
         profile_info.selectivity = params.selectivity;
 
-        double total_seconds = 0.0;
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe
-            auto start = std::chrono::system_clock::now();
+            const auto start = std::chrono::system_clock::now();
+            const auto start_cycles = rdtsc();
             manager.execute_query(pipeline, filter, cf, profile_info);
+            auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();
 
             if (i >= params.num_warmup) {
                 // Profile output
+                profile_info.pipeline_cycles += (double)(end_cycles - start_cycles);
+                profile_info.pipeline_sum_thread_cycles += (double)(pipeline.prof_pipeline_cycles.cycles);
                 profile_info.pipeline_time   += std::chrono::duration<double>(end - start).count();
-                profile_info.cpu_time        += pipeline.prof_aggr_cpu.cycles;
-                profile_info.gpu_time        += pipeline.prof_aggr_gpu.cycles;
-                profile_info.cpu_gpu_time    += pipeline.prof_aggr_gpu_cpu_join.cycles;
+                profile_info.cpu_time        += (double)pipeline.prof_aggr_cpu.cycles;
+                profile_info.gpu_time        += (double)pipeline.prof_aggr_gpu.cycles;
+                profile_info.cpu_gpu_time    += (double)pipeline.prof_aggr_gpu_cpu_join.cycles;
 
 #ifdef PROFILE
                 profile_info.pre_filter_tuples += pipeline.num_prefilter;
@@ -212,7 +215,7 @@ int main(int argc, char** argv) {
 
             pipeline.reset();
         }
-        auto final_elapsed_time = total_seconds / params.num_repetitions;
+        double final_elapsed_time = profile_info.pipeline_time / (double)params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
 
         profile_info.write_profile(results_file);

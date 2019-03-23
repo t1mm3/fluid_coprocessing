@@ -4,9 +4,13 @@ import os
 
 binary = "build/release/main_cu"
 
+kibi = 1024
+mebi = 1024*kibi
+gibi = 1024*mebi
+
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_size = 419430400     #400 M keys
+default_probe_size = 1*gibi        #1   G keys
 default_build_size = 4194304   	   #4   M keys
 default_num_threads = 16
 default_gpu_morsel_size = 16777216 #16  M keys
@@ -14,7 +18,7 @@ default_cpu_morsel_size = 16384	   #16  K keys
 default_gpu_devices = 0
 default_selectivity = 1
 
-selectivities = [1 for y in range(3)]
+selectivities = range(0, 100, 30)
 
 def syscall(cmd):
 	print(cmd)

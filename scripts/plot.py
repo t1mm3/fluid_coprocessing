@@ -29,7 +29,8 @@ hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 result_path = "results/"
 
 def plot_sel():
-    df = pd.read_csv("{}/selectivity/results-selectivity_cpu.csv".format(result_path, ), sep='|', names=["PipelineTime", "CPUJoinTime", "GPUProbeTime",
+    df = pd.read_csv("{}/selectivity/results-selectivity_cpu.csv".format(result_path, ), sep='|',
+        names=["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUJoinTime", "GPUProbeTime",
         "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "Selectivity"],
         header=None, skiprows=1)
 
@@ -46,7 +47,9 @@ def plot_sel():
     ax1.set_xlabel('Selectivity (in \\%)')
     # ax1.grid(True)
 
-    ax1.plot(df['Selectivity'], df['CPUJoinTime'], linestyle='--', marker='o', color=colors[0], label="CPU \fjoin time")
+    ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
+    ax1.plot(df['Selectivity'], df['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin")
+    ax1.plot(df['Selectivity'], df['PipelineSumThreadCycles']/16.0, linestyle='--', marker='o', color=colors[2], label="Avg worker")
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
