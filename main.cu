@@ -33,8 +33,10 @@ void gen_csv(const std::string& fname, const Table& t, bool probe) {
 #include <unistd.h>
 size_t file_size(const std::string& fname) {
     struct stat st;
-    stat(fname.c_str(), &st);
-    return st.st_size;
+    if (!stat(fname.c_str(), &st))  {
+        return st.st_size;
+    }
+    return 0;
 }
 
 void write_column(const std::string& file, Table& table, size_t col, size_t num) {
