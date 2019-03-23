@@ -360,39 +360,39 @@ params_t parse_command_line(int argc, char **argv) {
 		} else if (arg_name == "csv_path") {
 			params.csv_path = arg_value;
 		} else if (arg_name == "num_blocks") {
-			params.num_blocks = std::stoi(arg_value);
+			params.num_blocks = std::stoll(arg_value);
 		} else if (arg_name == "threads-per-block") {
-			params.num_threads_per_block = std::stoi(arg_value);
+			params.num_threads_per_block = std::stoll(arg_value);
 		} else if (arg_name == "filter_size") {
-			params.filter_size = std::stoi(arg_value);
+			params.filter_size = std::stoll(arg_value);
 		} else if (arg_name == "probe_size") {
-			params.probe_size = std::stoi(arg_value);
+			params.probe_size = std::stoll(arg_value);
 			if (!params.probe_size) {
 				params.probe_size = defaults::probe_size;
 			}
 		} else if (arg_name == "build_size") {
-			params.build_size = std::stoi(arg_value);
+			params.build_size = std::stoll(arg_value);
 			if (!params.build_size) {
 				params.build_size = defaults::build_size;
 			}
 		} else if (arg_name == "slowdown") {
-			params.slowdown = std::stoi(arg_value);
+			params.slowdown = std::stoll(arg_value);
 		} else if (arg_name == "gpu_morsel_size") {
-			params.gpu_morsel_size = std::stoi(arg_value);
+			params.gpu_morsel_size = std::stoll(arg_value);
 		} else if (arg_name == "cpu_morsel_size") {
-			params.cpu_morsel_size = std::stoi(arg_value);
+			params.cpu_morsel_size = std::stoll(arg_value);
 		} else if (arg_name == "repetitions") {
-			params.num_repetitions = std::stoi(arg_value);
+			params.num_repetitions = std::stoll(arg_value);
 		} else if (arg_name == "selectivity") {
-			params.selectivity = std::stoi(arg_value);
+			params.selectivity = std::stoll(arg_value);
 		} else if (arg_name == "gpu") {
-			params.gpu = std::stoi(arg_value) != 0;
+			params.gpu = std::stoll(arg_value) != 0;
 		} else if (arg_name == "only_generate") {
-			params.only_generate = std::stoi(arg_value) != 0;
+			params.only_generate = std::stoll(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
-			params.cpu_bloomfilter = std::stoi(arg_value);
+			params.cpu_bloomfilter = std::stoll(arg_value);
 		} else if (arg_name == "num_threads") {
-			int64_t n = std::stoi(arg_value);
+			int64_t n = std::stoll(arg_value);
 			if (n > 0) {
 				params.num_threads = n;
 			} else {

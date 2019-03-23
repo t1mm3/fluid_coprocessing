@@ -10,7 +10,7 @@ gibi = 1024*mebi
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_size = 1*gibi        #1   G keys
+default_probe_size = 2*gibi        #2   G keys
 default_build_size = 4194304   	   #4   M keys
 default_num_threads = 16
 default_gpu_morsel_size = 16777216 #16  M keys
