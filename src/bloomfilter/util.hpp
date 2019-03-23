@@ -463,6 +463,7 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
     		// THIS MIGHT OVERLAP AND MIGHT BE OVERWRITTEN BY THE CONSEQUENT PASS
     		size_t offset = 0;
     		size_t num_copy = (number_of_matches + table_build.size()-1) / table_build.size();
+    		assert(table_build.size() > table_probe.size());
     		for (size_t c=0; c<num_copy; c++) {
     			memcpy(&column[offset], column_build, table_build.size() * sizeof(int32_t));
 
