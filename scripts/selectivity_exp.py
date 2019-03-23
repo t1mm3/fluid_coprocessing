@@ -6,15 +6,15 @@ binary = "build/release/main_cu"
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_size = 1000#419430400     #400 M keys
+default_probe_size = 16777216#419430400     #400 M keys
 default_build_size = 1000#4194304   	   #4   M keys
-default_num_threads = 32
+default_num_threads = 16
 default_gpu_morsel_size = 16777216 #16  M keys
 default_cpu_morsel_size = 16384	   #16  K keys
 default_gpu_devices = 0
 default_selectivity = 1
 
-selectivities = [1 for y in range(10)]
+selectivities = [1 for y in range(3)]
 
 def syscall(cmd):
 	print(cmd)
@@ -60,9 +60,9 @@ os.system('mkdir -p results')
 
 os.system('mkdir -p results/selectivity')
 for selectivity in selectivities:
-	run_test(fname="selectivity/results-selectivity_cpu.csv" % (str(selectivity)), selectivity=selectivity)
+	run_test(fname="selectivity/results-selectivity_cpu.csv", selectivity=selectivity)
 
 os.system('mkdir -p results/selectivity')
 for selectivity in selectivities:
-	run_test(fname="selectivity/results-selectivity_gpu.csv" % (str(selectivity)), selectivity=selectivity, gpu_devices=1)
+	run_test(fname="selectivity/results-selectivity_gpu.csv", selectivity=selectivity, gpu_devices=1)
 

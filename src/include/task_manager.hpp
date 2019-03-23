@@ -66,7 +66,7 @@ struct WorkerThread {
 
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
-	              FilterWrapper::cuda_filter_t &cf)
+	              FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer)
 	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf) {
 	    thread = new std::thread(ExecuteWorkerThread, this);
 	}
@@ -198,13 +198,13 @@ void ExecuteWorkerThread(WorkerThread *ptr) {
 class TaskManager {
 public:
 
-	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
+	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
+			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf, profile_printer));
 		}
 
 		for (auto &worker : workers) {

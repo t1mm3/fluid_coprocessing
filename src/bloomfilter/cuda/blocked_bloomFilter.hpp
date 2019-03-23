@@ -62,7 +62,7 @@ template <typename filter_t> struct cuda_filter {
 	/// d'tor
 	~cuda_filter() {
 		cudaFree(device_word_array);
-		cuda_check_error();
+		//cuda_check_error();
 	}
 	/// batch-probe the filter
 	void contains(u32 *__restrict__ keys, u32 key_cnt, $u32 *__restrict__ bitmap, $u32 *__restrict__ /*keys_hash*/) {

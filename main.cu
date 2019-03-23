@@ -129,7 +129,7 @@ int main(int argc, char** argv) {
         std::cout << "Writing probe relation ..." <<std::endl;
         gen_csv(params.csv_path + "probe.csv", table_probe, true);
 
-        std::cout << "Done" <<std::endl;
+        std::cout << "Done" << std::endl;
         exit(0);
     }
 
@@ -184,18 +184,28 @@ int main(int argc, char** argv) {
 
         ProfilePrinter profile_info(params.num_repetitions);
         profile_info.write_header(results_file);
+        profile_info.selectivity = params.selectivity;
 
         double total_seconds = 0.0;
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe
             auto start = std::chrono::system_clock::now();
-            manager.execute_query(pipeline, filter, cf);
+            manager.execute_query(pipeline, filter, cf, profile_info);
             auto end = std::chrono::system_clock::now();
 
             if (i >= params.num_warmup) {
-                total_seconds += std::chrono::duration<double>(end - start).count();
                 // Profile output
-                profile_info.pipeline_time += total_seconds;
+                profile_info.pipeline_time   += std::chrono::duration<double>(end - start).count();
+                profile_info.cpu_time        += pipeline.prof_aggr_cpu.cycles;
+                profile_info.gpu_time        += pipeline.prof_aggr_gpu.cycles;
+                profile_info.cpu_gpu_time    += pipeline.prof_aggr_gpu_cpu_join.cycles;
+
+#ifdef PROFILE
+                profile_info.pre_filter_tuples += pipeline.num_prefilter;
+                profile_info.fitered_tuples    += pipeline.num_postfilter;
+                profile_info.pos_join_tuples   += pipeline.num_prejoin;
+                profile_info.pos_join_tuples   += pipeline.num_postjoin;
+#endif
             }
 
             pipeline.reset();

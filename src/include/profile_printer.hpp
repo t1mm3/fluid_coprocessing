@@ -10,20 +10,28 @@ struct ProfilePrinter {
 		os << "CPU Join Time"  	  << "|";
 		os << "GPU Probe Time" 	  << "|";
 		os << "CPU/GPU Time" 	  << "|";
+#ifdef PROFILE
 		os << "Pre Filter Tuples" << "|";
 		os << "Filtered Tuples"   << "|";
-		os << "Pos Join Tuples"   << '\n';
+		os << "Pre Join Tuples"   << "|";
+		os << "Pos Join Tuples"   << "|";
+#endif
+		os << "Selectivity"       << '\n';
 
 	}
 
 	void write_profile(std::ofstream& os) {
-		os << pipeline_time 	<< "|";
-		os << cpu_time 			<< "|";
-		os << gpu_time 			<< "|";
-		os << cpu_gpu_time 		<< "|";
-		os << pre_filter_tuples << "|";
-		os << fitered_tuples 	<< "|";
-		os << pos_join_tuples 	<< "\n";
+		os << (pipeline_time 	 / repetitions)	<< "|";
+		os << (cpu_time 	 	 / repetitions)	<< "|";
+		os << (gpu_time 	 	 / repetitions)	<< "|";
+		os << (cpu_gpu_time 	 / repetitions)	<< "|";
+#ifdef PROFILE
+		os << (pre_filter_tuples / repetitions) << "|";
+		os << (fitered_tuples    / repetitions)	<< "|";
+		os << (pre_join_tuples   / repetitions)	<< "|";
+#endif
+		os << (pos_join_tuples   / repetitions)	<< "|";
+		os << (selectivity)						<< "\n";
 
 	}
 
@@ -34,6 +42,8 @@ struct ProfilePrinter {
 	int64_t pre_filter_tuples{0};
 	int64_t fitered_tuples{0};
 	int64_t pos_join_tuples{0};
+	size_t selectivity{0};
+	size_t pre_join_tuples{0};
 	size_t repetitions{0};
 
 };
