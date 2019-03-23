@@ -446,7 +446,7 @@ void populate_table(Table& table) {
 
 //===----------------------------------------------------------------------===//
 void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity) {
-	    //thread_local allows unique seed for each thread
+	//thread_local allows unique seed for each thread
     thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
     thread_local std::mt19937 engine(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_int_distribution<int32_t> distribution;
@@ -463,7 +463,7 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
     		// THIS MIGHT OVERLAP AND MIGHT BE OVERWRITTEN BY THE CONSEQUENT PASS
     		size_t offset = 0;
     		size_t num_copy = (number_of_matches + table_build.size()-1) / table_build.size();
-    		assert(table_build.size() > table_probe.size());
+    		assert(table_build.size() < table_probe.size());
     		for (size_t c=0; c<num_copy; c++) {
     			memcpy(&column[offset], column_build, table_build.size() * sizeof(int32_t));
 
@@ -482,5 +482,27 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
 
         std::shuffle(&column[0], column + num, engine);   
     }
+}
+//===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
+int64_t calculate_matches_sum(Table& table_build, Table& table_probe, size_t selectivity) {
+	size_t number_of_matches = ((selectivity * table_probe.size()) / 100);
+	auto column_build = static_cast<int32_t*>(table_build.columns[0]);
+	std::set<int32_t> build_set(&column_build[0], column_build + table_build.size());
+	int64_t ksum = 0;
+    for(auto column_probe : table_probe.columns) {
+    	auto column = static_cast<int32_t*>(column_probe);
+    	const size_t probe_size = table_probe.size();
+    	for(size_t i = 0; i != probe_size; ++i) {
+    		auto value = *(column + i);
+    		if(build_set.find(value) != build_set.end()){
+        		ksum += value;
+        	}
+    	}
+
+    }
+    std::cout << ksum << std::endl;
+    return ksum;
 }
 //===----------------------------------------------------------------------===//

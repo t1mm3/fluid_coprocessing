@@ -48,6 +48,21 @@ void write_column(const std::string& file, Table& table, size_t col, size_t num)
     out.close();
 };
 
+void write_ksum(const std::string& file, int64_t ksum) {
+    std::ofstream out(file, std::ios::out | std::ios::binary);
+    assert(out.is_open());
+    out.write(reinterpret_cast<const char *>(&ksum), sizeof(ksum));
+    out.close();
+};
+
+void read_sum(const std::string& file, int64_t& ksum) {
+    std::ifstream in(file, std::ios::in | std::ios::binary);
+    assert(in.is_open());
+
+    in.read(reinterpret_cast<char *>(&ksum), sizeof(int64_t));
+    in.close();
+};
+
 void read_column(Table& table, const std::string& file, size_t col, size_t num) {
     std::ifstream in(file, std::ios::in | std::ios::binary);
     assert(in.is_open());
@@ -88,6 +103,7 @@ int main(int argc, char** argv) {
 
     const std::string bfile(gen_fname(0));
     const std::string pfile(gen_fname(1));
+    const std::string ksum(gen_fname(3));
     bool cached = true;
 
     if (!file_size(bfile) || !file_size(pfile)) {
@@ -99,6 +115,9 @@ int main(int argc, char** argv) {
         populate_table(table_probe);
 
         set_selectivity(table_build, table_probe, selectivity);
+        auto expected_ksum = calculate_matches_sum(table_build, table_probe, selectivity);
+        std::cout << "Writing ksum to disk ..." << std::endl;
+        write_ksum(ksum, expected_ksum);
 
         std::cout << "Writing 'build' to disk ..." << std::endl;
         write_column(bfile, table_build, 0, build_size);
@@ -115,11 +134,15 @@ int main(int argc, char** argv) {
     // load data
     assert(file_size(bfile) > 0);
     assert(file_size(pfile) > 0);
+    assert(file_size(ksum) > 0);
+    assert(file_size(ksum) == sizeof(int64_t));
     assert(file_size(bfile) == sizeof(int32_t) * build_size);
     assert(file_size(pfile) == sizeof(int32_t) * probe_size);
 
     read_column(table_build, bfile, 0, build_size);
     read_column(table_probe, pfile, 0, probe_size);
+    int64_t expected_ksum = 0;
+    read_sum(ksum, expected_ksum);
 
 
 
@@ -216,7 +239,9 @@ int main(int argc, char** argv) {
                 profile_info.pos_join_tuples   += pipeline.num_postjoin;
 #endif
             }
-
+            if(expected_ksum != pipeline.ksum) {
+                std::cout << " invalid ksum:" << pipeline.ksum << " expected:" << expected_ksum << std::endl;
+            }
             pipeline.reset();
         }
         double final_elapsed_time = profile_info.pipeline_time / (double)params.num_repetitions;
