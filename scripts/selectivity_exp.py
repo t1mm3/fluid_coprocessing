@@ -6,8 +6,8 @@ binary = "build/release/main_cu"
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_size = 16777216#419430400     #400 M keys
-default_build_size = 1000#4194304   	   #4   M keys
+default_probe_size = 419430400     #400 M keys
+default_build_size = 4194304   	   #4   M keys
 default_num_threads = 16
 default_gpu_morsel_size = 16777216 #16  M keys
 default_cpu_morsel_size = 16384	   #16  K keys
