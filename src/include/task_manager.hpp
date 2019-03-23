@@ -30,6 +30,7 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	int sel3[kVecSize];
+	uint8_t tmp8[kVecSize];
 
 	uint64_t ksum = 0;
 	uint64_t psum = 0;
@@ -48,6 +49,8 @@ struct WorkerThread {
 	std::vector<InflightProbe*> local_inflight;
 
 	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_join_cpu;
+	Profiling::Time prof_expop_cpu;
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
 
@@ -152,8 +155,21 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prefilter += num;
 #endif
-				num = filter.contains_sel(&sel3[0], keys, sel, num);
-				sel = &sel3[0];
+				switch (pipeline.params.cpu_bloomfilter) {
+				case 1:
+					num = filter.contains_sel(&sel3[0], keys, sel, num);
+					sel = &sel3[0];	
+					break;
+				case 2:
+					filter.contains_chr(&tmp8[0], keys, sel, num);
+					num = Vectorized::select_match(&sel3[0], &tmp8[0], sel, num);
+					sel = &sel3[0];	
+					break;
+				default:
+					assert(false);
+					break;
+				}
+				
 #ifdef PROFILE
 				num_postfilter += num;
 #endif
@@ -161,33 +177,38 @@ struct WorkerThread {
 
 			// Other pipeline stuff
 			if (pipeline.params.slowdown > 0) {
+				Profiling::Scope prof(prof_expop_cpu);
 				Vectorized::expensive_op(pipeline.params.slowdown,
 					tmp1, tmp2, tmp3, sel, num);
 			}
 
-			// Hash probe
-			Vectorized::map_hash(hashs, keys, sel, num);
+			{
+				Profiling::Scope jprofile(prof_join_cpu);
+				// Hash probe
+				Vectorized::map_hash(hashs, keys, sel, num);
 #ifdef PROFILE
-			num_prejoin += num;
+				num_prejoin += num;
 #endif
-			for (auto ht : pipeline.hts) {
-				ht->Probe(ctx, matches, keys, hashs, sel, num);
-				num = Vectorized::select_match(sel1, matches, sel, num);
-				if (!num) {
-					return; // nothing to do with this stride
+				for (auto ht : pipeline.hts) {
+					ht->Probe(ctx, matches, keys, hashs, sel, num);
+					num = Vectorized::select_match(sel1, matches, sel, num);
+					if (!num) {
+						return; // nothing to do with this stride
+					}
+
+					sel = &sel1[0];
+
+					// gather some payload columns
+					for (int i = 1; i < NUM_PAYLOAD; i++) {
+						ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
+					}
 				}
 
-				sel = &sel1[0];
+#ifdef PROFILE
+				num_postjoin += num;
+#endif
 
-				// gather some payload columns
-				for (int i = 1; i < NUM_PAYLOAD; i++) {
-					ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
-				}
 			}
-
-#ifdef PROFILE
-			num_postjoin += num;
-#endif
 
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
@@ -364,6 +385,8 @@ void WorkerThread::execute_pipeline() {
 	}
 
 	pipeline.prof_aggr_cpu.atomic_aggregate(prof_aggr_cpu);
+	pipeline.prof_join_cpu.atomic_aggregate(prof_join_cpu);
+	pipeline.prof_expop_cpu.atomic_aggregate(prof_expop_cpu);
 	pipeline.prof_aggr_gpu.atomic_aggregate(prof_aggr_gpu);
 	pipeline.prof_aggr_gpu_cpu_join.atomic_aggregate(prof_aggr_gpu_cpu_join);
 	std::atomic_fetch_add(&pipeline.ksum, ksum);

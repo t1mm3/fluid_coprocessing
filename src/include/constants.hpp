@@ -19,10 +19,10 @@ enum {
 	num_query_execution_runs = 5,
 	filter_size = 64ull * 1024ull * 1024ull * 8ull, // 64MiB
 	build_size = 1024ull * 1024ull * 4ull,
-	probe_size = 1024ull * 1024ull * 1024ull,
+	probe_size = 1024ull * 1024ull * 1024ull * 2,
 	num_repetitions = 3,
 	gpu = true,
-	cpu_bloomfilter = false,
+	cpu_bloomfilter = 0,
 	selectivity = 1,
 	num_columns = 1,
 	only_generate = false,

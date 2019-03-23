@@ -18,6 +18,8 @@ struct Pipeline {
 	Table &table; //!< Probe relation
 
 	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_join_cpu;
+	Profiling::Time prof_expop_cpu;
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
 	Profiling::Time prof_pipeline_cycles;
@@ -88,6 +90,8 @@ public:
 		prof_aggr_gpu.reset();
 		prof_aggr_gpu_cpu_join.reset();
 		prof_pipeline_cycles.reset();
+		prof_expop_cpu.reset();
+		prof_join_cpu.reset();
 		table.reset();
 	}
 
