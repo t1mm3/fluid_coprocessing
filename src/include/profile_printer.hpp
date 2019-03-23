@@ -22,6 +22,7 @@ struct ProfilePrinter {
 #endif
 
 		os << "CPUBloomFilter" << "|";
+		os << "Slowdown" << "|";
 		os << "Selectivity"       << '\n';
 
 	}
@@ -42,6 +43,7 @@ struct ProfilePrinter {
 #endif
 		os << (pos_join_tuples   / repetitions)	<< "|";
 		os << (cpu_bloomfilter) 				<< "|";
+		os << (slowdown) 						<< "|";
 		os << (selectivity)						<< "\n";
 
 	}
@@ -59,6 +61,7 @@ struct ProfilePrinter {
 	int64_t pos_join_tuples{0};
 
 	int cpu_bloomfilter{0};
+	size_t slowdown {0};
 	size_t selectivity{0};
 	size_t pre_join_tuples{0};
 	double repetitions{0};

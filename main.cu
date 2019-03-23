@@ -187,6 +187,7 @@ int main(int argc, char** argv) {
         ProfilePrinter profile_info(params.num_repetitions);
         profile_info.write_header(results_file);
         profile_info.selectivity = params.selectivity;
+        profile_info.slowdown = params.slowdown;
         profile_info.cpu_bloomfilter = params.cpu_bloomfilter;
 
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
