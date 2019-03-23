@@ -10,3 +10,4 @@ benchmark_info.txt
 results.csv
 results
 .last_format
+data*.bin
