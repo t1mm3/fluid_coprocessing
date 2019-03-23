@@ -19,7 +19,7 @@ default_gpu_devices = 0
 default_selectivity = 1
 default_cpu_filter = 1
 
-selectivities = range(0, 100, 30)
+selectivities = [0, 1, 5, 10, 15] + range(20, 100, 10)
 
 def syscall(cmd):
 	print(cmd)
@@ -53,12 +53,11 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 os.system('make')
 os.system('mkdir -p results')
 
-for cpu_filter in [0, 1]:
+for cpu_filter in [0, 1, 2]:
 	for gpu in [None]:
 		os.system('mkdir -p results/selectivity')
 
 		postfix = "gpu" if gpu is not None else "cpu"
-		postfix = "{}_cpufilter{}".format(postfix, cpu_filter)
 
 		for selectivity in selectivities:
 			file = "selectivity/results-selectivity_{}.csv".format(postfix)

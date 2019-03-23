@@ -309,7 +309,7 @@ struct params_t {
 
 	std::size_t num_repetitions   {defaults::num_repetitions};
 	bool gpu  					  {defaults::gpu};
-	bool cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
+	int cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
 	std::size_t selectivity 	  {defaults::selectivity};
 	std::string csv_path		  {""};
 	bool only_generate {defaults::only_generate};
@@ -390,7 +390,7 @@ params_t parse_command_line(int argc, char **argv) {
 		} else if (arg_name == "only_generate") {
 			params.only_generate = std::stoi(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
-			params.cpu_bloomfilter = std::stoi(arg_value) != 0;
+			params.cpu_bloomfilter = std::stoi(arg_value);
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoi(arg_value);
 			if (n > 0) {

@@ -26,15 +26,17 @@ colors = prop_cycle.by_key()['color']
 hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 
 
-framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUJoinTime", "GPUProbeTime",
-        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "Selectivity"]
+framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime", "CPUExpOpTime", "GPUProbeTime",
+        "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples" , "PostJoinTuples", "CPUBloomFilter", "Selectivity"]
 result_path = "results/"
 
 def plot_sel():
-    filter0 = pd.read_csv("{}/selectivity/results-selectivity_cpu_cpufilter0.csv".format(result_path),
+    df = pd.read_csv("{}/selectivity/results-selectivity_cpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
-    filter1 = pd.read_csv("{}/selectivity/results-selectivity_cpu_cpufilter1.csv".format(result_path),
-        sep='|', names=framework_columns, header=None, skiprows=1)
+
+    filter0 = df[df['CPUBloomFilter']==0]
+    filter1 = df[df['CPUBloomFilter']==1]
+    filter2 = df[df['CPUBloomFilter']==2]
 
     (fig, ax1) = plt.subplots()
 
@@ -50,7 +52,7 @@ def plot_sel():
     # ax1.grid(True)
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
-    ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no CPU filter")
+    ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
     ax1.plot(filter0['Selectivity'], filter0['PipelineSumThreadCycles'], linestyle='--', marker='o', color=colors[2], label="Probe pipeline, no CPU filter")
 
     ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")

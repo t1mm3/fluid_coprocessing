@@ -187,6 +187,7 @@ int main(int argc, char** argv) {
         ProfilePrinter profile_info(params.num_repetitions);
         profile_info.write_header(results_file);
         profile_info.selectivity = params.selectivity;
+        profile_info.cpu_bloomfilter = params.cpu_bloomfilter;
 
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe
@@ -202,6 +203,8 @@ int main(int argc, char** argv) {
                 profile_info.pipeline_sum_thread_cycles += (double)(pipeline.prof_pipeline_cycles.cycles);
                 profile_info.pipeline_time   += std::chrono::duration<double>(end - start).count();
                 profile_info.cpu_time        += (double)pipeline.prof_aggr_cpu.cycles;
+                profile_info.cpu_join_time   += (double)pipeline.prof_join_cpu.cycles;
+                profile_info.cpu_expop_time  += (double)pipeline.prof_expop_cpu.cycles;  
                 profile_info.gpu_time        += (double)pipeline.prof_aggr_gpu.cycles;
                 profile_info.cpu_gpu_time    += (double)pipeline.prof_aggr_gpu_cpu_join.cycles;
 

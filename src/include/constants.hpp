@@ -22,7 +22,7 @@ enum {
 	probe_size = 1024ull * 1024ull * 1024ull,
 	num_repetitions = 3,
 	gpu = true,
-	cpu_bloomfilter = false,
+	cpu_bloomfilter = 0,
 	selectivity = 1,
 	num_columns = 1,
 	only_generate = false,
