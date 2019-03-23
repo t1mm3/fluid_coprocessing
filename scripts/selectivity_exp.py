@@ -33,9 +33,6 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 	if not threads: threads = default_num_threads
 	if not filter_size: filter_size = default_filter_size
 
-	if os.path.isfile(os.path.join('results', fname)):
-		return
-
 	# Execute Experiment
 	syscall("""${BINARY} --filter_size=${FILTER_SIZE} --probe_size=${PROBE_SIZE} --build_size=${BUILD_SIZE} --gpu_morsel_size=${GPU_MORSEL_SIZE} --cpu_morsel_size=${CPU_MORSEL_SIZE} --gpu=${DEVICES} --selectivity=${SELECTIVITY} --num_threads=${THREADS}""".replace(
 		"${BINARY}", binary).replace(
@@ -56,7 +53,6 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 
 os.system('make')
 os.system('mkdir -p results')
-
 
 os.system('mkdir -p results/selectivity')
 for selectivity in selectivities:
