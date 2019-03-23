@@ -391,7 +391,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="349.10796"
+     inkscape:cx="132.93531"
      inkscape:cy="351.46892"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -419,7 +419,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -647,7 +647,7 @@
     </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker11988)"
-       d="M 71.437499,143.54168 103.1875,61.520861"
+       d="M 71.437499,143.54168 103.1875,40.354197"
        id="path11978"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -696,7 +696,7 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker12427)"
-       d="m 116.41667,61.520861 29.10416,10.583333"
+       d="m 116.41667,40.354197 29.10416,31.749997"
        id="path12261"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -711,23 +711,23 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="90.964294"
+       x="92.551796"
        y="80.834145"
        id="text11839"><tspan
          sodipodi:role="line"
          id="tspan11837"
-         x="90.964294"
+         x="92.551796"
          y="80.834145"
          style="stroke-width:0.26458332">Bloom Filter</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="90.883713"
+       x="92.471214"
        y="154.01593"
        id="text11839-4"><tspan
          sodipodi:role="line"
          id="tspan11837-8"
-         x="90.883713"
+         x="92.471214"
          y="154.01593"
          style="stroke-width:0.26458332">Bloom Filter</tspan></text>
     <text
@@ -771,12 +771,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="46.037529"
+       x="48.154198"
        y="11.250031"
        id="text17644"><tspan
          sodipodi:role="line"
          id="tspan17642"
-         x="46.037529"
+         x="48.154198"
          y="11.250031"
          style="stroke-width:0.26458332">Table</tspan></text>
     <rect
@@ -863,12 +863,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="138.11241"
+       x="144.46233"
        y="111.26254"
        id="text8855"><tspan
          sodipodi:role="line"
          id="tspan8853"
-         x="138.11241"
+         x="144.46233"
          y="111.26254"
          style="stroke-width:0.26458332">Bitmap</tspan></text>
     <text
