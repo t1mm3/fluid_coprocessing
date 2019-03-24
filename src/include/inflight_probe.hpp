@@ -39,7 +39,10 @@ struct InflightProbe {
 		processed = 0;
 	}
 	bool is_gpu_available() {
-		return probe->is_done();
+		if (status == Status::FILTERING) {
+			return probe->is_done();
+		}
+		return true;
 	}
 	void wait() {
 		return probe->wait();

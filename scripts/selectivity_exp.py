@@ -22,9 +22,9 @@ default_slowdown = 0
 
 selectivities = [0, 1, 5, 10, 15, 50]
 cpu_filter_values = [0, 1]
-gpu_values = [None]
-slowdown_values = [0, 1024, 1024*1024]
-filter_size_values = [1024*1024, default_filter_size]
+gpu_values = [None, 1]
+slowdown_values = [0, 10, 100, 1000]
+filter_size_values = [default_filter_size / 8, default_filter_size, 8*default_filter_size]
 
 
 def syscall(cmd):
@@ -58,21 +58,13 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 
 
 os.system('make')
-os.system('mkdir -p results')
-
-
-
-
-
-
 os.system('mkdir -p results/selectivity')
+
 for cpu_filter in cpu_filter_values:
 	for gpu in gpu_values:
 		for slowdown in slowdown_values:
-			for filter_size in filter_size_values:
-				postfix = "gpu" if gpu is not None else "cpu"
-
-				for selectivity in selectivities:
-					file = "selectivity/results-selectivity_{}.csv".format(postfix)
-					run_test(fname=file, selectivity=selectivity, gpu_devices=gpu,
-						cpu_filter=cpu_filter, filter_size=filter_size)
+			postfix = "gpu" if gpu is not None else "cpu"
+			for selectivity in selectivities:
+				file = "selectivity/results-selectivity_{}.csv".format(postfix)
+				run_test(fname=file, selectivity=selectivity, gpu_devices=gpu,
+					cpu_filter=cpu_filter, slowdown=slowdown)

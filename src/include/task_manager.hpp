@@ -1,6 +1,8 @@
 #pragma once
 
 // #define GPU_DEBUG
+// #define GPU_SYNC
+#define CPU_WORK
 
 #include "bloomfilter/bloom_cuda.hpp"
 #include "bloomfilter/util.hpp"
@@ -102,11 +104,11 @@ struct WorkerThread {
 	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
 
-		do_cpu_join(table, nullptr, nullptr, mnum, moffset);
+		do_cpu_join(table, nullptr, nullptr, mnum, moffset, -1);
 	}
 
 
-	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset) {
+	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset, int64_t probe_offset) {
 		if (sel) {
 			assert(mnum <= kVecSize);
 		}
@@ -117,7 +119,7 @@ struct WorkerThread {
 		Vectorized::chunk(moffset, mnum, [&](auto offset, auto num) {
 			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
 			int32_t *tkeys = (int32_t*)table.columns[0];
-			auto keys = &tkeys[offset];
+			auto keys = &tkeys[offset + probe_offset];
 
 			assert(offset >= moffset);
 
@@ -132,7 +134,7 @@ struct WorkerThread {
 				num_prefilter += n;
 #endif
 				num = Vectorized::select_match_bit(true, sel2,
-					(uint8_t*)bf_results + (offset - moffset)/8, n);
+					(uint8_t*)bf_results + (offset)/8, n);
 				assert(num <= n);
 
 #ifdef PROFILE
@@ -144,7 +146,9 @@ struct WorkerThread {
 
 
 				sel = &sel2[0];
+				assert(probe_offset >= 0);
 			} else {
+				assert(probe_offset == -1);
 				sel = nullptr;
 			}
 
@@ -320,12 +324,15 @@ void WorkerThread::execute_pipeline() {
 #ifdef PROFILE
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 #endif
-
 			// printf("probe schedule(%p)\n", inflight_probe);
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
 			inflight_probe->probe->contains(&tkeys[offset], num);
+#ifdef GPU_SYNC
+			inflight_probe->wait();
+#endif
+
 #ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
 				std::this_thread::get_id(), inflight_probe, offset, num);
@@ -349,7 +356,7 @@ void WorkerThread::execute_pipeline() {
 
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
-					do_cpu_join(pipeline.table, results, nullptr, num, offset + probe->offset);
+					do_cpu_join(pipeline.table, results, nullptr, num, offset, probe->offset);
 				}
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
@@ -364,11 +371,13 @@ void WorkerThread::execute_pipeline() {
 					pipeline.g_queue_remove(probe);
 				}
 #endif
-				pipeline.processed_tuples(num);
+
+				pipeline.processed_tuples(num, true);
 				continue;
 			}
 		}
 
+#ifdef CPU_WORK
 		// full CPU join
 		bool success = pipeline.table.get_range(num, offset, morsel_size);
 		if (!success) {
@@ -379,7 +388,8 @@ void WorkerThread::execute_pipeline() {
 			continue;
 		}
 		do_cpu_work(pipeline.table, num, offset);
-		pipeline.processed_tuples(num);
+		pipeline.processed_tuples(num, false);
+#endif
 	}
 
 	pipeline.prof_aggr_cpu.atomic_aggregate(prof_aggr_cpu);

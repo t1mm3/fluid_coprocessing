@@ -99,8 +99,12 @@ public:
 		return tuples_processed >= table.size();
 	}
 
-	void processed_tuples(int64_t num) {
-		tuples_processed += num;
+	void processed_tuples(int64_t num, bool gpu) {
+		auto old = std::atomic_fetch_add(&tuples_processed, num);
+#if 0
+		printf("%s tuples %ld  old = %ld, %ld <= %ld (max)\n",
+			gpu ? "GPU" : "cpu", num, old, old+num, table.size());
+#endif
 	}
 
 	int64_t get_tuples_processed() {

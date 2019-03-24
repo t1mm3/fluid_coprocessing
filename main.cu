@@ -78,8 +78,49 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num) 
 #include <tuple>
 #include <sstream>
 
+void test() {
+    int sel[kVecSize];
+    uint8_t bit;
+    int num;
+    uint32_t bit32;
+
+    bit = 0xFF;
+    num = Vectorized::select_match_bit(true, sel, &bit, 8);
+    assert(num == 8);
+    for (int i=0; i<num; i++) {
+        assert(sel[i] == i);
+    }
+
+    bit = 1;
+    num = Vectorized::select_match_bit(true, sel, &bit, 8);
+    assert(num == 1);
+    assert(sel[0] == 0);
+
+    bit32 = 0;
+    int exp_num = 0;
+    for (int i=0; i<32; i++) {
+        if (i % 4 == 0) {
+            bit32 |= 1 << i;
+            exp_num++;
+        } 
+    }
+
+    memset(sel, 0, sizeof(sel));
+    num = Vectorized::select_match_bit(true, sel, (uint8_t*)&bit32, 30);
+    assert(8 == num);
+    assert(num == exp_num);
+    assert(sel[0] == 0);
+    assert(sel[1] == 4);
+    assert(sel[2] == 8);
+    assert(sel[3] == 12);
+    assert(sel[4] == 16);
+    assert(sel[5] == 20);
+    assert(sel[6] == 24);
+    assert(sel[7] == 28);
+}
 //===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
+    test();
     auto params = parse_command_line(argc, argv);
     TaskManager manager;
     std::ofstream results_file;
