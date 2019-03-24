@@ -331,11 +331,13 @@ template <typename filter_t> struct cuda_filter {
 		void contains(const key_t *keys, u32 key_cnt) {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
+			assert(key_cnt > 0);
+			assert(device_in_keys != nullptr);
 			cudaEventRecord(start_event, 0);
-			cudaMemcpyAsync(device_in_keys, keys, batch_size * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
+			cudaMemcpyAsync(device_in_keys, keys, key_cnt * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
 			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0]);
 			// copy back the result bitmap to pre-allocated host memory
-			cudaMemcpyAsync(host_bitmap, device_bitmap, batch_size / 8, cudaMemcpyDeviceToHost, cuda_stream);
+			cudaMemcpyAsync(host_bitmap, device_bitmap, key_cnt / 8, cudaMemcpyDeviceToHost, cuda_stream);
 			cudaEventRecord(stop_event, 0);
 		}
 

@@ -113,9 +113,7 @@ struct WorkerThread {
 		tuples_morsel += mnum;
 
 		size_t num_tuples = mnum;
-
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
-
 		Vectorized::chunk(moffset, mnum, [&](auto offset, auto num) {
 			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
 			int32_t *tkeys = (int32_t*)table.columns[0];

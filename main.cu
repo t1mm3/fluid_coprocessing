@@ -189,6 +189,8 @@ int main(int argc, char** argv) {
         size_t m = params.filter_size;
         FilterWrapper filter(m);
         uint32_t *table_keys = (uint32_t *)table_build.columns[0];
+        uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
+        std::set<uint32_t> positions;
 
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
@@ -196,8 +198,7 @@ int main(int argc, char** argv) {
             filter.insert(key);
         }
 
-        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
-        
+        // Validate Filter on CPU
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
             auto match = filter.contains(key);
@@ -206,6 +207,21 @@ int main(int argc, char** argv) {
 
         }
         std::cout << std::endl;
+        std::size_t count = 0;
+        // // store the position of matches
+        // for(std::size_t i = 0; i != table_probe.size(); ++i) {
+        //     const auto key = static_cast<uint32_t>(*(probe_keys + i));
+        //     auto match =  filter.contains(key);
+        //     if(match) {
+        //         count++;
+        //         positions.insert(i);
+        //     }
+        // }
+        // assert(count == ((selectivity * table_probe.size()) / 100));
+
+        // cuda instance of bloom filter logic on GPU
+        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
+
 
         ProfilePrinter profile_info(params);
         profile_info.write_header(results_file);
