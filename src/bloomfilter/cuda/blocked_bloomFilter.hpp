@@ -54,15 +54,13 @@ template <typename filter_t> struct cuda_filter {
 		assert(word_cnt > 0);
 		word_array_size = word_cnt * sizeof(word_t);
 		cudaMalloc((void **)&device_word_array, word_array_size);
-		cuda_check_error();
 		cudaMemcpy(device_word_array, word_array, word_array_size, cudaMemcpyHostToDevice);
-		cuda_check_error();
 	}
 
 	/// d'tor
 	~cuda_filter() {
 		cudaFree(device_word_array);
-		//cuda_check_error();
+		cuda_check_error();
 	}
 	/// batch-probe the filter
 	void contains(u32 *__restrict__ keys, u32 key_cnt, $u32 *__restrict__ bitmap, $u32 *__restrict__ /*keys_hash*/) {
@@ -306,30 +304,25 @@ template <typename filter_t> struct cuda_filter {
 		probe(cuda_filter &cuda_filter_instance, u64 batch_size, const cudaStream_t &cuda_stream, u32 cuda_device_no)
 		    : cuda_filter_instance(cuda_filter_instance), batch_size(batch_size), cuda_stream(cuda_stream), device_no_(cuda_device_no) {
 		    assert(batch_size > 0);
-
 			cudaSetDevice(device_no_);
-			cuda_check_error();
 			// Allocate device memory for the keys and for the result bitmap
 			cudaMalloc((void **)&device_in_keys, batch_size * sizeof(key_t));
-			cuda_check_error();
 			cudaMalloc((void **)&device_bitmap, batch_size / 8);
-			cuda_check_error();
+			// Allocate host memory for result bitmap
 			host_bitmap = nullptr;
 			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
-			cuda_check_error();
 			assert(host_bitmap != nullptr);
 
 			/// create events
 			cudaEventCreate(&start_event);
 			cudaEventCreate(&stop_event);
-			cuda_check_error();
 		}
 
 		/// d'tor
 		~probe() {
 			cudaFree(device_in_keys);
 			cudaFree(device_bitmap);
-			cudaFree(host_bitmap);
+			cudaFreeHost(host_bitmap);
 			cudaEventDestroy(start_event);
 			cudaEventDestroy(stop_event);
 		}
@@ -339,21 +332,16 @@ template <typename filter_t> struct cuda_filter {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			cudaEventRecord(start_event, 0);
-			cuda_check_error();
 			cudaMemcpyAsync(device_in_keys, keys, batch_size * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
-			cuda_check_error();
 			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0]);
 			// copy back the result bitmap to pre-allocated host memory
 			cudaMemcpyAsync(host_bitmap, device_bitmap, batch_size / 8, cudaMemcpyDeviceToHost, cuda_stream);
-			cuda_check_error();
 			cudaEventRecord(stop_event, 0);
-			cuda_check_error();
 		}
 
 		/// blocks until a asynchronously executed query is finished.
 		void wait() {
 			cudaEventSynchronize(stop_event);
-			cuda_check_error();
 		}
 		// checks whether the gpu has finished
 		bool is_done() {
