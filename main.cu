@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
     const std::string ksum(gen_fname(3));
     bool cached = true;
 
-    if (!file_size(bfile) || !file_size(pfile)) {
+    if (!file_size(bfile) || !file_size(pfile) || !file_size(ksum)) {
         std::cout << "Files not cached. Recreating ..." << std::endl;
         // not cached, create files
         cached = false;
