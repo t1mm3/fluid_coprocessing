@@ -107,15 +107,17 @@ struct WorkerThread {
 		pipeline.prof_pipeline_cycles.atomic_aggregate(prof_pipeline_cycles);
 	}
 
-	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
+	NO_INLINE void do_cpu_work(int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
 
-		do_cpu_join(table, nullptr, mnum, moffset, -1);
+		do_cpu_join(nullptr, mnum, moffset, 0);
 	}
 
 
-	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int64_t mnum, int64_t moffset, int64_t probe_offset) {
+	NO_INLINE void do_cpu_join(uint32_t *bf_results, int64_t mnum,
+				int64_t moffset, int64_t probe_offset) {
 		tuples_morsel += mnum;
+		Table &table = pipeline.table; 
 
 		size_t num_tuples = mnum;
 
@@ -125,12 +127,11 @@ struct WorkerThread {
 			int* sel = nullptr;
 			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
 			int32_t *tkeys = (int32_t*)table.columns[0];
-			auto keys = &tkeys[offset + probe_offset];
+			int32_t* keys = &tkeys[offset + probe_offset];
 
 			assert(offset >= moffset);
 
 			size_t old_num = num;
-			// printf("cpu_join offset %ld\n", offset);
 
 			if (bf_results) {
 				//printf("cpu morsel bf_results %p offset %ld num %ld moffset %ld mnum %ld\n",
@@ -145,9 +146,6 @@ struct WorkerThread {
 
 #ifdef GPU_BF_CHECK_AGAINST_CPU
 				{
-					if (n != kVecSize) {
-						printf("n=%d\n", n);
-					}
 					assert(!sel && "not implemented");
 					filter.contains_chr(&tmp8[0], keys, sel, n);
 
@@ -184,7 +182,7 @@ struct WorkerThread {
 				sel = &sel2[0];
 				assert(probe_offset >= 0);
 			} else {
-				assert(probe_offset == -1);
+				assert(probe_offset == 0);
 				sel = nullptr;
 			}
 
@@ -227,14 +225,14 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prejoin += num;
 #endif
+
 				for (auto ht : pipeline.hts) {
 					ht->Probe(ctx, matches, keys, hashs, sel, num);
 					num = Vectorized::select_match(sel1, matches, sel, num);
+					sel = &sel1[0];
 					if (!num) {
 						return; // nothing to do with this stride
 					}
-
-					sel = &sel1[0];
 
 					// gather some payload columns
 					for (int i = 1; i < NUM_PAYLOAD; i++) {
@@ -298,6 +296,8 @@ public:
 
 void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
+
+	uint32_t *tkeys = (uint32_t *)pipeline.table.columns[0];
 	uint64_t iteration = 0;
 
 
@@ -330,8 +330,6 @@ void WorkerThread::execute_pipeline() {
 			if (!inflight_probe->is_gpu_available()) {
 				continue;
 			}
-			// get the keys to probe
-			uint32_t *tkeys = (uint32_t *)pipeline.table.columns[0];
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
@@ -392,12 +390,14 @@ void WorkerThread::execute_pipeline() {
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 #endif
 				uint32_t* results = probe->probe->get_results();
+
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
 
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
-					do_cpu_join(pipeline.table, results, num, offset, probe->offset);
+
+					do_cpu_join(results, num, offset, probe->offset);
 				}
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
@@ -428,7 +428,7 @@ void WorkerThread::execute_pipeline() {
 			usleep(8*1024);
 			continue;
 		}
-		do_cpu_work(pipeline.table, num, offset);
+		do_cpu_work(num, offset);
 		pipeline.processed_tuples(num, false);
 #endif
 	}

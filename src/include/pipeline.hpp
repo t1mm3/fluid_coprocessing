@@ -156,12 +156,12 @@ public:
 			g_queue_head = p->q_next;
 		}
 
-		p->status = InflightProbe::Status::DONE;
-		rwticket_wrunlock(&g_queue_rwlock);
-
 
 		p->q_next = nullptr;
 		p->q_prev = nullptr;
+		barrier();
+		p->status = InflightProbe::Status::DONE;
+		rwticket_wrunlock(&g_queue_rwlock);
 	}
 
 	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
