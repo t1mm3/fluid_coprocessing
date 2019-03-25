@@ -107,6 +107,12 @@ struct Vectorized {
 	static int NO_INLINE select_not_match(int *CPU_R osel, bool *CPU_R b, int *CPU_R sel, int num) {
 		return select(osel, sel, num, [&](auto i) { return !b[i]; });
 	}
+	static int NO_INLINE select_identity(int* CPU_R sel, int num) {
+		for (int i=0; i<num; i++) {
+			sel[i] = i;
+		}
+		return num;
+	}
 
 	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		int res = 0;

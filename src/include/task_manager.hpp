@@ -32,6 +32,7 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	int sel3[kVecSize];
+	int id_sel[kVecSize];
 	uint8_t tmp8[kVecSize];
 
 	uint64_t ksum = 0;
@@ -95,6 +96,7 @@ struct WorkerThread {
 		Profiling::Time prof_pipeline_cycles;
 		{
 			Profiling::Scope __prof(prof_pipeline_cycles);	
+			Vectorized::select_identity(id_sel, kVecSize);
 			execute_pipeline();
 		}
 
@@ -130,11 +132,14 @@ struct WorkerThread {
 				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
+				assert(pipeline.params.gpu_morsel_size % 32 == 0);
+				assert(offset % 32 == 0);
+
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
 				num = Vectorized::select_match_bit(true, sel2,
-					(uint8_t*)bf_results + (offset)/8, n);
+					(uint8_t*)bf_results + offset/8, n);
 				assert(num <= n);
 
 #ifdef PROFILE
@@ -181,7 +186,7 @@ struct WorkerThread {
 			if (pipeline.params.slowdown > 0) {
 				Profiling::Scope prof(prof_expop_cpu);
 				Vectorized::expensive_op(pipeline.params.slowdown,
-					tmp1, tmp2, tmp3, sel, num);
+					tmp1, tmp2, tmp3, sel ? sel : &id_sel[0], num);
 			}
 
 			{
