@@ -164,9 +164,14 @@ public:
 		rwticket_wrunlock(&g_queue_rwlock);
 	}
 
-	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, bool& is_busy, int64_t morsel_size) noexcept {
+	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset,
+			bool& is_busy, int64_t morsel_size) noexcept {
 		is_busy = false;
-#if 1
+
+		if (!g_queue_head) {
+			return nullptr;
+		}
+#if 0
 		int busy = rwticket_rdtrylock(&g_queue_rwlock);
 
 		if (busy) {

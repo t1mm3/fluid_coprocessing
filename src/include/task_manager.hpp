@@ -383,7 +383,8 @@ void WorkerThread::execute_pipeline() {
 		morsel_size = pipeline.params.cpu_morsel_size;
 		bool lock_busy = false;
 
-		{ // preferably do CPU join on GPU filtered data
+		if (pipeline.params.gpu > 0) {
+			// preferably do CPU join on GPU filtered data
 			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, lock_busy, morsel_size);
 
 			if (probe) {
