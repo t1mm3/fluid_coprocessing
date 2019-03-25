@@ -274,7 +274,7 @@ template <typename filter_t> struct cuda_filter {
 		cuda_check_error();
 	}
 
-	void contains_baseline(u32 *__restrict__ d_keys, u32 key_cnt, $u32 *__restrict__ device_bitmap) {
+	void contains_baseline(u32 *__restrict__ d_keys, int64_t key_cnt, $u32 *__restrict__ device_bitmap) {
 	
 		i32 block_size = 32;
 		// Probe
@@ -289,7 +289,7 @@ template <typename filter_t> struct cuda_filter {
 		cudaDeviceSynchronize();
 	}
 
-	void contains_with_keys_on_gpu(u32 offset, u32 key_cnt, $u32 *__restrict__ device_bitmap) {
+	void contains_with_keys_on_gpu(u32 offset, int64_t key_cnt, $u32 *__restrict__ device_bitmap) {
 	
 		i32 block_size = 32;
 		// Probe
@@ -340,10 +340,12 @@ template <typename filter_t> struct cuda_filter {
 			cudaSetDevice(device_no_);
 			// Allocate device memory for the keys and for the result bitmap
 			cudaMalloc((void **)&device_in_keys, batch_size * sizeof(key_t));
+			assert(batch_size % 32 == 0);
 			cudaMalloc((void **)&device_bitmap, batch_size / 8);
 			// Allocate host memory for result bitmap
 			host_bitmap = nullptr;
 			cudaMallocHost((void **)&host_bitmap, batch_size / 8, cudaHostAllocPortable);
+			// memset(host_bitmap, 0, batch_size / 8);
 			assert(host_bitmap != nullptr);
 
 			/// create events
@@ -361,7 +363,7 @@ template <typename filter_t> struct cuda_filter {
 		}
 
 		/// asynchronously batch-probe the filter
-		void contains(const key_t *keys, u32 key_cnt) {
+		void contains(const key_t *keys, int64_t key_cnt) {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			assert(key_cnt > 0);
@@ -375,7 +377,7 @@ template <typename filter_t> struct cuda_filter {
 		}
 
 		/// asynchronously batch-probe the filter
-		void contains_in_gpu_data(u32 key_cnt, u32 offset) {
+		void contains_in_gpu_data(int64_t key_cnt, int64_t offset) {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			assert(key_cnt > 0);

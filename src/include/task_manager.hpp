@@ -4,6 +4,10 @@
 // #define GPU_SYNC
 #define CPU_WORK
 
+#ifdef DEBUG 
+#define GPU_BF_CHECK_AGAINST_CPU
+#endif
+
 #include "bloomfilter/bloom_cuda.hpp"
 #include "bloomfilter/util.hpp"
 
@@ -106,19 +110,19 @@ struct WorkerThread {
 	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
 
-		do_cpu_join(table, nullptr, nullptr, mnum, moffset, -1);
+		do_cpu_join(table, nullptr, mnum, moffset, -1);
 	}
 
 
-	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset, int64_t probe_offset) {
-		if (sel) {
-			assert(mnum <= kVecSize);
-		}
+	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int64_t mnum, int64_t moffset, int64_t probe_offset) {
 		tuples_morsel += mnum;
 
 		size_t num_tuples = mnum;
+
+		// printf("cpu_join_morsel offset=%ld num=%ld\n", moffset, mnum);
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
 		Vectorized::chunk(moffset, mnum, [&](auto offset, auto num) {
+			int* sel = nullptr;
 			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
 			int32_t *tkeys = (int32_t*)table.columns[0];
 			auto keys = &tkeys[offset + probe_offset];
@@ -126,6 +130,7 @@ struct WorkerThread {
 			assert(offset >= moffset);
 
 			size_t old_num = num;
+			// printf("cpu_join offset %ld\n", offset);
 
 			if (bf_results) {
 				//printf("cpu morsel bf_results %p offset %ld num %ld moffset %ld mnum %ld\n",
@@ -134,13 +139,39 @@ struct WorkerThread {
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
 				assert(pipeline.params.gpu_morsel_size % 32 == 0);
 				assert(offset % 32 == 0);
+				assert(offset % 8 == 0);
+
+				uint8_t* filter_base = (uint8_t*)bf_results + offset/8;
+
+#ifdef GPU_BF_CHECK_AGAINST_CPU
+				{
+					if (n != kVecSize) {
+						printf("n=%d\n", n);
+					}
+					assert(!sel && "not implemented");
+					filter.contains_chr(&tmp8[0], keys, sel, n);
+
+					for (int i=0; i<n; i++) {
+						int w = i / 8;
+						int b = i % 8;
+
+						bool on = !!(filter_base[w] & (1 << b));
+						if (on != (bool)tmp8[i]) {
+							printf("@%d: gpu=%s vs cpu=%s", i,
+								on ? "1" : "0", (bool)tmp8[i] ? "1" : "0");
+						}
+						assert(on == (bool)tmp8[i]);
+					}
+				}
+#endif
 
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
 				num = Vectorized::select_match_bit(true, sel2,
-					(uint8_t*)bf_results + offset/8, n);
+					filter_base, n);
 				assert(num <= n);
+
 
 #ifdef PROFILE
 				num_postfilter += num;
@@ -277,6 +308,7 @@ void WorkerThread::execute_pipeline() {
 		const int64_t tuples = pipeline.params.gpu_morsel_size;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
+			// printf("inflight_probe offset %ld, tuples %ld\n", offset, tuples);
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
 			offset += tuples;
 		}
@@ -318,6 +350,10 @@ void WorkerThread::execute_pipeline() {
 			if (!success) {
 				break;
 			}
+
+			assert(num % 8 == 0 && "Otherwise we cannot divide num_keys by 8");
+
+			// printf("gpu_morsel offset %ld\n", offset);
 
 			// issue a new GPU BF probe
 			assert(num <= pipeline.params.gpu_morsel_size);
@@ -361,7 +397,7 @@ void WorkerThread::execute_pipeline() {
 
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
-					do_cpu_join(pipeline.table, results, nullptr, num, offset, probe->offset);
+					do_cpu_join(pipeline.table, results, num, offset, probe->offset);
 				}
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
