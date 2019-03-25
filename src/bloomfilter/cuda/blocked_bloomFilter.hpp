@@ -45,6 +45,10 @@ template <typename filter_t> struct cuda_filter {
 	word_t *device_word_array;
 	/// size of the filter data in bytes
 	$u64 word_array_size;
+	/// pointer to the keys on the device
+	word_t *device_keys_array;
+	/// size of the keys in bytes
+	$u64 keys_array_size;
 
 	/// c'tor
 	cuda_filter(const filter_t &filter, const word_t *__restrict word_array, const std::size_t word_cnt)
@@ -55,6 +59,20 @@ template <typename filter_t> struct cuda_filter {
 		word_array_size = word_cnt * sizeof(word_t);
 		cudaMalloc((void **)&device_word_array, word_array_size);
 		cudaMemcpy(device_word_array, word_array, word_array_size, cudaMemcpyHostToDevice);
+	}
+	//! Constructs a cuda filter allocating and copying both bloom filter and keys on GPU
+	cuda_filter(const filter_t &filter, const word_t *__restrict word_array, const std::size_t word_cnt, const key_t *__restrict keys, const std::size_t key_cnt)
+	    : filter(filter) {
+		cudaSetDevice(0);
+		// copy the filter data to device memory
+		assert(word_cnt > 0);
+		assert(key_cnt > 0);
+		word_array_size = word_cnt * sizeof(word_t);
+		keys_array_size = key_cnt * sizeof(key_t);
+		cudaMalloc((void **)&device_word_array, word_array_size);
+		cudaMalloc((void **)&device_keys_array, keys_array_size);
+		cudaMemcpy(device_word_array, word_array, word_array_size, cudaMemcpyHostToDevice);
+		cudaMemcpy(device_keys_array, keys, keys_array_size, cudaMemcpyHostToDevice);
 	}
 
 	/// d'tor
@@ -271,6 +289,21 @@ template <typename filter_t> struct cuda_filter {
 		cudaDeviceSynchronize();
 	}
 
+	void contains_with_keys_on_gpu(u32 offset, u32 key_cnt, $u32 *__restrict__ device_bitmap) {
+	
+		i32 block_size = 32;
+		// Probe
+		i32 elements_per_thread = warp_size;
+		i32 elements_per_block = block_size * elements_per_thread;
+		i32 block_count = (key_cnt + elements_per_block - 1) / elements_per_block;
+
+		cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
+		// Real Experiment
+		contains_naive_kernel<<<block_count, block_size>>>(filter, device_word_array, &device_keys_array[offset], key_cnt,
+			                                                device_bitmap);
+		cudaDeviceSynchronize();
+	}
+
 	struct probe {
 		/// reference to the CUDA filter instance
 		cuda_filter &cuda_filter_instance;
@@ -336,6 +369,19 @@ template <typename filter_t> struct cuda_filter {
 			cudaEventRecord(start_event, 0);
 			cudaMemcpyAsync(device_in_keys, keys, key_cnt * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
 			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0]);
+			// copy back the result bitmap to pre-allocated host memory
+			cudaMemcpyAsync(host_bitmap, device_bitmap, key_cnt / 8, cudaMemcpyDeviceToHost, cuda_stream);
+			cudaEventRecord(stop_event, 0);
+		}
+
+		/// asynchronously batch-probe the filter
+		void contains_in_gpu_data(u32 key_cnt, u32 offset) {
+			cudaSetDevice(device_no_);
+			// copy the keys to the pre-allocated device memory
+			assert(key_cnt > 0);
+			assert(offset > 0);
+			cudaEventRecord(start_event, 0);
+			cuda_filter_instance.contains_with_keys_on_gpu(offset, key_cnt, &device_bitmap[0]);
 			// copy back the result bitmap to pre-allocated host memory
 			cudaMemcpyAsync(host_bitmap, device_bitmap, key_cnt / 8, cudaMemcpyDeviceToHost, cuda_stream);
 			cudaEventRecord(stop_event, 0);

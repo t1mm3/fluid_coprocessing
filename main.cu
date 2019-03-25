@@ -248,17 +248,6 @@ int main(int argc, char** argv) {
 
         }
         std::cout << std::endl;
-        std::size_t count = 0;
-        // // store the position of matches
-        // for(std::size_t i = 0; i != table_probe.size(); ++i) {
-        //     const auto key = static_cast<uint32_t>(*(probe_keys + i));
-        //     auto match =  filter.contains(key);
-        //     if(match) {
-        //         count++;
-        //         positions.insert(i);
-        //     }
-        // }
-        // assert(count == ((selectivity * table_probe.size()) / 100));
 
         // cuda instance of bloom filter logic on GPU
         FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
