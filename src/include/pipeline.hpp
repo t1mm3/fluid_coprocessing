@@ -164,16 +164,18 @@ public:
 		rwticket_wrunlock(&g_queue_rwlock);
 	}
 
-	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
-	#if 0
+	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, bool& is_busy, int64_t morsel_size) noexcept {
+		is_busy = false;
+#if 1
 		int busy = rwticket_rdtrylock(&g_queue_rwlock);
 
 		if (busy) {
+			is_busy = true;
 			return nullptr; // just do CPU work instead
 		}
-	#else
+#else
 		rwticket_rdlock(&g_queue_rwlock);
-	#endif
+#endif
 		for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
 			if (p->cpu_offset >= p->num) {
 				continue;
@@ -186,9 +188,9 @@ public:
 
 
 			// printf("g_queue_get_range(%p)\n", p);
-	#ifdef DEBUG
+#ifdef DEBUG
 			assert(p->status == InflightProbe::Status::CPU_SHARE);
-	#endif
+#endif
 
 			size_t n = std::min(morsel_size, p->num - off);
 			onum = n;

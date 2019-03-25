@@ -381,9 +381,10 @@ void WorkerThread::execute_pipeline() {
 
 		// do CPU work
 		morsel_size = pipeline.params.cpu_morsel_size;
+		bool lock_busy = false;
 
 		{ // preferably do CPU join on GPU filtered data
-			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, morsel_size);
+			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, lock_busy, morsel_size);
 
 			if (probe) {
 #ifdef PROFILE
@@ -419,8 +420,20 @@ void WorkerThread::execute_pipeline() {
 		}
 
 #ifdef CPU_WORK
+		morsel_size = pipeline.params.cpu_morsel_size;
+		if (lock_busy) {
+			// instead of busy waiting we do some useful work
+			morsel_size	= kVecSize;
+		}
+
 		// full CPU join
+
 		bool success = pipeline.table.get_range(num, offset, morsel_size);
+		if (!success && lock_busy) {
+			// still waiting on Queue lock
+			cpu_relax();
+			continue;
+		}
 		if (!success) {
 			// busy waiting until the last tuple is processed
 			// give others a chance
