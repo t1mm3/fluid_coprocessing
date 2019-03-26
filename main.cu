@@ -74,7 +74,6 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num) 
     in.close();
 };
 
-
 #include <tuple>
 #include <sstream>
 
