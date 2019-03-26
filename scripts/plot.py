@@ -98,8 +98,6 @@ def plot_bloomfilter():
         print gpu
 
     ofilename = "plot_bf.pgf"
-    # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
-    # plt.xlabel("Query")
 
     ax1.set_ylabel('Throughput (MProbe/s)')
     ax1.set_xlabel('Bloom filter size (MiB)')
