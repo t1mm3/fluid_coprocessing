@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import math
+import matplotlib.ticker as mticker
 from matplotlib.ticker import MultipleLocator, FuncFormatter
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -114,6 +115,11 @@ def plot_bloomfilter():
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
     ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[1], label="GPU Naive", basex=2)
     ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='o', color=colors[2], label="GPU Radix", basex=2)
+
+    ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
+    ax1.xaxis.get_major_formatter().set_scientific(False)
+    ax1.xaxis.get_major_formatter().set_useOffset(False)
+    ax1.xaxis.set_minor_formatter(mticker.ScalarFormatter())
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
