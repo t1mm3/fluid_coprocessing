@@ -488,7 +488,6 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
 
 //===----------------------------------------------------------------------===//
 int64_t calculate_matches_sum(Table& table_build, Table& table_probe, size_t selectivity) {
-	size_t number_of_matches = ((selectivity * table_probe.size()) / 100);
 	auto column_build = static_cast<int32_t*>(table_build.columns[0]);
 	std::set<int32_t> build_set(&column_build[0], column_build + table_build.size());
 	uint64_t ksum = 0;

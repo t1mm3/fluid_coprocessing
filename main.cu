@@ -185,6 +185,8 @@ int main(int argc, char** argv) {
     read_sum(ksum, expected_ksum);
 
 
+    assert(params.gpu_morsel_size >= params.cpu_morsel_size);
+
 
     if (!params.csv_path.empty()) {
         std::cout << "Writing build relation ..." <<std::endl;
