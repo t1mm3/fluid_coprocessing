@@ -17,12 +17,12 @@ enum {
 	num_gpu_streams = 4,                    // at least 4
 	should_print_results = false,
 	num_query_execution_runs = 5,
-	filter_size = 64ull * 1024 * 1024 * 8, // 64MiB
-	build_size = filter_size / 128,
-	probe_size = build_size * 100,
+	filter_size = 64ull * 1024ull * 1024ull * 8ull, // 64MiB
+	build_size = 1024ull * 1024ull * 4ull,
+	probe_size = 1024ull * 1024ull * 1024ull * 2,
 	num_repetitions = 3,
 	gpu = true,
-	cpu_bloomfilter = false,
+	cpu_bloomfilter = 1,
 	selectivity = 1,
 	num_columns = 1,
 	only_generate = false,

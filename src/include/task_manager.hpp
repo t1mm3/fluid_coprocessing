@@ -1,6 +1,12 @@
 #pragma once
 
 // #define GPU_DEBUG
+// #define GPU_SYNC
+#define CPU_WORK
+
+#ifdef DEBUG 
+#define GPU_BF_CHECK_AGAINST_CPU
+#endif
 
 #include "bloomfilter/bloom_cuda.hpp"
 #include "bloomfilter/util.hpp"
@@ -30,6 +36,8 @@ struct WorkerThread {
 	int sel1[kVecSize];
 	int sel2[kVecSize];
 	int sel3[kVecSize];
+	int id_sel[kVecSize];
+	uint8_t tmp8[kVecSize];
 
 	uint64_t ksum = 0;
 	uint64_t psum = 0;
@@ -48,6 +56,8 @@ struct WorkerThread {
 	std::vector<InflightProbe*> local_inflight;
 
 	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_join_cpu;
+	Profiling::Time prof_expop_cpu;
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
 
@@ -66,7 +76,7 @@ struct WorkerThread {
 
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
-	              FilterWrapper::cuda_filter_t &cf)
+	              FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer)
 	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf) {
 	    thread = new std::thread(ExecuteWorkerThread, this);
 	}
@@ -86,27 +96,38 @@ struct WorkerThread {
 
 	NO_INLINE void execute_pipeline();
 
-	NO_INLINE void do_cpu_work(Table &table, int64_t mnum, int64_t moffset) {
+	void _execute_pipeline() {
+		Profiling::Time prof_pipeline_cycles;
+		{
+			Profiling::Scope __prof(prof_pipeline_cycles);	
+			Vectorized::select_identity(id_sel, kVecSize);
+			execute_pipeline();
+		}
+
+		pipeline.prof_pipeline_cycles.atomic_aggregate(prof_pipeline_cycles);
+	}
+
+	NO_INLINE void do_cpu_work(int64_t mnum, int64_t moffset) {
 		Profiling::Scope profile(prof_aggr_cpu);
 
-		do_cpu_join(table, nullptr, nullptr, mnum, moffset);
+		do_cpu_join(nullptr, mnum, moffset, 0);
 	}
 
 
-	NO_INLINE void do_cpu_join(Table &table, uint32_t *bf_results, int *sel, int64_t mnum, int64_t moffset) {
-		if (sel) {
-			assert(mnum <= kVecSize);
-		}
+	NO_INLINE void do_cpu_join(uint32_t *bf_results, int64_t mnum,
+				int64_t moffset, int64_t probe_offset) {
 		tuples_morsel += mnum;
+		Table &table = pipeline.table; 
 
 		size_t num_tuples = mnum;
 
+		// printf("cpu_join_morsel offset=%ld num=%ld\n", moffset, mnum);
 		//std::cout << "morsel moffset " << moffset << " mnum " << mnum << std::endl;
-
 		Vectorized::chunk(moffset, mnum, [&](auto offset, auto num) {
+			int* sel = nullptr;
 			//std::cout << "chunk offset " << offset << " num " << num << std::endl;
 			int32_t *tkeys = (int32_t*)table.columns[0];
-			auto keys = &tkeys[offset];
+			int32_t* keys = &tkeys[offset + probe_offset];
 
 			assert(offset >= moffset);
 
@@ -117,12 +138,38 @@ struct WorkerThread {
 				//	bf_results, offset, num, moffset, mnum);
 				const auto n = num;
 				assert(pipeline.params.gpu_morsel_size % 8 == 0);
+				assert(pipeline.params.gpu_morsel_size % 32 == 0);
+				assert(offset % 32 == 0);
+				assert(offset % 8 == 0);
+
+				uint8_t* filter_base = (uint8_t*)bf_results + offset/8;
+
+#ifdef GPU_BF_CHECK_AGAINST_CPU
+				{
+					assert(!sel && "not implemented");
+					filter.contains_chr(&tmp8[0], keys, sel, n);
+
+					for (int i=0; i<n; i++) {
+						int w = i / 8;
+						int b = i % 8;
+
+						bool on = !!(filter_base[w] & (1 << b));
+						if (on != (bool)tmp8[i]) {
+							printf("@%d: gpu=%s vs cpu=%s", i,
+								on ? "1" : "0", (bool)tmp8[i] ? "1" : "0");
+						}
+						assert(on == (bool)tmp8[i]);
+					}
+				}
+#endif
+
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
 				num = Vectorized::select_match_bit(true, sel2,
-					(uint8_t*)bf_results + (offset - moffset)/8, n);
+					filter_base, n);
 				assert(num <= n);
+
 
 #ifdef PROFILE
 				num_postfilter += num;
@@ -133,7 +180,9 @@ struct WorkerThread {
 
 
 				sel = &sel2[0];
+				assert(probe_offset >= 0);
 			} else {
+				assert(probe_offset == 0);
 				sel = nullptr;
 			}
 
@@ -142,8 +191,21 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prefilter += num;
 #endif
-				num = filter.contains_sel(&sel3[0], keys, sel, num);
-				sel = &sel3[0];
+				switch (pipeline.params.cpu_bloomfilter) {
+				case 1:
+					num = filter.contains_sel(&sel3[0], keys, sel, num);
+					sel = &sel3[0];	
+					break;
+				case 2:
+					filter.contains_chr(&tmp8[0], keys, sel, num);
+					num = Vectorized::select_match(&sel3[0], &tmp8[0], sel, num);
+					sel = &sel3[0];	
+					break;
+				default:
+					assert(false);
+					break;
+				}
+				
 #ifdef PROFILE
 				num_postfilter += num;
 #endif
@@ -151,33 +213,38 @@ struct WorkerThread {
 
 			// Other pipeline stuff
 			if (pipeline.params.slowdown > 0) {
+				Profiling::Scope prof(prof_expop_cpu);
 				Vectorized::expensive_op(pipeline.params.slowdown,
-					tmp1, tmp2, tmp3, sel, num);
+					tmp1, tmp2, tmp3, sel ? sel : &id_sel[0], num);
 			}
 
-			// Hash probe
-			Vectorized::map_hash(hashs, keys, sel, num);
+			{
+				Profiling::Scope jprofile(prof_join_cpu);
+				// Hash probe
+				Vectorized::map_hash(hashs, keys, sel, num);
 #ifdef PROFILE
-			num_prejoin += num;
+				num_prejoin += num;
 #endif
-			for (auto ht : pipeline.hts) {
-				ht->Probe(ctx, matches, keys, hashs, sel, num);
-				num = Vectorized::select_match(sel1, matches, sel, num);
-				if (!num) {
-					return; // nothing to do with this stride
+
+				for (auto ht : pipeline.hts) {
+					ht->Probe(ctx, matches, keys, hashs, sel, num);
+					num = Vectorized::select_match(sel1, matches, sel, num);
+					sel = &sel1[0];
+					if (!num) {
+						return; // nothing to do with this stride
+					}
+
+					// gather some payload columns
+					for (int i = 1; i < NUM_PAYLOAD; i++) {
+						ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
+					}
 				}
 
-				sel = &sel1[0];
+#ifdef PROFILE
+				num_postjoin += num;
+#endif
 
-				// gather some payload columns
-				for (int i = 1; i < NUM_PAYLOAD; i++) {
-					ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
-				}
 			}
-
-#ifdef PROFILE
-			num_postjoin += num;
-#endif
 
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
@@ -192,19 +259,19 @@ struct WorkerThread {
 };
 
 void ExecuteWorkerThread(WorkerThread *ptr) {
-	ptr->execute_pipeline();
+	ptr->_execute_pipeline();
 }
 
 class TaskManager {
 public:
 
-	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf) {
+	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf));
+			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf, profile_printer));
 		}
 
 		for (auto &worker : workers) {
@@ -229,7 +296,10 @@ public:
 
 void WorkerThread::execute_pipeline() {
 	int64_t morsel_size;
+
+	uint32_t *tkeys = (uint32_t *)pipeline.table.columns[0];
 	uint64_t iteration = 0;
+
 
 #ifdef HAVE_CUDA
 	if (pipeline.params.gpu && device == 0) {
@@ -238,6 +308,7 @@ void WorkerThread::execute_pipeline() {
 		const int64_t tuples = pipeline.params.gpu_morsel_size;
 		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
 			// create probes
+			// printf("inflight_probe offset %ld, tuples %ld\n", offset, tuples);
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples));
 			offset += tuples;
 		}
@@ -259,8 +330,6 @@ void WorkerThread::execute_pipeline() {
 			if (!inflight_probe->is_gpu_available()) {
 				continue;
 			}
-			// get the keys to probe
-			uint32_t *tkeys = (uint32_t *)pipeline.table.columns[0];
 
 			// inflight_probe.probe->result();
 			if (inflight_probe->status == InflightProbe::Status::FILTERING) {
@@ -280,6 +349,10 @@ void WorkerThread::execute_pipeline() {
 				break;
 			}
 
+			assert(num % 8 == 0 && "Otherwise we cannot divide num_keys by 8");
+
+			// printf("gpu_morsel offset %ld\n", offset);
+
 			// issue a new GPU BF probe
 			assert(num <= pipeline.params.gpu_morsel_size);
 
@@ -290,12 +363,15 @@ void WorkerThread::execute_pipeline() {
 #ifdef PROFILE
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 #endif
-
 			// printf("probe schedule(%p)\n", inflight_probe);
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
 			inflight_probe->probe->contains(&tkeys[offset], num);
+#ifdef GPU_SYNC
+			inflight_probe->wait();
+#endif
+
 #ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
 				std::this_thread::get_id(), inflight_probe, offset, num);
@@ -305,21 +381,25 @@ void WorkerThread::execute_pipeline() {
 
 		// do CPU work
 		morsel_size = pipeline.params.cpu_morsel_size;
+		bool lock_busy = false;
 
-		{ // preferably do CPU join on GPU filtered data
-			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, morsel_size);
+		if (pipeline.params.gpu > 0) {
+			// preferably do CPU join on GPU filtered data
+			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, lock_busy, morsel_size);
 
 			if (probe) {
 #ifdef PROFILE
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 #endif
 				uint32_t* results = probe->probe->get_results();
+
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
 
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
-					do_cpu_join(pipeline.table, results, nullptr, num, offset + probe->offset);
+
+					do_cpu_join(results, num, offset, probe->offset);
 				}
 
 				int64_t old = std::atomic_fetch_add(&probe->processed, num);
@@ -334,13 +414,27 @@ void WorkerThread::execute_pipeline() {
 					pipeline.g_queue_remove(probe);
 				}
 #endif
-				pipeline.processed_tuples(num);
+
+				pipeline.processed_tuples(num, true);
 				continue;
 			}
 		}
 
+#ifdef CPU_WORK
+		morsel_size = pipeline.params.cpu_morsel_size;
+		if (lock_busy) {
+			// instead of busy waiting we do some useful work
+			morsel_size	= kVecSize;
+		}
+
 		// full CPU join
+
 		bool success = pipeline.table.get_range(num, offset, morsel_size);
+		if (!success && lock_busy) {
+			// still waiting on Queue lock
+			cpu_relax();
+			continue;
+		}
 		if (!success) {
 			// busy waiting until the last tuple is processed
 			// give others a chance
@@ -348,11 +442,14 @@ void WorkerThread::execute_pipeline() {
 			usleep(8*1024);
 			continue;
 		}
-		do_cpu_work(pipeline.table, num, offset);
-		pipeline.processed_tuples(num);
+		do_cpu_work(num, offset);
+		pipeline.processed_tuples(num, false);
+#endif
 	}
 
 	pipeline.prof_aggr_cpu.atomic_aggregate(prof_aggr_cpu);
+	pipeline.prof_join_cpu.atomic_aggregate(prof_join_cpu);
+	pipeline.prof_expop_cpu.atomic_aggregate(prof_expop_cpu);
 	pipeline.prof_aggr_gpu.atomic_aggregate(prof_aggr_gpu);
 	pipeline.prof_aggr_gpu_cpu_join.atomic_aggregate(prof_aggr_gpu_cpu_join);
 	std::atomic_fetch_add(&pipeline.ksum, ksum);

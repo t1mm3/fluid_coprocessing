@@ -59,9 +59,9 @@ struct Vectorized {
 		return res;
 	}
 
-	static void NO_INLINE map_div64(int64_t* CPU_R r, int64_t* CPU_R a, int64_t* CPU_R b,
+	static void NO_INLINE map_mul64(uint64_t* CPU_R r, uint64_t* CPU_R a, uint64_t* CPU_R b,
 			int* CPU_R sel, int num) {
-		map(sel, num, [&] (auto i) { r[i] = a[i] / b[i]; });
+		map(sel, num, [&] (auto i) { r[i] = a[i] * b[i]; });
 	}
 
 	static void NO_INLINE expensive_op(size_t repeats, int64_t* CPU_R t1, int64_t* CPU_R t2,
@@ -87,7 +87,7 @@ struct Vectorized {
 				break;
 			}	
 
-			map_div64(r, a, b, sel, num);
+			map_mul64((uint64_t*)r, (uint64_t*)a, (uint64_t*)b, sel, num);
 		}
 	}
 
@@ -101,8 +101,17 @@ struct Vectorized {
 	static int NO_INLINE select_match(int *CPU_R osel, bool *CPU_R b, int *CPU_R sel, int num) {
 		return select(osel, sel, num, [&](auto i) { return b[i]; });
 	}
+	static int NO_INLINE select_match(int *CPU_R osel, uint8_t *CPU_R b, int *CPU_R sel, int num) {
+		return select(osel, sel, num, [&](auto i) { return (bool)b[i]; });
+	}
 	static int NO_INLINE select_not_match(int *CPU_R osel, bool *CPU_R b, int *CPU_R sel, int num) {
 		return select(osel, sel, num, [&](auto i) { return !b[i]; });
+	}
+	static int NO_INLINE select_identity(int* CPU_R sel, int num) {
+		for (int i=0; i<num; i++) {
+			sel[i] = i;
+		}
+		return num;
 	}
 
 	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {

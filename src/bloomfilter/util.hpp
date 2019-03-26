@@ -1,7 +1,8 @@
 #pragma once
 
 #include "constants.hpp"
-
+#include "table.hpp"
+#include <thread>
 #include <algorithm>
 #include <bitset>
 #include <cmath>
@@ -309,7 +310,7 @@ struct params_t {
 
 	std::size_t num_repetitions   {defaults::num_repetitions};
 	bool gpu  					  {defaults::gpu};
-	bool cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
+	int cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
 	std::size_t selectivity 	  {defaults::selectivity};
 	std::string csv_path		  {""};
 	bool only_generate {defaults::only_generate};
@@ -360,39 +361,39 @@ params_t parse_command_line(int argc, char **argv) {
 		} else if (arg_name == "csv_path") {
 			params.csv_path = arg_value;
 		} else if (arg_name == "num_blocks") {
-			params.num_blocks = std::stoi(arg_value);
+			params.num_blocks = std::stoll(arg_value);
 		} else if (arg_name == "threads-per-block") {
-			params.num_threads_per_block = std::stoi(arg_value);
+			params.num_threads_per_block = std::stoll(arg_value);
 		} else if (arg_name == "filter_size") {
-			params.filter_size = std::stoi(arg_value);
+			params.filter_size = std::stoll(arg_value);
 		} else if (arg_name == "probe_size") {
-			params.probe_size = std::stoi(arg_value);
+			params.probe_size = std::stoll(arg_value);
 			if (!params.probe_size) {
 				params.probe_size = defaults::probe_size;
 			}
 		} else if (arg_name == "build_size") {
-			params.build_size = std::stoi(arg_value);
+			params.build_size = std::stoll(arg_value);
 			if (!params.build_size) {
 				params.build_size = defaults::build_size;
 			}
 		} else if (arg_name == "slowdown") {
-			params.slowdown = std::stoi(arg_value);
+			params.slowdown = std::stoll(arg_value);
 		} else if (arg_name == "gpu_morsel_size") {
-			params.gpu_morsel_size = std::stoi(arg_value);
+			params.gpu_morsel_size = std::stoll(arg_value);
 		} else if (arg_name == "cpu_morsel_size") {
-			params.cpu_morsel_size = std::stoi(arg_value);
+			params.cpu_morsel_size = std::stoll(arg_value);
 		} else if (arg_name == "repetitions") {
-			params.num_repetitions = std::stoi(arg_value);
+			params.num_repetitions = std::stoll(arg_value);
 		} else if (arg_name == "selectivity") {
-			params.selectivity = std::stoi(arg_value);
+			params.selectivity = std::stoll(arg_value);
 		} else if (arg_name == "gpu") {
-			params.gpu = std::stoi(arg_value) != 0;
+			params.gpu = std::stoll(arg_value) != 0;
 		} else if (arg_name == "only_generate") {
-			params.only_generate = std::stoi(arg_value) != 0;
+			params.only_generate = std::stoll(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
-			params.cpu_bloomfilter = std::stoi(arg_value) != 0;
+			params.cpu_bloomfilter = std::stoll(arg_value);
 		} else if (arg_name == "num_threads") {
-			int64_t n = std::stoi(arg_value);
+			int64_t n = std::stoll(arg_value);
 			if (n > 0) {
 				params.num_threads = n;
 			} else {
@@ -434,9 +435,6 @@ void set_incremental_values(T* column, size_t range_size) {
 
     auto increment_one = [n = 0]() mutable { return ++n; };   
     std::generate(&column[0], column + range_size, increment_one); // Initializes the container with random uniform distributed values
-
-	// random shuffle to break sequential access
-	//std::shuffle(&column[0], column + range_size, engine);
 }
 //===----------------------------------------------------------------------===//
 
@@ -449,7 +447,7 @@ void populate_table(Table& table) {
 
 //===----------------------------------------------------------------------===//
 void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity) {
-	    //thread_local allows unique seed for each thread
+	//thread_local allows unique seed for each thread
     thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
     thread_local std::mt19937 engine(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_int_distribution<int32_t> distribution;
@@ -461,6 +459,20 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
     	auto column = static_cast<int32_t*>(column_probe);
     	const size_t num = table_probe.size();
 
+    	{
+    		// require 'number_of_matches' ... copy build-side multiple times into probe
+    		// THIS MIGHT OVERLAP AND MIGHT BE OVERWRITTEN BY THE CONSEQUENT PASS
+    		size_t offset = 0;
+    		size_t num_copy = (number_of_matches + table_build.size()-1) / table_build.size();
+    		assert(table_build.size() < table_probe.size());
+    		for (size_t c=0; c<num_copy; c++) {
+    			memcpy(&column[offset], column_build, table_build.size() * sizeof(int32_t));
+
+    			offset += table_build.size();
+    		}
+    	}
+
+    	// replace
    		for(size_t i = number_of_matches; i < num;) {
         	int32_t new_random = distribution(engine);
         	if(build_set.find(new_random) == build_set.end()){
@@ -471,5 +483,26 @@ void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity)
 
         std::shuffle(&column[0], column + num, engine);   
     }
+}
+//===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
+int64_t calculate_matches_sum(Table& table_build, Table& table_probe, size_t selectivity) {
+	auto column_build = static_cast<int32_t*>(table_build.columns[0]);
+	std::set<int32_t> build_set(&column_build[0], column_build + table_build.size());
+	uint64_t ksum = 0;
+    for(auto column_probe : table_probe.columns) {
+    	auto column = static_cast<int32_t*>(column_probe);
+    	const size_t probe_size = table_probe.size();
+    	for(size_t i = 0; i != probe_size; ++i) {
+    		auto value = *(column + i);
+    		if(build_set.find(value) != build_set.end()){
+        		ksum += value;
+        	}
+    	}
+
+    }
+    std::cout << ksum << std::endl;
+    return ksum;
 }
 //===----------------------------------------------------------------------===//

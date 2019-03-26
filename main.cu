@@ -1,4 +1,5 @@
 #include "hash_table.hpp"
+#include "profile_printer.hpp"
 #include "bloomfilter.hpp"
 #include "task_manager.hpp"
 #include <thrust/host_vector.h>
@@ -6,6 +7,7 @@
 #include <random>
 #include <iostream>
 #include "bloomfilter/util.hpp"
+
 
 void gen_csv(const std::string& fname, const Table& t, bool probe) {
     uint32_t *table_keys = (uint32_t *)t.columns[0];
@@ -31,8 +33,10 @@ void gen_csv(const std::string& fname, const Table& t, bool probe) {
 #include <unistd.h>
 size_t file_size(const std::string& fname) {
     struct stat st;
-    stat(fname.c_str(), &st);
-    return st.st_size;
+    if (!stat(fname.c_str(), &st))  {
+        return st.st_size;
+    }
+    return 0;
 }
 
 void write_column(const std::string& file, Table& table, size_t col, size_t num) {
@@ -42,6 +46,21 @@ void write_column(const std::string& file, Table& table, size_t col, size_t num)
 
     out.write((char*)d, sizeof(int32_t) * num);
     out.close();
+};
+
+void write_ksum(const std::string& file, int64_t ksum) {
+    std::ofstream out(file, std::ios::out | std::ios::binary);
+    assert(out.is_open());
+    out.write(reinterpret_cast<const char *>(&ksum), sizeof(ksum));
+    out.close();
+};
+
+void read_sum(const std::string& file, int64_t& ksum) {
+    std::ifstream in(file, std::ios::in | std::ios::binary);
+    assert(in.is_open());
+
+    in.read(reinterpret_cast<char *>(&ksum), sizeof(int64_t));
+    in.close();
 };
 
 void read_column(Table& table, const std::string& file, size_t col, size_t num) {
@@ -55,12 +74,52 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num) 
     in.close();
 };
 
-
 #include <tuple>
 #include <sstream>
 
+void test() {
+    int sel[kVecSize];
+    uint8_t bit;
+    int num;
+    uint32_t bit32;
+
+    bit = 0xFF;
+    num = Vectorized::select_match_bit(true, sel, &bit, 8);
+    assert(num == 8);
+    for (int i=0; i<num; i++) {
+        assert(sel[i] == i);
+    }
+
+    bit = 1;
+    num = Vectorized::select_match_bit(true, sel, &bit, 8);
+    assert(num == 1);
+    assert(sel[0] == 0);
+
+    bit32 = 0;
+    int exp_num = 0;
+    for (int i=0; i<32; i++) {
+        if (i % 4 == 0) {
+            bit32 |= 1 << i;
+            exp_num++;
+        } 
+    }
+
+    memset(sel, 0, sizeof(sel));
+    num = Vectorized::select_match_bit(true, sel, (uint8_t*)&bit32, 30);
+    assert(8 == num);
+    assert(num == exp_num);
+    assert(sel[0] == 0);
+    assert(sel[1] == 4);
+    assert(sel[2] == 8);
+    assert(sel[3] == 12);
+    assert(sel[4] == 16);
+    assert(sel[5] == 20);
+    assert(sel[6] == 24);
+    assert(sel[7] == 28);
+}
 //===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
+    test();
     auto params = parse_command_line(argc, argv);
     TaskManager manager;
     std::ofstream results_file;
@@ -84,9 +143,10 @@ int main(int argc, char** argv) {
 
     const std::string bfile(gen_fname(0));
     const std::string pfile(gen_fname(1));
+    const std::string ksum(gen_fname(3));
     bool cached = true;
 
-    if (!file_size(bfile) || !file_size(pfile)) {
+    if (!file_size(bfile) || !file_size(pfile) || !file_size(ksum)) {
         std::cout << "Files not cached. Recreating ..." << std::endl;
         // not cached, create files
         cached = false;
@@ -95,6 +155,9 @@ int main(int argc, char** argv) {
         populate_table(table_probe);
 
         set_selectivity(table_build, table_probe, selectivity);
+        auto expected_ksum = calculate_matches_sum(table_build, table_probe, selectivity);
+        std::cout << "Writing ksum to disk ..." << std::endl;
+        write_ksum(ksum, expected_ksum);
 
         std::cout << "Writing 'build' to disk ..." << std::endl;
         write_column(bfile, table_build, 0, build_size);
@@ -111,12 +174,18 @@ int main(int argc, char** argv) {
     // load data
     assert(file_size(bfile) > 0);
     assert(file_size(pfile) > 0);
+    assert(file_size(ksum) > 0);
+    assert(file_size(ksum) == sizeof(int64_t));
     assert(file_size(bfile) == sizeof(int32_t) * build_size);
     assert(file_size(pfile) == sizeof(int32_t) * probe_size);
 
     read_column(table_build, bfile, 0, build_size);
     read_column(table_probe, pfile, 0, probe_size);
+    int64_t expected_ksum = 0;
+    read_sum(ksum, expected_ksum);
 
+
+    assert(params.gpu_morsel_size >= params.cpu_morsel_size);
 
 
     if (!params.csv_path.empty()) {
@@ -127,7 +196,7 @@ int main(int argc, char** argv) {
         std::cout << "Writing probe relation ..." <<std::endl;
         gen_csv(params.csv_path + "probe.csv", table_probe, true);
 
-        std::cout << "Done" <<std::endl;
+        std::cout << "Done" << std::endl;
         exit(0);
     }
 
@@ -162,6 +231,8 @@ int main(int argc, char** argv) {
         size_t m = params.filter_size;
         FilterWrapper filter(m);
         uint32_t *table_keys = (uint32_t *)table_build.columns[0];
+        uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
+        std::set<uint32_t> positions;
 
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
@@ -169,8 +240,7 @@ int main(int argc, char** argv) {
             filter.insert(key);
         }
 
-        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
-        
+        // Validate Filter on CPU
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
             auto match = filter.contains(key);
@@ -180,22 +250,48 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
 
-        double total_seconds = 0.0;
+        // cuda instance of bloom filter logic on GPU
+        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
+
+
+        ProfilePrinter profile_info(params);
+        profile_info.write_header(results_file);
+
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
             //execute probe
-            auto start = std::chrono::system_clock::now();
-            manager.execute_query(pipeline, filter, cf);
+            const auto start = std::chrono::system_clock::now();
+            const auto start_cycles = rdtsc();
+            manager.execute_query(pipeline, filter, cf, profile_info);
+            auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();
 
             if (i >= params.num_warmup) {
-                total_seconds += std::chrono::duration<double>(end - start).count();
-            }
+                // Profile output
+                profile_info.pipeline_cycles += (double)(end_cycles - start_cycles);
+                profile_info.pipeline_sum_thread_cycles += (double)(pipeline.prof_pipeline_cycles.cycles);
+                profile_info.pipeline_time   += std::chrono::duration<double>(end - start).count();
+                profile_info.cpu_time        += (double)pipeline.prof_aggr_cpu.cycles;
+                profile_info.cpu_join_time   += (double)pipeline.prof_join_cpu.cycles;
+                profile_info.cpu_expop_time  += (double)pipeline.prof_expop_cpu.cycles;  
+                profile_info.gpu_time        += (double)pipeline.prof_aggr_gpu.cycles;
+                profile_info.cpu_gpu_time    += (double)pipeline.prof_aggr_gpu_cpu_join.cycles;
 
+#ifdef PROFILE
+                profile_info.pre_filter_tuples += pipeline.num_prefilter;
+                profile_info.fitered_tuples    += pipeline.num_postfilter;
+                profile_info.pos_join_tuples   += pipeline.num_prejoin;
+                profile_info.pos_join_tuples   += pipeline.num_postjoin;
+#endif
+            }
+            if(expected_ksum != pipeline.ksum) {
+                std::cout << " invalid ksum:" << pipeline.ksum << " expected:" << expected_ksum << std::endl;
+            }
             pipeline.reset();
         }
-        auto final_elapsed_time = total_seconds / params.num_repetitions;
+        double final_elapsed_time = profile_info.pipeline_time / (double)params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
-        results_file << "Total time :" << final_elapsed_time << std::endl;
+
+        profile_info.write_profile(results_file);
     }
     results_file.close();
 

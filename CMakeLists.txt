@@ -76,7 +76,7 @@ endif()
 
 ### GCC Flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGPU -DDEBUG -O0 -g -march=native")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -march=native -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -O3 -g -march=native")
 
 
 SET(BLOOM_CUDA_SOURCE_FILES
@@ -87,6 +87,11 @@ SET(BLOOM_CUDA_SOURCE_FILES
 SET(FRAMEWORK
         ${BLOOM_FILTER_SOURCE_FILES}
         main.cu
+        )
+
+SET(BLOOM_SIZE_FILES
+        ${BLOOM_FILTER_SOURCE_FILES}
+        src/bloomfilter/bloom_size_benchmark.cu
         )
 
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
@@ -112,7 +117,9 @@ target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 #framework
 cuda_add_executable(main_cu ${FRAMEWORK})
 target_link_libraries(main_cu cudart numa pthread)
-
+#bechmark bloom size
+cuda_add_executable(bloom_size_benchmark ${BLOOM_SIZE_FILES})
+target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 #enable_testing()
 #add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
 #target_link_libraries(test_cpp mainlib Threads::Threads)

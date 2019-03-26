@@ -8,5 +8,7 @@ out2.txt
 out_bits.txt
 benchmark_info.txt
 results.csv
+result.csv
 results
 .last_format
+data*.bin

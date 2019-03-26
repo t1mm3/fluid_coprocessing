@@ -18,8 +18,11 @@ struct Pipeline {
 	Table &table; //!< Probe relation
 
 	Profiling::Time prof_aggr_cpu;
+	Profiling::Time prof_join_cpu;
+	Profiling::Time prof_expop_cpu;
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
+	Profiling::Time prof_pipeline_cycles;
 
 	std::atomic<int64_t> tuples_morsel;
 
@@ -86,6 +89,9 @@ public:
 		prof_aggr_cpu.reset();
 		prof_aggr_gpu.reset();
 		prof_aggr_gpu_cpu_join.reset();
+		prof_pipeline_cycles.reset();
+		prof_expop_cpu.reset();
+		prof_join_cpu.reset();
 		table.reset();
 	}
 
@@ -93,8 +99,12 @@ public:
 		return tuples_processed >= table.size();
 	}
 
-	void processed_tuples(int64_t num) {
-		tuples_processed += num;
+	void processed_tuples(int64_t num, bool gpu) {
+		auto old = std::atomic_fetch_add(&tuples_processed, num);
+#if 0
+		printf("%s tuples %ld  old = %ld, %ld <= %ld (max)\n",
+			gpu ? "GPU" : "cpu", num, old, old+num, table.size());
+#endif
 	}
 
 	int64_t get_tuples_processed() {
@@ -146,24 +156,31 @@ public:
 			g_queue_head = p->q_next;
 		}
 
-		p->status = InflightProbe::Status::DONE;
-		rwticket_wrunlock(&g_queue_rwlock);
-
 
 		p->q_next = nullptr;
 		p->q_prev = nullptr;
+		barrier();
+		p->status = InflightProbe::Status::DONE;
+		rwticket_wrunlock(&g_queue_rwlock);
 	}
 
-	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset, int64_t morsel_size) noexcept {
-	#if 0
+	NO_INLINE InflightProbe* g_queue_get_range(int64_t& onum, int64_t& ooffset,
+			bool& is_busy, int64_t morsel_size) noexcept {
+		is_busy = false;
+
+		if (!g_queue_head) {
+			return nullptr;
+		}
+#if 0
 		int busy = rwticket_rdtrylock(&g_queue_rwlock);
 
 		if (busy) {
+			is_busy = true;
 			return nullptr; // just do CPU work instead
 		}
-	#else
+#else
 		rwticket_rdlock(&g_queue_rwlock);
-	#endif
+#endif
 		for (InflightProbe *p = g_queue_head; p; p = p->q_next) {
 			if (p->cpu_offset >= p->num) {
 				continue;
@@ -176,9 +193,9 @@ public:
 
 
 			// printf("g_queue_get_range(%p)\n", p);
-	#ifdef DEBUG
+#ifdef DEBUG
 			assert(p->status == InflightProbe::Status::CPU_SHARE);
-	#endif
+#endif
 
 			size_t n = std::min(morsel_size, p->num - off);
 			onum = n;
