@@ -76,7 +76,7 @@ endif()
 
 ### GCC Flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGPU -DDEBUG -O0 -g -march=native")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -march=native -O3 -g -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -O3 -g -march=native")
 
 
 SET(BLOOM_CUDA_SOURCE_FILES
