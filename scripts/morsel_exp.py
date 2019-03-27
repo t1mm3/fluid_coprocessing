@@ -88,4 +88,4 @@ for cms in [16*1024, 128*1024, 1024*1024]:
 	for gms in [128*1024, 1024*1024, 16*1024*1024, 128*1024*1024]:
 		file = "morsel/results-morsel.csv"
 		run_test(fname=file, selectivity="5", gpu_devices="1",
-			cpu_filter="1", cpu_morsel_size=cms)
+			cpu_filter="1", cpu_morsel_size=cms, gpu_morsel_size=gms)
