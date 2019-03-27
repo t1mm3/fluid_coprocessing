@@ -28,6 +28,8 @@ struct ProfilePrinter {
 		os << "CPUBloomFilter"	<< "|";
 		os << "FilterSize"		<< "|";
 		os << "Slowdown"		<< "|";
+		os << "CPUMorselSize"	<< "|";
+		os << "GPUMorselSize"	<< "|";
 		os << "Selectivity"		<< '\n';
 
 	}
@@ -50,6 +52,8 @@ struct ProfilePrinter {
 		os << (params.cpu_bloomfilter) 			<< "|";
 		os << (params.filter_size)				<< "|";
 		os << (params.slowdown)					<< "|";
+		os << (params.cpu_morsel_size)			<< "|";
+		os << (params.gpu_morsel_size)			<< "|";
 		os << (params.selectivity)				<< "\n";
 	}
 
