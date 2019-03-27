@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 
@@ -27,9 +27,37 @@ slowdown_values = [0, 10, 100, 1000]
 filter_size_values = [default_filter_size / 8, default_filter_size, 8*default_filter_size]
 
 
+def run_timeout(cmd, timeout):
+	# inspired by https://stackoverflow.com/questions/36952245/subprocess-timeout-failure
+	import os
+	import signal
+	from subprocess import Popen, PIPE, TimeoutExpired
+	from time import monotonic as timer
+
+	start = timer()
+	with Popen(cmd, shell=True, stdout=PIPE, preexec_fn=os.setsid) as process:
+		try:
+			output = process.communicate(timeout=timeout)[0]
+			return True
+		except TimeoutExpired:
+			print('Timeout for {}'.format(cmd))
+			os.killpg(process.pid, signal.SIGINT) # send signal to the process group
+			output = process.communicate()[0]
+			return False
+
 def syscall(cmd):
 	print(cmd)
-	os.system(cmd)
+	# os.system(cmd)
+
+	timed_out = True
+	# 100 seconds for large run * 20 reps * 2 (overalloc)
+	time_out_seconds = 100 * 20 * 2 # 30*60
+	iterations = 0
+
+	while timed_out:
+		assert(iterations < 10)
+		timed_out = not run_timeout(cmd, time_out_seconds)
+		iterations = iterations + 1
 
 def run_test(fname = None, probe_size = None, streams = None, filter_size = None, build_size = None, gpu_morsel_size = None, cpu_morsel_size = None, gpu_devices = None, selectivity = None, threads = None, cpu_filter = None, slowdown = None):
 	if fname is None: raise Exception("No filename provided")
