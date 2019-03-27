@@ -41,7 +41,7 @@ def syscall(cmd):
 
 	timed_out = True
 	# 100 seconds for large run * 20 reps * 2 (overalloc)
-	time_out_seconds = 100 * 20 * 2 # 30*60
+	time_out_seconds = 15*60
 	iterations = 0
 
 	while timed_out:
