@@ -84,7 +84,7 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 os.system('make')
 os.system('mkdir -p results/morsel')
 
-for cms in [16*1024, 128*1024, 1024*1024]
+for cms in [16*1024, 128*1024, 1024*1024]:
 	for gms in [128*1024, 1024*1024, 16*1024*1024, 128*1024*1024]:
 		file = "morsel/results-morsel.csv"
 		run_test(fname=file, selectivity="5", gpu_devices="1",
