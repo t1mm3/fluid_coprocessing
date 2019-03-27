@@ -1,3 +1,5 @@
+import os
+
 binary = "build/release/main_cu"
 
 kibi = 1024
