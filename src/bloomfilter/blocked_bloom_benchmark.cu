@@ -229,7 +229,7 @@ void benchmark(const std::size_t m,
 // Main
 //===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
-    std::string result_file("result.csv"), output_file("output.txt");
+    std::string result_file("bench_bits.csv"), output_file("output.txt");
     for (int i = 1; i < argc; i++) {
       auto arg = std::string(argv[i]);
       if (arg.substr(0, 2) != "--") {
@@ -258,11 +258,11 @@ int main(int argc, char** argv) {
     //===----------------------------------------------------------------------===//
     //Benchmark set up
     auto increment_one = [n = 0]() mutable {return ++n;};
-    std::size_t default_m = 64 * 1024 * 1024 * 8; // 256MiB
-    auto m = {default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32};
+    std::size_t default_m = 1ull * 1024ull * 1024ull * 8ull; // 256MiB
+    auto m = {default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32, default_m * 64, default_m * 128, default_m * 256, default_m * 512};
     std::vector<size_t> bits_to_sort(32);
     std::generate(bits_to_sort.begin(), bits_to_sort.end(), increment_one);
-    auto input_size = {1ull<<17, 1ull<<20, 1ull<<24, 1ull<<27}; // 10K 100K 1M 10M 100M
+    auto input_size = {1ull<<28}; // 10K 100K 1M 10M 100M
     
     // Data generation.
     using key_t        = $u32;

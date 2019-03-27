@@ -2,10 +2,19 @@ import os
 
 binary="build/release/bloom_size_benchmark"
 
-default_bloom_size = 32*1024*1024*8
+default_bloom_size = 1*1024*1024*8
 default_bits = 6
-bloom_sizes = [default_bloom_size, default_bloom_size * 2, default_bloom_size * 4, default_bloom_size * 8, default_bloom_size * 16] # 32Mb 64Mb 128Mb 256Mb 512Mb 
-bits_to_sort = [6, 6, 12, 18]
+bloom_sizes = [1 * 1024 * 1024 * 8,
+	2 * 1024 * 1024 * 8,
+	4 * 1024 * 1024 * 8,
+	8 * 1024 * 1024 * 8,
+	16 * 1024 * 1024 * 8,
+	32 * 1024 * 1024 * 8,
+	64 * 1024 * 1024 * 8,
+	128 * 1024 * 1024 * 8,
+	256 * 1024 * 1024 * 8,
+	512 * 1024 * 1024 * 8]
+bits_to_sort = [6, 6, 6, 6, 6, 6, 6, 6, 8, 12]
 file = "bloom_size/bloom_size_gpu"
 
 def syscall(cmd):
