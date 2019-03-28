@@ -165,6 +165,8 @@ def plot_expensiveop(sel):
     ax1.set_ylabel('Time (in s)')
     ax1.set_xlabel('Slowdown')
     # ax1.grid(True)
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print cpu_nofilter
 
     ax1.semilogx(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
     ax1.semilogx(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, BF")
