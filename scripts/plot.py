@@ -146,40 +146,30 @@ def plot_bloomfilter():
     plt.close(fig)
 
 
-def plot_expensiveop():
-    df = pd.read_csv("{}/expensiveop/results-expensiveop.csv".format(result_path),
+def plot_expensiveop(sel):
+    cpu = pd.read_csv("{}/expensiveop/results-expensiveop_cpu.csv".format(result_path),
+        sep='|', names=framework_columns, header=None, skiprows=1)
+    gpu = pd.read_csv("{}/expensiveop/results-expensiveop_gpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
 
-    cpu = df[df['NAME']=="CPU"]
-    gpu = df[df['NAME']=="GPU-Naive"]
-    gpu_cluster = df[df['NAME']=="GPU-Clustering"]
+    cpu = cpu[cpu['Selectivity']==sel]
+    gpu = gpu[gpu['Selectivity']==sel]
 
     (fig, ax1) = plt.subplots()
 
-    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print gpu
+    cpu_filter = cpu[cpu['CPUBloomFilter']==1]
+    cpu_nofilter = cpu[cpu['CPUBloomFilter']==0]
 
-    ofilename = "plot_expensiveop.pgf"
+    ofilename = "plot_expensiveop_sel{}.pgf".format(sel)
 
-    ax1.set_ylabel('Throughput (MProbe/s)')
-    ax1.set_xlabel('Bloom filter size (MiB)')
+    ax1.set_ylabel('Time (in s)')
+    ax1.set_xlabel('Slowdown')
     # ax1.grid(True)
 
-    sz_div = mebi * 8.0
-    tp_div = mega
+    ax1.semilogx(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.semilogx(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, BF")
+    ax1.semilogx(gpu['Slowdown'], gpu['PipelineTime'], linestyle='--', marker='x', color=colors[2], label="GPU+CPU, BF")
 
-    ax1.ticklabel_format(axis='x', style='plain')
-
-    ax1.set_xlim(1, 2**9)
-
-    ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[1], label="GPU Naive", basex=2)
-    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='o', color=colors[2], label="GPU Radix", basex=2)
-
-    ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
-    ax1.xaxis.get_major_formatter().set_scientific(False)
-    ax1.xaxis.get_major_formatter().set_useOffset(False)
-    ax1.xaxis.set_minor_formatter(mticker.ScalarFormatter())
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
@@ -196,9 +186,10 @@ def plot_expensiveop():
 
 def main():
     mpl.rcParams.update({'font.size': 15})
-    plot_sel()
+    # plot_sel()
     # plot_bloomfilter()
-    # plot_expensiveop()
+    plot_expensiveop(1)
+    plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()
