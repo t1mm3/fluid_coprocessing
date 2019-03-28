@@ -149,7 +149,7 @@ template <typename filter_t> struct cuda_filter {
 		cuda_check_error();
 
 		// Probe with sorted hashes
-		u64 repeats = 1;
+		u64 repeats = 10;
 		// i32 elements_per_thread = warp_size;
 		// i32 elements_per_block = block_size * elements_per_thread;
 		// i32 block_count = (key_cnt + elements_per_block - 1) / elements_per_block;
@@ -171,8 +171,8 @@ template <typename filter_t> struct cuda_filter {
 			contains_kernel_clustering<<<block_cnt, block_size>>>(filter, device_word_array, d_sorted_hashes,d_sorted_keys,
 			                                                       key_cnt, device_bitmap);
 			cudaDeviceSynchronize();
-			cuda_check_error();
 		}
+		cuda_check_error();
 
 		auto end_probe = std::chrono::high_resolution_clock::now();
 		perf_data.probe_time = std::chrono::duration<double>(end_probe - start_probe).count() / repeats;
@@ -205,6 +205,112 @@ template <typename filter_t> struct cuda_filter {
 		cudaFree(d_sorted_hashes);
 		cudaFree(device_bitmap);
 		cudaFree(result_bitmap);
+		cuda_check_error();
+	}
+		/// batch-probe the filter with profile
+	void contains_clustering_only(u32 *__restrict__ keys, u32 key_cnt, $u32 *__restrict__ bitmap, perf_data_t &perf_data,
+	                         std::size_t bits_to_sort) {
+		// Allocate device memory and copy the keys to device
+		$u32 *d_keys, *d_keys_hash;
+		u32 device_keys_size = sizeof($u32) * key_cnt;
+		const std::size_t gran = 4ull * 1024; // page allignment
+		const std::size_t device_keys_alloc_size = ((device_keys_size + (gran - 1)) / gran) * gran;
+
+		// Allocate device memory for hash_values and positions
+		cudaMalloc((void **)&d_keys, 	  device_keys_alloc_size);
+		cudaMalloc((void **)&d_keys_hash, device_keys_alloc_size);
+		cuda_check_error();
+
+		// Copy keys to device
+		cudaMemcpy(d_keys, keys, device_keys_size, cudaMemcpyHostToDevice);
+
+		// Calculate Hash Values
+		i32 block_size = 32;
+		i32 block_cnt = (key_cnt + block_size - 1) / block_size;
+		auto start_hash = std::chrono::high_resolution_clock::now();
+		//std::cout << "hash" << block_cnt << std::endl;
+		calculate_hash_kernel<<<block_cnt, block_size>>>(filter, d_keys, key_cnt, d_keys_hash);
+		cudaDeviceSynchronize();
+
+		auto end_hash = std::chrono::high_resolution_clock::now();
+		perf_data.hash_time = std::chrono::duration<double>(end_hash - start_hash).count();
+		perf_data.hash_throughput = static_cast<u64>(key_cnt / perf_data.hash_time);
+
+		// Sort Hash Values by 6 MSB
+		// Allocate auxiliary buffers for sorted keys and positions
+		$u32 *d_sorted_keys, *d_sorted_hashes;
+		cudaMalloc((void **)&d_sorted_keys, device_keys_alloc_size);
+		cudaMalloc((void **)&d_sorted_hashes, device_keys_alloc_size);
+		cuda_check_error();
+
+		// Sorting
+		// Allocate temp storage for radix sort
+		unsigned char *temp_storage;
+		auto temp_storage_size = get_temp_storage_requirement<key_t, key_t>(key_cnt);
+		cudaMalloc((void **)&temp_storage, temp_storage_size);
+		//std::cout << "sort" << std::endl;
+		auto start_sort = std::chrono::high_resolution_clock::now();
+
+		auto status =
+		    cub::DeviceRadixSort::SortPairs(temp_storage, temp_storage_size, d_keys_hash, d_sorted_hashes, d_keys,
+		                                    d_sorted_keys, key_cnt, (END_BIT - bits_to_sort), END_BIT);
+		cudaDeviceSynchronize();
+
+		auto end_sort = std::chrono::high_resolution_clock::now();
+		cudaFree(d_keys_hash);
+		cudaFree(d_keys);
+		cudaFree(temp_storage);
+		perf_data.sort_time = std::chrono::duration<double>(end_sort - start_sort).count();
+		perf_data.sort_throughput = static_cast<u64>(key_cnt / perf_data.sort_time);
+
+		// Allocate memory for the result bitmap
+		$u32 *device_bitmap;
+		const std::size_t device_bitmap_size = (key_cnt) * sizeof($u32); // one position per key
+		cudaMalloc((void **)&device_bitmap, device_bitmap_size);
+		cuda_check_error();
+
+		// Probe with sorted hashes
+		u64 repeats = 10;
+		// i32 elements_per_thread = warp_size;
+		// i32 elements_per_block = block_size * elements_per_thread;
+		// i32 block_count = (key_cnt + elements_per_block - 1) / elements_per_block;
+		// perf_data.cuda_block_size = block_size;
+		// perf_data.cuda_block_cnt = block_count;
+
+		cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
+		//std::cout << "probe" << block_cnt << std::endl;
+		// warm up
+		if (repeats > 0) {
+			contains_kernel_clustering<<<block_cnt, block_size>>>(filter, device_word_array, d_sorted_hashes,d_sorted_keys,
+			                                                       key_cnt, device_bitmap);
+			cudaDeviceSynchronize();
+			cuda_check_error();
+		}
+		// Real Experiment
+		auto start_probe = std::chrono::high_resolution_clock::now();
+		for (size_t i = 0; i < repeats; i++) {
+			contains_kernel_clustering<<<block_cnt, block_size>>>(filter, device_word_array, d_sorted_hashes,d_sorted_keys,
+			                                                       key_cnt, device_bitmap);
+			cudaDeviceSynchronize();
+			cuda_check_error();
+		}
+
+		auto end_probe = std::chrono::high_resolution_clock::now();
+		perf_data.probe_time = std::chrono::duration<double>(end_probe - start_probe).count() / repeats;
+		perf_data.probes_per_second = static_cast<u64>((key_cnt) / perf_data.probe_time);
+		double total_time = static_cast<double>(perf_data.hash_time + perf_data.sort_time + perf_data.probe_time);
+		perf_data.total_throughput = static_cast<u64>((key_cnt) / total_time);
+
+		// copy back only the candidate list
+		cudaMemcpy(bitmap, device_bitmap, device_bitmap_size, cudaMemcpyDeviceToHost);
+		cuda_check_error();
+		cudaDeviceSynchronize();
+		cuda_check_error();
+
+		// Free temporary resources
+		cudaFree(d_sorted_keys);
+		cudaFree(d_sorted_hashes);
+		cudaFree(device_bitmap);
 		cuda_check_error();
 	}
 
