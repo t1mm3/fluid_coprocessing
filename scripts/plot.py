@@ -70,8 +70,8 @@ def plot_sel():
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU-only, no BF")
-    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[3], label="CPU only, BF")
+    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, no BF")
+    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[3], label="CPU, BF")
     # PipelineSumThreadCycles
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
@@ -88,7 +88,7 @@ def plot_sel():
 
     # Put a legend below current axis
     legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-              fancybox=False, ncol=2)
+              fancybox=False, ncol=3)
 
     fig.tight_layout()
     #,legend2
@@ -168,9 +168,9 @@ def plot_expensiveop(sel):
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
         print cpu_nofilter
 
-    ax1.semilogx(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
-    ax1.semilogx(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, BF")
-    ax1.semilogx(gpu['Slowdown'], gpu['PipelineTime'], linestyle='--', marker='x', color=colors[2], label="GPU+CPU, BF")
+    ax1.plot(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.plot(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, BF")
+    ax1.plot(gpu['Slowdown'], gpu['PipelineTime'], linestyle='--', marker='x', color=colors[2], label="GPU+CPU, BF")
 
 
     box = ax1.get_position()
@@ -189,9 +189,10 @@ def plot_expensiveop(sel):
 def main():
     mpl.rcParams.update({'font.size': 15})
     # plot_sel()
-    # plot_bloomfilter()
+    plot_bloomfilter()
+
     plot_expensiveop(1)
-    plot_expensiveop(5)
+    # plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()
