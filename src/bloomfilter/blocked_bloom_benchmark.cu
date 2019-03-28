@@ -68,9 +68,9 @@ void benchmark(const std::size_t m,
     std::size_t n = 0;
     for (std::size_t i = 0; i < to_insert.size(); ++i) {
         const auto key = to_insert[i];
-        filter.insert_hash(&filter_data[0], key);
+        filter.insert(&filter_data[0], key);
         auto hash_key = filter.hash(key);
-        if (!filter.contains_with_hash(&filter_data[0], hash_key)) {
+        if (!filter.contains_with_hash(&filter_data[0], hash_key, key)) {
             break;
         } else {
             n++;
@@ -86,8 +86,9 @@ void benchmark(const std::size_t m,
     auto start_probe = std::chrono::high_resolution_clock::now();
     //FIXME (HL) use batch-probes for the CPU baseline (otherwise no SIMD is used)
     for (std::size_t i = 0; i < n; i++) {
-        auto hash_key = filter.hash(to_lookup[i]);
-        match_cnt += filter.contains_with_hash(&filter_data[0], hash_key);
+        const auto key = to_lookup[i];
+        auto hash_key = filter.hash(key);
+        match_cnt += filter.contains_with_hash(&filter_data[0], hash_key, key);
     }
     auto end_probe = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration_probe = end_probe - start_probe;
@@ -112,9 +113,10 @@ void benchmark(const std::size_t m,
         $u64 match_cnt_gpu = 0;
         $u64 mismatches = 0;
         cf.contains_clustering(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data, bits_to_sort);
-        for (std::size_t i = 0; i < n; i++) {
-          auto hash_key = filter.hash(to_lookup[i]);
-          u1 is_match_on_cpu = filter.contains_with_hash(&filter_data[0], hash_key);
+        /*for (std::size_t i = 0; i < n; i++) {
+          const auto key = to_lookup[i];
+          auto hash_key = filter.hash(key);
+          u1 is_match_on_cpu = filter.contains_with_hash(&filter_data[0], hash_key, key);
           u1 is_match_on_gpu = (result_bitmap[i] == 1);
           if (is_match_on_gpu != is_match_on_cpu) {
               mismatches++;
@@ -128,7 +130,7 @@ void benchmark(const std::size_t m,
             //std::cerr << "mismatches : " << mismatches << std::endl;
         } else {
             //std::cout << "none mismatches found" << std::endl;
-        }
+        }*/
     
     }
 
@@ -259,7 +261,8 @@ int main(int argc, char** argv) {
     //Benchmark set up
     auto increment_one = [n = 0]() mutable {return ++n;};
     std::size_t default_m = 1ull * 1024ull * 1024ull * 8ull; // 256MiB
-    auto m = {default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32, default_m * 64, default_m * 128, default_m * 256, default_m * 512};
+    //default_m, default_m * 2, default_m * 4, default_m * 8,
+    auto m = { default_m * 16, default_m * 32, default_m * 64, default_m * 128, default_m * 256, default_m * 512};
     std::vector<size_t> bits_to_sort(32);
     std::generate(bits_to_sort.begin(), bits_to_sort.end(), increment_one);
     auto input_size = {1ull<<28}; // 10K 100K 1M 10M 100M
