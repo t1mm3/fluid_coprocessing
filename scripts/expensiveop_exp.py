@@ -11,8 +11,8 @@ os.system('mkdir -p results/expensiveop')
 
 for s in [0, 10, 100, 1000, 10000]:
 	for gpu in gpu_values:
-		file = "expensiveop/results-expensiveop.csv"
+		file = "expensiveop/results-expensiveop_{}.csv".format(postfix)
 		run_test(fname=file, selectivity="1", slowdown=s)
 
-		file = "expensiveop/results-expensiveop.csv"
+		file = "expensiveop/results-expensiveop_{}.csv".format(postfix)
 		run_test(fname=file, selectivity="5", slowdown=s)		
