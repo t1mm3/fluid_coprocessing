@@ -73,7 +73,7 @@ public:
 
 	bool contains_with_hash(const key_t key) {
 		auto hash_key = bloom_filter.hash(key);
-		return bloom_filter.contains_with_hash(&filter_data[0], hash_key);
+		return bloom_filter.contains_with_hash(&filter_data[0], hash_key, key);
 	}
 
 	bool contains(const key_t key) {

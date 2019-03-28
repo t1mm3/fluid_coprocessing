@@ -32,7 +32,7 @@ __global__ void contains_naive_kernel(const filter_t filter, const typename filt
 template <typename filter_t>
 __global__ void contains_clustered_kernel(const filter_t filter,
                                           const typename filter_t::word_t *__restrict__ word_array,
-                                          u32 *__restrict__ hash_keys, u32 key_cnt,
+                                          u32 *__restrict__ hash_keys,  u32 *__restrict__ keys,  u32 key_cnt,
                                           $u32 *__restrict__ result_bitmap) {
 	// who am I?
 	u32 warp_id = global_warp_id();
@@ -46,9 +46,9 @@ __global__ void contains_clustered_kernel(const filter_t filter,
 
 	// each thread processes multiple elements sequentially
 	for ($u32 i = 0; i != elements_per_thread; i++) {
-		//
 		if (read_pos < key_cnt) {
-			result_bitmap[read_pos] = filter.contains_with_hash(word_array, hash_keys[read_pos]);
+		//printf(" pos - %lu %lu \n", (unsigned long)read_pos, (unsigned long)i);
+			result_bitmap[read_pos] = filter.contains_with_hash(word_array, hash_keys[read_pos], keys[read_pos]);
 		}
 		read_pos += warp_size;
 	}
@@ -57,14 +57,38 @@ __global__ void contains_clustered_kernel(const filter_t filter,
 
 //===----------------------------------------------------------------------===//
 template <typename filter_t>
+__global__ void contains_kernel_clustering(const filter_t filter,
+                                          const typename filter_t::word_t *__restrict__ word_array,
+                                          u32 *__restrict__ hash_keys, 
+                                          u32 *__restrict__ keys, 
+                                          u32 key_cnt,
+                                          $u32 *__restrict__ result_bitmap) {
+		// who am I?
+	u32 warp_id = global_warp_id();
+	u32 local_thread_id = warp_local_thread_id();
+
+	constexpr u32 elements_per_thread = warp_size; // ... processed sequentially
+	constexpr u32 elements_per_warp = elements_per_thread * warp_size;
+
+	// where to start?
+	$u32 read_pos = blockIdx.x * blockDim.x + threadIdx.x;//warp_id * elements_per_warp + local_thread_id;
+	size_t stride = (blockDim.x * gridDim.x); // Grid-Stride
+	for (size_t i = read_pos; i < key_cnt; i += stride) {
+		//printf(" pos - %lu %lu %lu \n", (unsigned long)read_pos, (unsigned long)i, (unsigned long)stride);
+		result_bitmap[i] = filter.contains_with_hash(word_array, hash_keys[i], keys[i]);
+	}
+}
+//===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
+template <typename filter_t>
 __global__ void calculate_hash_kernel(const filter_t filter, u32 *__restrict__ keys, u32 key_cnt,
-                                      $u32 *__restrict__ hash_block_vector, $u32 *__restrict__ positions_block_vector) {
+                                      $u32 *__restrict__ hash_block_vector) {
 
 	int read_pos = blockIdx.x * blockDim.x + threadIdx.x;
 	size_t stride = (blockDim.x * gridDim.x); // Grid-Stride
 	for (size_t i = read_pos; i < key_cnt; i += stride) {
 		hash_block_vector[i] = ($u32)filter.hash(keys[i]);
-		positions_block_vector[i] = i;
 	}
 }
 //===----------------------------------------------------------------------===//
