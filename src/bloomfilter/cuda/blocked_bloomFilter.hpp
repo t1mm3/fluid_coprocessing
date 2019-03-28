@@ -90,6 +90,7 @@ template <typename filter_t> struct cuda_filter {
 	void contains_clustering(u32 *__restrict__ keys, u32 key_cnt, $u32 *__restrict__ bitmap, perf_data_t &perf_data,
 	                         std::size_t bits_to_sort) {
 		// Allocate device memory and copy the keys to device
+		std::cout << "Clustering bench" << std::endl;
 		$u32 *d_keys, *d_keys_hash;
 		u32 device_keys_size = sizeof($u32) * key_cnt;
 		const std::size_t gran = 4ull * 1024; // page allignment

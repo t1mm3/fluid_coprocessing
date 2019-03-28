@@ -128,7 +128,7 @@ void benchmark(const std::size_t m,
         typename cuda_filter<filter_t>::perf_data_t perf_data;
         cf.contains_clustering(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data, bits_to_sort);
         std::cout << "GPU-Clustering" << "|" << m  << "|" << perf_data.probe_time << "|" << perf_data.total_throughput << '\n';
-        results << "GPU-Clustering" << "|" << m  << "|" << perf_data.probe_time << "|" << perf_data.total_throughput << std::endl;
+        results << "GPU-Clustering"   << "|" << m  << "|" << perf_data.probe_time << "|" << perf_data.total_throughput << '\n';
         
         size_t count = 0;
         for(size_t i = 0; i != to_lookup.size(); ++i ) {
