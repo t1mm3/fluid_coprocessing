@@ -87,8 +87,9 @@ def plot_sel():
                      box.width, box.height * 0.9])
 
     # Put a legend below current axis
-    legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-              fancybox=False, ncol=3)
+    #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
+    #          fancybox=False, ncol=3)
+    ax1.legend(loc='lower right', ncol=2)
 
     fig.tight_layout()
     #,legend2
@@ -132,13 +133,19 @@ def plot_bloomfilter():
     ax1.xaxis.get_major_formatter().set_useOffset(False)
     ax1.xaxis.set_minor_formatter(mticker.ScalarFormatter())
 
+    ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
+    ax1.yaxis.get_major_formatter().set_scientific(False)
+    ax1.yaxis.get_major_formatter().set_useOffset(False)
+    ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
+
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
 
     # Put a legend below current axis
-    legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-              fancybox=False, ncol=3)
+    # legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
+    #          fancybox=False, ncol=3)
+    ax1.legend(loc='lower left', ncol=1)
 
     fig.tight_layout()
     #,legend2
@@ -183,8 +190,9 @@ def plot_expensiveop(sel):
                      box.width, box.height * 0.9])
 
     # Put a legend below current axis
-    legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-              fancybox=False, ncol=3)
+    #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
+    #          fancybox=False, ncol=1)
+    ax1.legend(loc='upper left', ncol=1)
 
     fig.tight_layout()
     #,legend2
