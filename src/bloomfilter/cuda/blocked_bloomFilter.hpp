@@ -567,9 +567,9 @@ template <typename filter_t> struct cuda_filter {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			assert(key_cnt > 0);
-			assert(device_in_keys != nullptr);
 			cudaEventRecord(start_event, 0);
 			if(!in_gpu_keys){
+				assert(device_in_keys != nullptr);
 				cudaMemcpyAsync(device_in_keys, keys, key_cnt * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
 
 			}
