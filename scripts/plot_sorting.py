@@ -70,10 +70,10 @@ def plot_sorting_throughput():
 
     ax1.loglog(bf16['bits to sort'] , bf16['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[0], label="BF Size 16MiB", basex=2)
     #ax1.loglog(bf32['bits to sort'] , bf32['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[1], label="BF Size 32MiB", basex=2)
-    ax1.loglog(bf64['bits to sort'] , bf64['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[1], label="BF Size 64MiB", basex=2)
+    ax1.loglog(bf64['bits to sort'] , bf64['Total throughput'] / tp_div, linestyle='--', marker='x', color=colors[1], label="BF Size 64MiB", basex=2)
     #ax1.loglog(bf128['bits to sort'] , bf128['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[3], label="BF Size 128MiB", basex=2)
     #ax1.loglog(bf256['bits to sort'] , bf256['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[4], label="BF Size 256MiB", basex=2)
-    ax1.loglog(bf512['bits to sort'] , bf512['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[2], label="BF Size 512MiB", basex=2)
+    ax1.loglog(bf512['bits to sort'] , bf512['Total throughput'] / tp_div, linestyle='--', marker='^', color=colors[2], label="BF Size 512MiB", basex=2)
 
 
 
@@ -127,14 +127,14 @@ def plot_sorting_time():
     ax1[0].xaxis.set_ticks(np.arange(0, 33, 8))
 
     ax1[1].semilogy(bf16['bits to sort'] , bf16['Probe time (ms)'] , linestyle='--', marker='o', color=colors[0], label="BF Size 16MiB")
-    ax1[1].semilogy(bf64['bits to sort'] , bf64['Probe time (ms)'] , linestyle='--', marker='o', color=colors[1], label="BF Size 64MiB")
-    ax1[1].semilogy(bf512['bits to sort'] , bf512['Probe time (ms)'] , linestyle='--', marker='o', color=colors[2], label="BF Size 512MiB")
-    ax1[1].semilogy(sort['bits to sort'] , sort['Sort time (ms)'] , linestyle='--', marker='o', color=colors[3], label="Sorting")
+    ax1[1].semilogy(bf64['bits to sort'] , bf64['Probe time (ms)'] , linestyle='--', marker='x', color=colors[1], label="BF Size 64MiB")
+    ax1[1].semilogy(bf512['bits to sort'] , bf512['Probe time (ms)'] , linestyle='--', marker='^', color=colors[2], label="BF Size 512MiB")
+    ax1[1].semilogy(sort['bits to sort'] , sort['Sort time (ms)'] , linestyle='--', marker='+', color=colors[3], label="Sorting")
 
 
     ax1[0].semilogy(bf16['bits to sort'] , bf16['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[0], label="BF Size 16MiB")
-    ax1[0].semilogy(bf64['bits to sort'] , bf64['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[1], label="BF Size 64MiB")
-    ax1[0].semilogy(bf512['bits to sort'] , bf512['Total throughput'] / tp_div, linestyle='--', marker='o', color=colors[2], label="BF Size 512MiB")
+    ax1[0].semilogy(bf64['bits to sort'] , bf64['Total throughput'] / tp_div, linestyle='--', marker='x', color=colors[1], label="BF Size 64MiB")
+    ax1[0].semilogy(bf512['bits to sort'] , bf512['Total throughput'] / tp_div, linestyle='--', marker='^', color=colors[2], label="BF Size 512MiB")
 
     ax1[0].yaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1[0].yaxis.get_major_formatter().set_scientific(False)
