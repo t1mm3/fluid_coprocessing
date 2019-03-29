@@ -27,8 +27,8 @@ for cpu_filter in cpu_filter_values:
 			for filter_size in filter_sizes:
 				file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
 				run_test(fname=file, selectivity="1", slowdown=s, gpu_devices=gpu,
-					cpu_filter=cpu_filter, filter_size=filter_size)
+					cpu_filter=cpu_filter, filter_size=int(filter_size))
 
 				file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
 				run_test(fname=file, selectivity="5", slowdown=s, gpu_devices=gpu,
-					cpu_filter=cpu_filter, filter_size=filter_size)		
+					cpu_filter=cpu_filter, filter_size=int(filter_size))		
