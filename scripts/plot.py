@@ -70,8 +70,8 @@ def plot_sel():
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU-only, no BF")
-    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[3], label="CPU only, BF")
+    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
     # PipelineSumThreadCycles
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
@@ -88,7 +88,7 @@ def plot_sel():
 
     # Put a legend below current axis
     legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
-              fancybox=False, ncol=2)
+              fancybox=False, ncol=3)
 
     fig.tight_layout()
     #,legend2
@@ -195,6 +195,7 @@ def main():
     mpl.rcParams.update({'font.size': 15})
     plot_sel()
     plot_bloomfilter()
+
     plot_expensiveop(1)
     plot_expensiveop(5)
 
