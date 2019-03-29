@@ -103,8 +103,7 @@ def df_prejointuples(df):
     return df['FilteredTuples'].replace(0, 2.0*1024.0*1024.0*1024.0)
 
 def df_joinspeed(df):
-    num_threads = 10.0
-    return df['CPUJoinTime'] / df_prejointuples(df) / num_threads
+    return df['CPUJoinTime'] / df_prejointuples(df)
 
 
 def plot_joinspeed():
