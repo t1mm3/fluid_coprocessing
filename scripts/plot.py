@@ -124,8 +124,8 @@ def plot_bloomfilter():
     ax1.set_xlim(1, 2**9)
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[1], label="GPU Naive", basex=2)
-    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='o', color=colors[2], label="GPU Radix", basex=2)
+    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Naive", basex=2)
+    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
 
     ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.xaxis.get_major_formatter().set_scientific(False)
@@ -163,14 +163,19 @@ def plot_expensiveop(sel):
     ofilename = "plot_expensiveop_sel{}.pgf".format(sel)
 
     ax1.set_ylabel('Time (in s)')
-    ax1.set_xlabel('Slowdown')
+    ax1.set_xlabel('Slowdown factor $s$')
     # ax1.grid(True)
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
         print cpu_nofilter
 
-    ax1.semilogx(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
-    ax1.semilogx(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='o', color=colors[1], label="CPU, BF")
-    ax1.semilogx(gpu['Slowdown'], gpu['PipelineTime'], linestyle='--', marker='x', color=colors[2], label="GPU+CPU, BF")
+    ax1.plot(cpu_nofilter['Slowdown'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.plot(cpu_filter['Slowdown'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
+    ax1.plot(gpu['Slowdown'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
+
+    ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
+    ax1.xaxis.get_major_formatter().set_scientific(False)
+    ax1.xaxis.get_major_formatter().set_useOffset(False)
+    ax1.xaxis.set_minor_formatter(mticker.ScalarFormatter())
 
 
     box = ax1.get_position()
@@ -188,8 +193,8 @@ def plot_expensiveop(sel):
 
 def main():
     mpl.rcParams.update({'font.size': 15})
-    # plot_sel()
-    # plot_bloomfilter()
+    plot_sel()
+    plot_bloomfilter()
     plot_expensiveop(1)
     plot_expensiveop(5)
 
