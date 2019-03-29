@@ -317,8 +317,9 @@ struct params_t {
 
 	std::size_t num_threads 	  {std::thread::hardware_concurrency()};
 	std::size_t num_columns 	  {defaults::num_columns};
-	std::size_t slowdown 	  	{defaults::slowdown};
-	std::size_t num_warmup 		{defaults::num_warmup};
+	std::size_t slowdown 	  	  {defaults::slowdown};
+	std::size_t num_warmup 		  {defaults::num_warmup};
+	bool in_gpu_keys 			  {defaults::in_gpu_keys};
 };
 //===----------------------------------------------------------------------===//
 
@@ -392,6 +393,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.only_generate = std::stoll(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
 			params.cpu_bloomfilter = std::stoll(arg_value);
+		} else if (arg_name == "in_gpu_keys") {
+			params.in_gpu_keys = std::stoll(arg_value) != 0;
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoll(arg_value);
 			if (n > 0) {
