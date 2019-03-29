@@ -16,7 +16,7 @@ for cpu_filter in cpu_filter_values:
 
 		postfix = "gpu" if gpu is not None else "cpu"
 
-		for s in [0, 5, 10, 25, 50, 75, 100]:
+		for s in [0, 5, 10, 25, 50, 75, 100, 150, 200]:
 			file = "expensiveop/results-expensiveop_{}.csv".format(postfix)
 			run_test(fname=file, selectivity="1", slowdown=s, gpu_devices=gpu,
 				cpu_filter=cpu_filter)
