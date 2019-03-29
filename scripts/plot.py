@@ -100,7 +100,7 @@ def df_div(df, colA, colB):
     return df[colA] / df[colB]
 
 def df_prejointuples(df):
-    return df['FilteredTuples'].replace(0, 2.0*1024.0*1024.0*1024.0)
+    return df['FilteredTuples'].replace(0, 1.0*1024.0*1024.0*1024.0)
 
 def df_joinspeed(df):
     return df['CPUJoinTime'] / df_prejointuples(df)
