@@ -309,7 +309,7 @@ def plot_heatmap(sel, file):
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
     ax1.set_xlabel("Slowdown $s$")
-    ax1.set_ylabel("Bloom filter size")
+    ax1.set_ylabel("Bloom filter size (bit)")
 
     fig.colorbar(c, ax=ax1)
 
