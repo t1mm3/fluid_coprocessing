@@ -48,9 +48,12 @@ def plot_sel():
         sep='|', names=framework_columns, header=None, skiprows=1)
     gpu = pd.read_csv("{}/selectivity/results-selectivity_gpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
+    gpukeys = pd.read_csv("{}/selectivity/results-selectivity_gpukeys.csv".format(result_path),
+        sep='|', names=framework_columns, header=None, skiprows=1)
 
     cpu=cpu.sort_values(by=['Selectivity'])
     gpu=gpu.sort_values(by=['Selectivity'])
+    gpukeys=gpukeys.sort_values(by=['Selectivity'])
 
     cpu_filter = cpu[cpu['CPUBloomFilter']==1]
     cpu_nofilter = cpu[cpu['CPUBloomFilter']==0]
@@ -76,6 +79,7 @@ def plot_sel():
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
     ax1.semilogy(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
+    ax1.semilogy(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='^', color=colors[3], label="GPU+CPU, BF trick")
 
     ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.yaxis.get_major_formatter().set_scientific(False)
@@ -111,9 +115,12 @@ def plot_joinspeed():
         sep='|', names=framework_columns, header=None, skiprows=1)
     gpu = pd.read_csv("{}/selectivity/results-selectivity_gpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
+    gpukeys = pd.read_csv("{}/selectivity/results-selectivity_gpukeys.csv".format(result_path),
+        sep='|', names=framework_columns, header=None, skiprows=1)
 
     cpu=cpu.sort_values(by=['Selectivity'])
     gpu=gpu.sort_values(by=['Selectivity'])
+    gpukeys=gpukeys.sort_values(by=['Selectivity'])
 
     cpu_filter = cpu[cpu['CPUBloomFilter']==1]
     cpu_nofilter = cpu[cpu['CPUBloomFilter']==0]
@@ -144,6 +151,9 @@ def plot_joinspeed():
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
     ax1.plot(gpu['Selectivity'], df_joinspeed(gpu),
         linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
+
+    ax1.plot(gpukeys['Selectivity'], df_joinspeed(gpukeys),
+        linestyle='--', marker='^', color=colors[3], label="GPU+CPU, BF")
 
     ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.yaxis.get_major_formatter().set_scientific(False)
@@ -266,8 +276,54 @@ def plot_expensiveop(sel):
     fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
     plt.close(fig)
 
+from pandas import DataFrame
+
+def plot_heatmap(sel, file):
+    cpu = pd.read_csv("{p}/op_vs_bfsize/results-op_vs_bfsize{file}.csv".format(
+        p=result_path, file=file),
+        sep='|', names=framework_columns, header=None, skiprows=1)
+    #gpu = pd.read_csv("{}/op_vs_bfsize/results-op_vs_bfsizegpu.csv".format(result_path),
+    #    sep='|', names=framework_columns, header=None, skiprows=1)
+    (fig, ax1) = plt.subplots()
+
+    cpu = cpu[cpu['Selectivity']==sel]
+    cpu = cpu[cpu['CPUBloomFilter']==1]
+
+
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print cpu
+
+    ofilename = "plot-heat{sel}-{file}.pgf".format(sel=sel, file=file)
+
+    #Index= ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
+    #Cols = ['A', 'B', 'C', 'D']
+    #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
+
+    df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
+    # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
+
+    c = plt.pcolor(df, cmap="plasma")
+    plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
+    plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
+
+    ax1.set_xlabel("Slowdown $s$")
+    ax1.set_ylabel("Bloom filter size")
+
+    fig.colorbar(c, ax=ax1)
+
+    fig.tight_layout()
+    #,legend2
+    fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
+    plt.close(fig)
+
 def main():
     mpl.rcParams.update({'font.size': 15})
+    for sel in [1, 5]:
+        for file in ["cpu", "gpu"]:
+            plot_heatmap(sel, file)
+            exit(0)
+
+
     plot_sel()
     plot_joinspeed()
     plot_bloomfilter()
