@@ -13,3 +13,5 @@ results
 .last_format
 data*.bin
 plot_bf_sort.pgf
+plot_bf_sort_throughput.pgf
+plot_bf_sort_time.pgf

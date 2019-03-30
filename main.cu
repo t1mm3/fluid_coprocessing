@@ -250,8 +250,15 @@ int main(int argc, char** argv) {
         }
         std::cout << std::endl;
 
-        // cuda instance of bloom filter logic on GPU
-        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt());
+        // cuda instance of bloom filter logic on GPU with keys on CPU
+         int64_t key_cnt = 0;
+         uint32_t *keys = nullptr;
+        if(params.in_gpu_keys){
+            key_cnt = table_probe.size();
+            keys = static_cast<uint32_t*>(table_probe.columns[0]);
+        } 
+
+        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt(), &probe_keys[0], key_cnt);
 
 
         ProfilePrinter profile_info(params);

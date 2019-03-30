@@ -31,9 +31,9 @@ struct InflightProbe {
 
 	cudaStream_t stream;
 	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
-			int64_t start, int64_t tuples_to_process) : num(tuples_to_process), offset(start) {
+			int64_t start, int64_t tuples_to_process, bool in_gpu_keys) : num(tuples_to_process), offset(start) {
 		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking  & cudaEventDisableTiming);
-		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device);
+		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device, in_gpu_keys);
 
 		cpu_offset = 0;
 		processed = 0;
