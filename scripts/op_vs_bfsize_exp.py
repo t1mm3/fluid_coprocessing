@@ -18,9 +18,6 @@ os.system('mkdir -p results/op_vs_bfsize')
 
 for cpu_filter in cpu_filter_values:
 	for gpu in gpu_values:
-		if gpu == 1 and cpu_filter == 0:
-			continue
-
 		postfix = "gpu" if gpu is not None else "cpu"
 
 		for s in [0, 50, 100, 150, 200]:
