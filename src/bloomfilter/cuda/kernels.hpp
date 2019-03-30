@@ -6,17 +6,18 @@ __global__ void contains_naive_kernel(const filter_t filter, const typename filt
 	u32 wid = global_warp_id();
 	u32 lid = warp_local_thread_id();
 
-	// the output this executing thread wi  ll write later on (kept in a register)
-	$u32 thread_local_bitmap = 0u; // out  put
+	// the output this executing thread will write later on (kept in a register)
+	$u32 thread_local_bitmap = 0u; // output
 
 	constexpr u32 elements_per_thread = warp_size; // ... processed sequentially
 	constexpr u32 elements_per_warp = elements_per_thread * warp_size;
 
-	// where to star    t?
+	// where to start?
 	$u32 read_pos = wid * elements_per_warp + lid;
 
 	// each thread processes multiple elements sequentially
 	for ($u32 i = 0; i != elements_per_thread; i++) {
+		//printf("thread %lu - i %lu read_pos %lu\n", (unsigned long)lid, (unsigned long)i, (unsigned long)read_pos);
 		auto is_contained = (read_pos < key_cnt) ? filter.contains(word_array, keys[read_pos]) : false;
 		u32 bitmap = __ballot_sync(0xffffffff, is_contained);
 		thread_local_bitmap = (lid == i) ? bitmap : thread_local_bitmap;

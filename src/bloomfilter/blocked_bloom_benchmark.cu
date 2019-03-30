@@ -86,7 +86,6 @@ void benchmark(const std::size_t m,
         const auto key = to_lookup[i];
         const auto hash_val = filter.hash(key);
         if (filter.contains(&filter_data[0], key)) {
-
             matches_naive++;
         }
         if(filter.contains_with_hash(&filter_data[0], hash_val, key)) {
@@ -94,53 +93,9 @@ void benchmark(const std::size_t m,
         }
     }
     assert(matches == matches_naive);
-    //if (match_cnt != n) std::cerr << "Validation failed (scalar code)" << std::endl;
-    /*std::cout << "=============================== " << '\n'; 
-    std::cout << "CPU " << '\n'; 
-    std::cout << "time " << probe_time << '\n'; 
-    std::cout << "throughput " << probe_throughput << '\n'; 
-    std::cout << "=============================== " << '\n'; */
+
     // CUDA filter
-    cuda_filter<filter_t> cf(filter, &filter_data[0], filter_data.size());
-
-
-     // probe the filter
-    /*{
-        std::vector<$u32> result_bitmap;
-        result_bitmap.resize((n + 31) / (sizeof(u32) * 8), 0);
-    
-        // probe filter
-        typename cuda_filter<filter_t>::perf_data_t perf_data;
-        // TODO (HL) result bitmaps sizing issue with the sorted_kernel!!!
-//        cf.contains(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data, &hash_val[0]);
-      // Naive kernel.
-        cf.contains_naive(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data);
-
-        //size_t position = 0;
-        //auto printer = [&](auto &value) { std::cout << '[' << position++ << ']' << "= " << value << " "; };
-        //std::for_each(hash_val.begin(), hash_val.end(), printer);
-        //position = 0;
-        //std::cout << '\n' << "Sorted Positions"<< std::endl;
-        //std::for_each(result_bitmap.begin(), result_bitmap.end(), printer);
-    
-        std::cout << " Results: "                                          << '\n'
-                  << " Word count: "        << word_cnt                    << '\n'
-                  << " Zone count: "        << zone_cnt                    << '\n'
-                  << " k: "                 << k                           << '\n'
-                  << " Bloom filter size: " << m /(8*1024*1024)            << '\n'
-                  << " Lookup size: "       << to_lookup.size()            << '\n'
-                  << " Blocks: "            << perf_data.cuda_block_cnt    << '\n'
-                  << " Block size: "        << perf_data.cuda_block_size   << '\n'
-                  << " Hash throughput: "   << perf_data.hash_throughput   << '\n'
-                  << " Hash time (ms): "    << perf_data.hash_time * 1000  << '\n'
-                  << " Sort throughput: "   << perf_data.sort_throughput   << '\n'
-                  << " Sort time (ms): "    << perf_data.sort_time * 1000  << '\n'
-                  << " Probes per second: " << perf_data.probes_per_second << '\n'
-                  << " Probe time (ms): "   << perf_data.probe_time * 1000 << '\n'
-                  << " Total throughput: "  << perf_data.total_throughput  << '\n'
-                  << std::endl;
-    
-    }*/
+    cuda_filter<filter_t> cf(filter, &filter_data[0], filter_data.size(),nullptr,0);
 
          // probe the filter
     {
@@ -150,8 +105,6 @@ void benchmark(const std::size_t m,
         // probe filter
         typename cuda_filter<filter_t>::perf_data_t perf_data;
         // TODO (HL) result bitmaps sizing issue with the sorted_kernel!!!
-//        cf.contains(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data, &hash_val[0]);
-      // Naive kernel.
 
         cf.contains_clustering(&to_lookup[0], to_lookup.size(), &result_bitmap[0], perf_data, bits_to_sort);
     
@@ -161,7 +114,7 @@ void benchmark(const std::size_t m,
                   << " Block size: "                 << word_cnt * 4                    << '\n'
                   << " Zone count: "                 << zone_cnt                        << '\n'
                   << " k: "                          << k                               << '\n'
-                  << " Bloom filter size(GiB): "     << m/(8*1024*1024)                 << '\n'
+                  << " Bloom filter size(MiB): "     << m/(8*1024*1024)                 << '\n'
                   << " Lookup size: "                << to_lookup.size()                << '\n'
                   << " Blocks: "                     << perf_data.cuda_block_cnt        << '\n'
                   << " CUDA Block size: "            << perf_data.cuda_block_size       << '\n'
@@ -175,9 +128,6 @@ void benchmark(const std::size_t m,
                   << " Total throughput: "           << perf_data.total_throughput      << '\n'
                   << "=============================== "                                 << '\n'
                   << std::endl;
-
-
-        
         
         results << m/(8*1024*1024)             << ';';
         results <<  word_cnt * 4               << ';';
@@ -188,7 +138,7 @@ void benchmark(const std::size_t m,
         results << perf_data.probe_time * 1000 << ';';
         results << perf_data.total_throughput  << "\n";
 
-                size_t count = 0;
+        size_t count = 0;
         for(size_t i = 0; i != to_lookup.size(); ++i ) {
             if(result_bitmap[i] != 0) {
                 //std::cout << result_bitmap[i] << std::endl;
@@ -238,62 +188,40 @@ int main(int argc, char** argv) {
     //===----------------------------------------------------------------------===//
     //Benchmark set up
     auto increment_one = [n = 0]() mutable {return ++n;};
-    std::size_t default_m = 1ull * 1024ull * 1024ull * 8ull; // 256MiB
-    //default_m, default_m * 2, default_m * 4, default_m * 8,
-    auto m = { default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32, default_m * 64, default_m * 128, default_m * 256, default_m * 512};
     std::vector<size_t> bits_to_sort(32);
     std::generate(bits_to_sort.begin(), bits_to_sort.end(), increment_one);
+    std::size_t default_m = 1ull * 1024ull * 1024ull * 8ull; // 256MiB
+    auto m = { default_m, default_m * 2, default_m * 4, default_m * 8, default_m * 16, default_m * 32, default_m * 64, default_m * 128, default_m * 256, default_m * 512};
     auto input_size = {1ull<<28}; // 10K 100K 1M 10M 100M
     
     // Data generation.
     using key_t        = $u32;
 
     for(auto to_insert_cnt : input_size){
-      const std::size_t to_lookup_cnt = to_insert_cnt;
-      std::vector<key_t> to_insert(to_insert_cnt);
-      std::vector<key_t> to_lookup(to_lookup_cnt);
+        const std::size_t to_lookup_cnt = to_insert_cnt;
+        std::vector<key_t> to_insert(to_insert_cnt);
+        std::vector<key_t> to_lookup(to_lookup_cnt);
   
-        auto selectivity = (0.1 * to_insert_cnt);
         for(auto bloom_size : m) {
             set_random_values(to_insert);
             set_random_values(to_lookup);
             auto bf_size = (bloom_size / (8*1024*1024));
   
-            for(size_t i = 0; i < selectivity; ++i) {
-              to_lookup[i] = to_insert[i];
-            }
             for(auto& bits : bits_to_sort) {
-              std::cout << "to_insert.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
-              std::cout << "to_lookup.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
-              std::cout << "bits to sort: "     << bits                  << " bits"   << std::endl;
-              std::cerr << "bits to sort: "     << bits                  << " bits"   << std::endl;
-              std::cerr << "Bloom Size: "       << bf_size               << " MiB"    << std::endl;
-              //Register Blocking
-              //benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-              //benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup, bit);
-              benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bits, results);
-              //benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+                std::cout << "to_insert.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
+                std::cout << "to_lookup.size(): " << to_insert_cnt/1024    << " K-keys" << std::endl;
+                std::cout << "bits to sort: "     << bits                  << " bits"   << std::endl;
+                std::cerr << "bits to sort: "     << bits                  << " bits"   << std::endl;
+                std::cerr << "Bloom Size: "       << bf_size               << " MiB"    << std::endl;
+                //Register Blocking
+                //benchmark<8, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+                //benchmark<16, 1, 2>(bloom_size, to_insert, to_lookup, bit);
+                benchmark<32, 1, 2>(bloom_size, to_insert, to_lookup, bits, results);
+                //benchmark<64, 1, 2>(bloom_size, to_insert, to_lookup, bit);
             }
-      }
+        }
     }
     results.close();
-    //std::vector<key_t> hash_val(100000000, 0);
-    //auto printer = [&](auto& value) {std::cout << value << ' '; };
-    //std::for_each(to_lookup.begin() + 1000000, to_lookup.end(), printer);
-    //std::for_each(hash_val.begin() + 1000000, hash_val.end(), printer);
-    /*benchmark<4, 2, 4>(m, to_insert, to_lookup);
-    benchmark<4, 2, 8>(m, to_insert, to_lookup);
-    
-    benchmark<32, 2, 2>(m, to_insert, to_lookup);
-    benchmark<32, 2, 4>(m, to_insert, to_lookup);
-    benchmark<32, 2, 8>(m, to_insert, to_lookup);
-    benchmark<32, 2,16>(m, to_insert, to_lookup);
-    
-    benchmark<32, 4, 4>(m, to_insert, to_lookup);
-    benchmark<32, 4, 8>(m, to_insert, to_lookup);
-    benchmark<32, 4,16>(m, to_insert, to_lookup);
-    
-    benchmark<32, 8, 8>(m, to_insert, to_lookup);
-    benchmark<32, 8, 16>(m, to_insert, to_lookup);*/
+
     return 0;
 }

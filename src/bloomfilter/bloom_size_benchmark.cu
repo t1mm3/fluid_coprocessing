@@ -93,7 +93,7 @@ void benchmark(const std::size_t m,
         const auto key = to_lookup[i];
         const auto hash_val = filter.hash(key);
         if (filter.contains(&filter_data[0], key)) {
-
+            //std::cout << key << std::endl;
             matches_naive++;
         }
         if(filter.contains_with_hash(&filter_data[0], hash_val, key)) {
@@ -103,7 +103,7 @@ void benchmark(const std::size_t m,
     assert(matches == matches_naive);
     // // cpu BF
     //GPU Filters
-    cuda_filter<filter_t> cf(filter, &filter_data[0], filter_data.size());
+    cuda_filter<filter_t> cf(filter, &filter_data[0], filter_data.size(), nullptr, 0);
     // naive
 /*    {
         std::vector<$u32> result_bitmap;
@@ -133,11 +133,11 @@ void benchmark(const std::size_t m,
         size_t count = 0;
         for(size_t i = 0; i != to_lookup.size(); ++i ) {
             if(result_bitmap[i] != 0) {
-                //std::cout << result_bitmap[i] << std::endl;
+                //std::cout << "res" << result_bitmap[i] << std::endl;
                 count++;
             }
         }
-        std::cout << "possible matches found " << count << " - matches found " << matches  << " total " << to_lookup.size() - matches << std::endl;
+        std::cout << "possible matches found " << count << " - matches found " << matches  << " total " << to_lookup.size() - matches << "bits" << bits_to_sort << std::endl;
     }
 
 }
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
     }
     std::ofstream result_file;
     result_file.open(std::string(file_name + ".csv"));
-    result_file << "Probe Type | Bloom Filter Size | Probe time(s) | Total throughput" << '\n';
+    result_file << "Probe Type|Bloom Filter Size|Probe time(s)|Hash time(s)|Sort time(s)|Total throughput" << '\n';
     std::size_t insert_cnt = 1<<24; //10M
     std::size_t lookup_cnt = 1<<28; //100M
     std::vector<uint32_t> to_insert(insert_cnt);
@@ -182,10 +182,8 @@ int main(int argc, char** argv) {
     //===----------------------------------------------------------------------===//
     //Benchmark set up
     using key_t = $u32;
-    set_uniform_distributed_values(to_insert);
-    set_uniform_distributed_values(to_lookup);
-
-    //std::generate(to_lookup.begin(), to_lookup.end(), [n = 0]() mutable {return ++n;});
+    set_random_values(to_insert);
+    set_random_values(to_lookup);
 
 
     // Data generation.

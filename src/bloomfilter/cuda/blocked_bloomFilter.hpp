@@ -100,8 +100,8 @@ template <typename filter_t> struct cuda_filter {
 		// Calculate Hash Values
 		i32 block_size = 32;
 		i32 block_cnt = (key_cnt + block_size - 1) / block_size;
+		std::cout << "hash" << block_cnt << std::endl;
 		auto start_hash = std::chrono::high_resolution_clock::now();
-		//std::cout << "hash" << block_cnt << std::endl;
 		calculate_hash_kernel<<<block_cnt, block_size>>>(filter, d_keys, key_cnt, d_keys_hash);
 		cudaDeviceSynchronize();
 
@@ -121,7 +121,7 @@ template <typename filter_t> struct cuda_filter {
 		unsigned char *temp_storage;
 		auto temp_storage_size = get_temp_storage_requirement<key_t, key_t>(key_cnt);
 		cudaMalloc((void **)&temp_storage, temp_storage_size);
-		//std::cout << "sort" << std::endl;
+		std::cout << "sort" << std::endl;
 		auto start_sort = std::chrono::high_resolution_clock::now();
 
 		auto status =
@@ -144,14 +144,9 @@ template <typename filter_t> struct cuda_filter {
 
 		// Probe with sorted hashes
 		u64 repeats = 10;
-		// i32 elements_per_thread = warp_size;
-		// i32 elements_per_block = block_size * elements_per_thread;
-		// i32 block_count = (key_cnt + elements_per_block - 1) / elements_per_block;
-		// perf_data.cuda_block_size = block_size;
-		// perf_data.cuda_block_cnt = block_count;
 
 		cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
-		//std::cout << "probe" << block_cnt << std::endl;
+		std::cout << "probe" << block_cnt << std::endl;
 		// warm up
 		if (repeats > 0) {
 			contains_kernel_clustering<<<block_cnt, block_size>>>(filter, device_word_array, d_sorted_hashes,d_sorted_keys,
@@ -182,8 +177,8 @@ template <typename filter_t> struct cuda_filter {
 
 		auto end_candidates = std::chrono::high_resolution_clock::now();
 		perf_data.candidate_time = std::chrono::duration<double>(end_candidates - start_candidates).count();
-		double total_time = static_cast<double>(perf_data.hash_time + perf_data.sort_time + perf_data.probe_time +
-		                                        perf_data.candidate_time);
+		double total_time = static_cast<double>(perf_data.hash_time + perf_data.sort_time + perf_data.probe_time);
+		                                       // + perf_data.candidate_time);
 		perf_data.total_throughput = static_cast<u64>((key_cnt) / total_time);
 
 		// copy back only the candidate list
