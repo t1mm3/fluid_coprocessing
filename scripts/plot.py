@@ -58,6 +58,9 @@ def plot_sel():
     cpu_filter = cpu[cpu['CPUBloomFilter']==1]
     cpu_nofilter = cpu[cpu['CPUBloomFilter']==0]
 
+    gpu = gpu[gpu['CPUBloomFilter']==1]
+    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==1]
+
     (fig, ax1) = plt.subplots()
 
     #with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
@@ -79,12 +82,13 @@ def plot_sel():
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
     ax1.semilogy(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
-    ax1.semilogy(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='^', color=colors[3], label="GPU+CPU, BF trick")
+    ax1.semilogy(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
 
-    ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
-    ax1.yaxis.get_major_formatter().set_scientific(False)
-    ax1.yaxis.get_major_formatter().set_useOffset(False)
-    ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
+    if False:
+        ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
+        ax1.yaxis.get_major_formatter().set_scientific(False)
+        ax1.yaxis.get_major_formatter().set_useOffset(False)
+        ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
@@ -93,7 +97,7 @@ def plot_sel():
     # Put a legend below current axis
     #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
     #          fancybox=False, ncol=3)
-    ax1.legend(loc='lower right', ncol=2)
+    ax1.legend(loc='lower right', ncol=1)
 
     fig.tight_layout()
     #,legend2
@@ -125,6 +129,9 @@ def plot_joinspeed():
     cpu_filter = cpu[cpu['CPUBloomFilter']==1]
     cpu_nofilter = cpu[cpu['CPUBloomFilter']==0]
 
+    gpu = gpu[gpu['CPUBloomFilter']==1]
+    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==1]
+
     (fig, ax1) = plt.subplots()
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
@@ -153,7 +160,7 @@ def plot_joinspeed():
         linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
 
     ax1.plot(gpukeys['Selectivity'], df_joinspeed(gpukeys),
-        linestyle='--', marker='^', color=colors[3], label="GPU+CPU, BF")
+        linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
 
     ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.yaxis.get_major_formatter().set_scientific(False)
@@ -167,7 +174,7 @@ def plot_joinspeed():
     # Put a legend below current axis
     #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
     #          fancybox=False, ncol=3)
-    ax1.legend(loc='upper right', ncol=2)
+    ax1.legend(loc='upper center', ncol=1)
 
     fig.tight_layout()
     #,legend2
@@ -320,6 +327,8 @@ def plot_heatmap(sel, file):
 
 def main():
     mpl.rcParams.update({'font.size': 15})
+    plot_sel()
+    plot_joinspeed()
     plot_bloomfilter()
 
     for sel in [1, 5]:
@@ -327,8 +336,6 @@ def main():
             plot_heatmap(sel, file)
 
 
-    plot_joinspeed()
-    plot_sel()
 
     plot_expensiveop(1)
     plot_expensiveop(5)
