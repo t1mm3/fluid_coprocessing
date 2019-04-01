@@ -9,7 +9,7 @@
 #include "bloomfilter/util.hpp"
 
 
-void gen_csv(const std::string& fname, const Table& t, bool probe) {
+void gen_csv(const std::string& fname, const Table& t, bool probe, size_t num_payload) {
     uint32_t *table_keys = (uint32_t *)t.columns[0];
     std::ofstream f;
     f.open(fname);
@@ -18,7 +18,7 @@ void gen_csv(const std::string& fname, const Table& t, bool probe) {
     for (size_t row=0; row<num; row++) {
         f << table_keys[row];
         if (!probe) {
-            for (int k=0; k<NUM_PAYLOAD; k++) {
+            for (int k=0; k<num_payload; k++) {
                 f << "|";
                 f << "0";
             }
@@ -260,10 +260,10 @@ int main(int argc, char** argv) {
     if (!params.csv_path.empty()) {
         std::cout << "Writing build relation ..." <<std::endl;
 
-        gen_csv(params.csv_path + "build.csv", table_build, false);
+        gen_csv(params.csv_path + "build.csv", table_build, false, params.num_payloads);
 
         std::cout << "Writing probe relation ..." <<std::endl;
-        gen_csv(params.csv_path + "probe.csv", table_probe, true);
+        gen_csv(params.csv_path + "probe.csv", table_probe, true, params.num_payloads);
 
         std::cout << "Done" << std::endl;
         exit(0);
@@ -271,7 +271,7 @@ int main(int argc, char** argv) {
 
     auto ht = new HashTablinho(
         sizeof(int32_t) + // key 
-        NUM_PAYLOAD * sizeof(int32_t), // payload cols
+        params.num_payloads * sizeof(int32_t), // payload cols
         params.build_size);
 
      //build table

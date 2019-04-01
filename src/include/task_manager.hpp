@@ -42,7 +42,7 @@ struct WorkerThread {
 	uint64_t ksum = 0;
 	uint64_t psum = 0;
 
-	int32_t payload[kVecSize * NUM_PAYLOAD];
+	int32_t *payload;
 
 	int64_t tuples = 0;
 	int64_t tuples_morsel = 0;
@@ -78,7 +78,9 @@ struct WorkerThread {
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer)
 	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf) {
+	    payload = new int32_t[kVecSize * pipeline.params.num_payloads];
 	    thread = new std::thread(ExecuteWorkerThread, this);
+
 	}
 
 	void join() {
@@ -92,6 +94,7 @@ struct WorkerThread {
 			inflight_probe = nullptr;
 		}
 		delete thread;
+		delete payload;
 	}
 
 	NO_INLINE void execute_pipeline();
@@ -235,8 +238,8 @@ struct WorkerThread {
 					}
 
 					// gather some payload columns
-					for (int i = 1; i < NUM_PAYLOAD; i++) {
-						ht->ProbeGather(ctx, payload + (i-1)*kVecSize, i, sel, num);
+					for (int i = 0; i < pipeline.params.num_payloads; i++) {
+						ht->ProbeGather(ctx, payload + i*kVecSize, i+1, sel, num);
 					}
 				}
 
@@ -249,8 +252,8 @@ struct WorkerThread {
 			// global sum
 			Vectorized::glob_sum(&ksum, keys, sel, num);
 
-			for (int i = 1; i < NUM_PAYLOAD; i++) {
-				Vectorized::glob_sum(&psum, payload + (i-1)*kVecSize, sel, num);
+			for (int i = 0; i < pipeline.params.num_payloads; i++) {
+				Vectorized::glob_sum(&psum, payload + i*kVecSize, sel, num);
 			}
 
 			tuples += num;

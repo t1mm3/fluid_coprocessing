@@ -71,7 +71,7 @@ private:
 
 public:
 	HashTablinho(size_t bsize, size_t capacity) {
-		assert(bsize > sizeof(int64_t));
+		assert(bsize >= sizeof(int32_t));
 		bucket_size = bsize + sizeof(bucket_t) + sizeof(uint32_t);
 
 		assert(bucket_size % sizeof(bucket_t) == 0);
