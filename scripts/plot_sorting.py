@@ -111,7 +111,7 @@ def plot_sorting_time():
 
     ofilename = "plot_bf_sort_time.pgf"
 
-    ax1[1].set_ylabel('Probe time (ms)')
+    ax1[1].set_ylabel('Probe/Sorting time (ms)')
     ax1[1].set_xlabel('Sorted bits')
     ax1[1].grid(True)
     ax1[0].set_ylabel('Throughput (GProbe/s)')
@@ -146,10 +146,13 @@ def plot_sorting_time():
     ax1[1].yaxis.get_major_formatter().set_useOffset(False)
     ax1[1].yaxis.set_minor_formatter(mticker.ScalarFormatter())
 
+    ax1[1].legend(loc="center right")
+    ax1[0].legend(loc="upper right")
     # Put a legend below current axis
-    handles, labels = ax1[1].get_legend_handles_labels()
-    plt.legend( handles, labels, loc = 'lower center', bbox_to_anchor = (0,-0.1,1,1),ncol=2,
-            bbox_transform = plt.gcf().transFigure )
+
+    #handles, labels = ax1[1].get_legend_handles_labels()
+    #plt.legend( handles, labels, loc = 'lower center', bbox_to_anchor = (0,-0.025,1,1),ncol=2,
+    #        bbox_transform = plt.gcf().transFigure )
 
     fig.tight_layout()
     #,legend2
