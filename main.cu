@@ -105,6 +105,7 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num, 
         // printf("%d: -> %p got %p\n", (int)s, dest, address);
         if (address == MAP_FAILED) {
             printf("error = %s\n", strerror(errno));
+            assert(false);
         }
         assert(address != MAP_FAILED);
         assert(address == dest);
