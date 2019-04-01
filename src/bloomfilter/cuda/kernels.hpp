@@ -64,12 +64,6 @@ __global__ void contains_kernel_clustering(const filter_t filter,
                                           u32 *__restrict__ keys, 
                                           u32 key_cnt,
                                           $u32 *__restrict__ result_bitmap) {
-		// who am I?
-	u32 warp_id = global_warp_id();
-	u32 local_thread_id = warp_local_thread_id();
-
-	constexpr u32 elements_per_thread = warp_size; // ... processed sequentially
-	constexpr u32 elements_per_warp = elements_per_thread * warp_size;
 
 	// where to start?
 	$u32 read_pos = blockIdx.x * blockDim.x + threadIdx.x;//warp_id * elements_per_warp + local_thread_id;

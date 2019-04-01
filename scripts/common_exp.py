@@ -8,8 +8,9 @@ gibi = 1024*mebi
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_size = 1*gibi        #2   G keys
+default_probe_scale = 1024
 default_build_size = 4194304   	   #4   M keys
+default_probe_size = int(default_build_size * default_probe_scale)
 default_num_threads = 16
 default_gpu_morsel_size = 16777216 #16  M keys
 default_cpu_morsel_size = 16384	   #16  K keys
@@ -19,6 +20,7 @@ default_cpu_filter = 1
 default_slowdown = 0
 default_keys_on_gpu = 0
 default_repetitions = 10
+default_num_payloads = 1
 
 def run_timeout(cmd, timeout):
 	# inspired by https://stackoverflow.com/questions/36952245/subprocess-timeout-failure
@@ -52,7 +54,7 @@ def syscall(cmd):
 		timed_out = not run_timeout(cmd, time_out_seconds)
 		iterations = iterations + 1
 
-def run_test(fname = None, probe_size = None, streams = None, filter_size = None, build_size = None, gpu_morsel_size = None, cpu_morsel_size = None, gpu_devices = None, selectivity = None, threads = None, cpu_filter = None, slowdown = None, keys_on_gpu = None):
+def run_test(fname = None, probe_size = None, streams = None, filter_size = None, probe_scale = None, num_payloads = None, build_size = None, gpu_morsel_size = None, cpu_morsel_size = None, gpu_devices = None, selectivity = None, threads = None, cpu_filter = None, slowdown = None, keys_on_gpu = None):
 	if fname is None: raise Exception("No filename provided")
 	if probe_size is None: probe_size = default_probe_size
 	if streams is None: streams = default_streams
@@ -66,13 +68,15 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 	if cpu_filter is None: cpu_filter = default_cpu_filter
 	if slowdown is None: slowdown = default_slowdown
 	if keys_on_gpu is None: keys_on_gpu = default_keys_on_gpu
+	if probe_scale is None: probe_scale = default_probe_scale
+	if num_payloads is None: num_payloads = default_num_payloads
 
 	repetitions=default_repetitions
 
 	# Execute Experiment
-	syscall("""{BINARY} --repetitions={REPS} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU}""".format(
+	syscall("""{BINARY} --repetitions={REPS} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --probe_scale={PROBE_SCALE} --num_payloads={NUM_PAYLOADS} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU}""".format(
 		BINARY=binary, REPS=repetitions, FILTER_SIZE=filter_size, PROBE_SIZE=probe_size, BUILD_SIZE=build_size, GPU_MORSEL_SIZE=gpu_morsel_size, CPU_MORSEL_SIZE=cpu_morsel_size,
-		DEVICES=gpu_devices, SELECTIVITY=selectivity, THREADS=threads, CPU_FILTER=cpu_filter, SLOWDOWN=slowdown, KEYS_ON_GPU=keys_on_gpu))
+		DEVICES=gpu_devices, SELECTIVITY=selectivity, THREADS=threads, CPU_FILTER=cpu_filter, SLOWDOWN=slowdown, KEYS_ON_GPU=keys_on_gpu, PROBE_SCALE=probe_scale, NUM_PAYLOADS=num_payloads))
 
 	# We include the header in the first time
 	if not os.path.isfile(os.path.join('results', fname)):

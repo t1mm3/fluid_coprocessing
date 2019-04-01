@@ -177,8 +177,8 @@ template <typename filter_t> struct cuda_filter {
 
 		auto end_candidates = std::chrono::high_resolution_clock::now();
 		perf_data.candidate_time = std::chrono::duration<double>(end_candidates - start_candidates).count();
-		double total_time = static_cast<double>(perf_data.hash_time + perf_data.sort_time + perf_data.probe_time);
-		                                       // + perf_data.candidate_time);
+		double total_time = static_cast<double>(perf_data.hash_time + perf_data.sort_time + perf_data.probe_time
+		                                        + perf_data.candidate_time);
 		perf_data.total_throughput = static_cast<u64>((key_cnt) / total_time);
 
 		// copy back only the candidate list
