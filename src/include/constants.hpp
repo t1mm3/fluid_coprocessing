@@ -11,7 +11,6 @@ namespace defaults {
 enum {
 	gpu_morsel_size = 16ull * 1024ull * 1024ull,
 	cpu_morsel_size = 16 * 1024,
-
 	num_threads_per_block = 256,
 	num_blocks = 32,
 	num_gpu_streams = 4,                    // at least 4
@@ -28,7 +27,7 @@ enum {
 	only_generate = false,
 	slowdown = 0,
 	num_warmup = 2,
-	in_gpu_keys = false,
+	in_gpu_keys = false, 
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
