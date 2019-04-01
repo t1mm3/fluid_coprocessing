@@ -63,7 +63,66 @@ void read_sum(const std::string& file, int64_t& ksum) {
     in.close();
 };
 
-void read_column(Table& table, const std::string& file, size_t col, size_t num) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
+void read_column(Table& table, const std::string& file, size_t col, size_t num, size_t scale) {
+    if (scale <= 0) {
+        scale = 1;
+    }
+
+    int fd;
+    struct stat sb;
+    const size_t bytes = sizeof(int32_t) * num;
+
+    fd = open(file.c_str(), O_RDONLY);
+    assert(fd > 0);
+
+    memset(&sb, 0, sizeof(sb));
+    fstat(fd, &sb);
+
+    assert((uint64_t)sb.st_size == bytes);
+
+    table.delloc_columns();
+
+    char* area = (char*)mmap(NULL,
+        scale * bytes, PROT_NONE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+    assert(area != MAP_FAILED);
+
+    assert((bytes % 4*1024) == 0);
+
+    for (size_t s = 0; s < scale; s++) {
+        char* dest = area + bytes * s;
+        char* address = (char*)mmap(dest,
+            bytes, PROT_READ, MAP_FIXED | MAP_SHARED, fd, 0);
+        // printf("%d: -> %p got %p\n", (int)s, dest, address);
+        if (address == MAP_FAILED) {
+            printf("error = %s\n", strerror(errno));
+        }
+        assert(address != MAP_FAILED);
+        assert(address == dest);
+    }
+
+    close(fd);
+
+    uint64_t sum = 0;
+
+    // check data
+    uint32_t* data = (uint32_t*)area;
+    for (size_t i=0; i<scale*num; i++) {
+        sum += data[i];
+    }
+
+    table.columns[col] = area;
+
+#if 0
     std::ifstream in(file, std::ios::in | std::ios::binary);
     assert(in.is_open());
 
@@ -72,6 +131,7 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num) 
     in.read((char*)d, sizeof(int32_t) * num);
 
     in.close();
+#endif
 };
 
 #include <tuple>
@@ -128,16 +188,19 @@ int main(int argc, char** argv) {
     std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
     size_t build_size = params.build_size;
-    size_t probe_size = params.probe_size;
+    // size_t probe_size = params.probe_size;
+
+    const size_t real_probe_size = params.probe_scale ? (params.probe_size / params.probe_scale) : params.probe_size;
+    const size_t virt_probe_size = params.probe_size;
     size_t selectivity = params.selectivity;
     size_t num_columns = params.num_columns;
     Table table_build(num_columns, build_size);
-    Table table_probe(1,probe_size);
+    Table table_probe(1,real_probe_size);
 
     auto gen_fname = [&] (size_t id) {
         std::ostringstream s;
         s << "data_" << id << "_" << "_s_" << selectivity
-            << "_b_" << build_size << "_p_" << probe_size << ".bin";
+            << "_b_" << build_size << "_p_" << real_probe_size << ".bin";
         return s.str();
     };
 
@@ -147,7 +210,7 @@ int main(int argc, char** argv) {
     bool cached = true;
 
     if (!file_size(bfile) || !file_size(pfile) || !file_size(ksum)) {
-        std::cout << "Files not cached. Recreating ..." << std::endl;
+        std::cout << "Files not cached. Recreating ... with "<< real_probe_size << std::endl;
         // not cached, create files
         cached = false;
 
@@ -162,7 +225,7 @@ int main(int argc, char** argv) {
         std::cout << "Writing 'build' to disk ..." << std::endl;
         write_column(bfile, table_build, 0, build_size);
         std::cout << "Writing 'probe' to disk ..." << std::endl;
-        write_column(pfile, table_probe, 0, probe_size);
+        write_column(pfile, table_probe, 0, real_probe_size);
 
         std::cout << "Done" << std::endl;
     }
@@ -177,12 +240,18 @@ int main(int argc, char** argv) {
     assert(file_size(ksum) > 0);
     assert(file_size(ksum) == sizeof(int64_t));
     assert(file_size(bfile) == sizeof(int32_t) * build_size);
-    assert(file_size(pfile) == sizeof(int32_t) * probe_size);
+    assert(file_size(pfile) == sizeof(int32_t) * real_probe_size);
 
-    read_column(table_build, bfile, 0, build_size);
-    read_column(table_probe, pfile, 0, probe_size);
+    read_column(table_build, bfile, 0, build_size, 0);
+    read_column(table_probe, pfile, 0, real_probe_size, params.probe_scale);
     int64_t expected_ksum = 0;
     read_sum(ksum, expected_ksum);
+
+    if (params.probe_scale >= 1) {
+        expected_ksum *= params.probe_scale;
+    }
+
+    table_probe.capacity = virt_probe_size;
 
 
     assert(params.gpu_morsel_size >= params.cpu_morsel_size);
