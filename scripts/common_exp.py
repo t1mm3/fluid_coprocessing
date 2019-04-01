@@ -34,7 +34,7 @@ def run_timeout(cmd, timeout):
 		try:
 			output = process.communicate(timeout=timeout)[0]
 			return True
-		except TimeoutExpired:
+		except subprocess.TimeoutExpired:
 			print('Timeout for {}'.format(cmd))
 			os.killpg(process.pid, signal.SIGINT) # send signal to the process group
 			output = process.communicate()[0]
