@@ -154,7 +154,7 @@ int main(int argc, char** argv) {
         populate_table(table_build);
         populate_table(table_probe);
 
-        set_selectivity(table_build, table_probe, selectivity);
+        set_selectivity(table_build, table_probe, selectivity, params.probe_scale);
         auto expected_ksum = calculate_matches_sum(table_build, table_probe, selectivity);
         std::cout << "Writing ksum to disk ..." << std::endl;
         write_ksum(ksum, expected_ksum);

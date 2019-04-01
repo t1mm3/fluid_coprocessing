@@ -320,6 +320,8 @@ struct params_t {
 	std::size_t slowdown 	  	  {defaults::slowdown};
 	std::size_t num_warmup 		  {defaults::num_warmup};
 	bool in_gpu_keys 			  {defaults::in_gpu_keys};
+
+	std::size_t probe_scale {0};
 };
 //===----------------------------------------------------------------------===//
 
@@ -395,6 +397,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.cpu_bloomfilter = std::stoll(arg_value);
 		} else if (arg_name == "in_gpu_keys") {
 			params.in_gpu_keys = std::stoll(arg_value) != 0;
+		} else if (arg_name == "probe_scale") {
+			params.probe_scale = std::stoll(arg_value);
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoll(arg_value);
 			if (n > 0) {
@@ -449,7 +453,7 @@ void populate_table(Table& table) {
 //===----------------------------------------------------------------------===//
 
 //===----------------------------------------------------------------------===//
-void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity) {
+void set_selectivity(Table& table_build, Table& table_probe, size_t selectivity, size_t scale) {
 	//thread_local allows unique seed for each thread
     thread_local std::random_device rd;     // Will be used to obtain a seed for the random number engine
     thread_local std::mt19937 engine(rd()); //Standard mersenne_twister_engine seeded with rd()
