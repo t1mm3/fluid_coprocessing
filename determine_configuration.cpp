@@ -214,7 +214,7 @@ determine_filter_params(
 
 int32_t main() {
   // The number of keys.
-  const std::size_t n = 10000000;
+  const std::size_t n = 16777216;
   // The time we safe, with each filtered tuple.
   const auto work_time_nanos = 1.0;
 

@@ -1,6 +1,6 @@
 import os
 
-binary = "build/release/main_cu"
+binary = "build/debug/main_cu"
 
 kibi = 1024
 mebi = 1024*kibi
@@ -8,10 +8,10 @@ gibi = 1024*mebi
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_scale = 1024
+default_probe_scale = 128
 default_build_size = 4194304   	   #4   M keys
 default_probe_size = int(default_build_size * default_probe_scale)
-default_num_threads = 16
+default_num_threads = 10
 default_gpu_morsel_size = 16777216 #16  M keys
 default_cpu_morsel_size = 16384	   #16  K keys
 default_gpu_devices = 0
@@ -19,7 +19,7 @@ default_selectivity = 1
 default_cpu_filter = 1
 default_slowdown = 0
 default_keys_on_gpu = 0
-default_repetitions = 10
+default_repetitions = 3
 default_num_payloads = 1
 
 def run_timeout(cmd, timeout):
@@ -34,7 +34,7 @@ def run_timeout(cmd, timeout):
 		try:
 			output = process.communicate(timeout=timeout)[0]
 			return True
-		except subprocess.TimeoutExpired:
+		except TimeoutExpired:
 			print('Timeout for {}'.format(cmd))
 			os.killpg(process.pid, signal.SIGINT) # send signal to the process group
 			output = process.communicate()[0]

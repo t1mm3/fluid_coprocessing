@@ -19,9 +19,9 @@ my_dict = {
 	('2147483648'):268435456, 
 	('4294967296'):536870912
 }
-default_probe_scale = 1024
+default_probe_scale = 128
 
-os.system('make')
+os.system('make debug')
 os.system('mkdir -p results/op_vs_bfsize')
 
 for cpu_filter in cpu_filter_values:
@@ -34,6 +34,6 @@ for cpu_filter in cpu_filter_values:
 				run_test(fname=file, selectivity="1", slowdown=s, gpu_devices=gpu,
 					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(build_size * default_probe_scale))
 
-				file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
-				run_test(fname=file, selectivity="5", slowdown=s, gpu_devices=gpu,
-					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(build_size * default_probe_scale))		
+				#file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
+				#run_test(fname=file, selectivity="5", slowdown=s, gpu_devices=gpu,
+				#cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(build_size * default_probe_scale))		

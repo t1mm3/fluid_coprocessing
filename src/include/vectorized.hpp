@@ -25,7 +25,7 @@ struct Vectorized {
 		} else {
 			for (int i = 0; i < num; i++) {
 #ifdef DEBUG
-				assert(i < kVecSize);
+				//assert(i < kVecSize);
 #endif
 
 				fun(i);
