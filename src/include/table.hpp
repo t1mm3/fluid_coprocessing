@@ -12,8 +12,8 @@
 #include <iostream>
 
 struct Table {
-private:
 	int64_t capacity;
+private:
 	std::atomic<int64_t> start; //! Current start offset
 	std::atomic<int64_t> done;  //!< Current finished offset (after morsel completion)
 
@@ -47,6 +47,14 @@ public:
 	void reset() {
 		done = 0;
 		start = 0;
+	}
+
+
+	void delloc_columns() {
+		for (auto& col : columns) {
+			free(col);
+			col = nullptr;
+		}
 	}
 
 	template <typename T> void fill_columns(T &&f) {

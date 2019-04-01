@@ -4,7 +4,7 @@
 constexpr const size_t NUMBER_OF_STREAMS = 4;
 constexpr const size_t kVecSize          = 1024;
 
-#define NUM_PAYLOAD 32
+// #define NUM_PAYLOAD 32
 
 namespace defaults {
 

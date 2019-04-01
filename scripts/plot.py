@@ -256,7 +256,7 @@ def plot_expensiveop(sel):
     ofilename = "plot_expensiveop_sel{}.pgf".format(sel)
 
     ax1.set_ylabel('Time (in s)')
-    ax1.set_xlabel('Slowdown factor $s$')
+    ax1.set_xlabel('Additional Pipeline Cost $c_A$')
     # ax1.grid(True)
     #with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
     #    print cpu_nofilter
@@ -287,7 +287,7 @@ def plot_expensiveop(sel):
 
 from pandas import DataFrame
 
-def plot_heatmap(sel, file):
+def plot_heatmap(sel, file, rbar, lbar, cpubf):
     cpu = pd.read_csv("{p}/op_vs_bfsize/results-op_vs_bfsize{file}.csv".format(
         p=result_path, file=file),
         sep='|', names=framework_columns, header=None, skiprows=1)
@@ -295,13 +295,21 @@ def plot_heatmap(sel, file):
     #    sep='|', names=framework_columns, header=None, skiprows=1)
     (fig, ax1) = plt.subplots()
 
+    ax1.set_aspect(1.0)
+
     cpu = cpu[cpu['Selectivity']==sel]
-    cpu = cpu[cpu['CPUBloomFilter']==1]
+
+    if cpubf:
+        cpu = cpu[cpu['CPUBloomFilter']==1]
+    else:
+        cpu = cpu[cpu['CPUBloomFilter']==0]
 
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
         print cpu
 
+    if not cpubf:
+        file = file + "_nocpubf"
     ofilename = "plot-heat{sel}-{file}.pgf".format(sel=sel, file=file)
 
     #Index= ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
@@ -311,14 +319,26 @@ def plot_heatmap(sel, file):
     df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma")
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=7)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
-    ax1.set_xlabel("Slowdown $s$")
-    ax1.set_ylabel("Bloom filter size (bit)")
+    ax1.set_xlabel("Additonal Pipeline Cost $c_A$")
 
-    fig.colorbar(c, ax=ax1)
+    if not rbar:
+        plt.setp(ax1.get_yticklabels(), visible=False)
+    else:
+        ax1.set_ylabel("Bloom filter size (bit)")
+        l = [8, 16, 32, 64,
+            128, 256, 512, 1024,
+            2*1024, 4*1024]
+        p = ["1~MiB", "2~MiB", "4~MiB", "8~MiB",
+            "16~MiB", "32~MiB", "64~MiB", "128~MiB",
+            "256~MiB", "512~MiB"]
+        ax1.set_yticklabels(p)
+
+    if lbar:
+        fig.colorbar(c, ax=ax1)
 
     fig.tight_layout()
     #,legend2
@@ -332,9 +352,15 @@ def main():
     plot_bloomfilter()
 
     for sel in [1, 5]:
-        for file in ["cpu", "gpu"]:
-            plot_heatmap(sel, file)
+        for file in ["cpu", "gpu", "gpuonly"]:
+            right = file == "cpu"
+            left = file == "gpu"
+            cpubf = True
+            if file == "gpuonly":
+                file = "gpu"
+                cpubf = False
 
+            plot_heatmap(sel, file, right, left, cpubf)
 
 
     plot_expensiveop(1)
