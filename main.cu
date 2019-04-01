@@ -105,6 +105,7 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num, 
         // printf("%d: -> %p got %p\n", (int)s, dest, address);
         if (address == MAP_FAILED) {
             printf("error = %s\n", strerror(errno));
+            assert(false);
         }
         assert(address != MAP_FAILED);
         assert(address == dest);
@@ -112,12 +113,13 @@ void read_column(Table& table, const std::string& file, size_t col, size_t num, 
 
     close(fd);
 
-    uint64_t sum = 0;
-
     // check data
-    uint32_t* data = (uint32_t*)area;
-    for (size_t i=0; i<scale*num; i++) {
-        sum += data[i];
+    uint64_t sum = 0;
+    Vectorized::glob_sum(&sum, (int32_t*)area, nullptr, scale*num);
+
+    if (sum % scale != 0) {
+        fprintf(stderr, "read_column: Sum not divisible by scale\n");
+        assert(false);
     }
 
     table.columns[col] = area;
