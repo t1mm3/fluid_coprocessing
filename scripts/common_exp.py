@@ -1,6 +1,6 @@
 import os
 
-binary = "build/debug/main_cu"
+binary = "build/release/main_cu"
 
 kibi = 1024
 mebi = 1024*kibi
