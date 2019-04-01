@@ -124,3 +124,5 @@ target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 #add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
 #target_link_libraries(test_cpp mainlib Threads::Threads)
 #add_test(NAME test_cpp COMMAND test_cpp)
+
+add_executable(determine_configuration determine_configuration.cpp)
