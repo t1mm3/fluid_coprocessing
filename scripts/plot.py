@@ -87,13 +87,13 @@ def plot_sel():
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
-    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
+    ax1.plot(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.plot(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
     # PipelineSumThreadCycles
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
-    ax1.semilogy(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
-    ax1.semilogy(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
+    ax1.plot(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
+    ax1.plot(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
 
     if False:
         ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
@@ -334,10 +334,15 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     #Cols = ['A', 'B', 'C', 'D']
     #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
 
-    df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
+
+    cpu['NormalizedPipelineTime'] = cpu['PipelineTime'] / ((cpu['FilterSize'] / (8.0 * 1024))) * 3.0 * 1000.0 * 1000.0 # * 1000.0 * 1000.0 * 1000.0 * 1000.0
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print(cpu)    
+
+    df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=900)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
@@ -346,13 +351,13 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     if not rbar:
         plt.setp(ax1.get_yticklabels(), visible=False)
     else:
-        ax1.set_ylabel("Input size")
+        ax1.set_ylabel("Inner Relation Cardinality (MiTuples)")
         l = [8, 16, 32, 64,
             128, 256, 512, 1024,
             2*1024, 4*1024]
-        p = ["1~MiB", "2~MiB", "4~MiB", "8~MiB",
-            "16~MiB", "32~MiB", "64~MiB", "128~MiB",
-            "256~MiB", "512~MiB"]
+        p = ["1", "2", "4", "8",
+            "16", "32", "64", "128",
+            "256", "512"]
         ax1.set_yticklabels(p)
 
     if lbar:
@@ -365,12 +370,12 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
 
 def main():
     mpl.rcParams.update({'font.size': 15})
-    #plot_sel()
-    #plot_joinspeed()
+    plot_sel()
+    plot_joinspeed()
     plot_bloomfilter()
 
-    for sel in [1, 5]:
-        for file in ["cpu", "gpu", "gpuonly"]:
+    for sel in [1]: #, 5]:
+        for file in ["cpu", "gpu"]: #, "gpuonly"]:
             right = file == "cpu"
             left = file == "gpu"
             cpubf = True
@@ -381,8 +386,8 @@ def main():
             plot_heatmap(sel, file, right, left, cpubf)
 
 
-    #plot_expensiveop(1)
-    #plot_expensiveop(5)
+    plot_expensiveop(1)
+    plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()
