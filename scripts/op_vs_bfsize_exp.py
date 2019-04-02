@@ -32,7 +32,7 @@ for cpu_filter in cpu_filter_values:
 			for filter_size,build_size in my_dict.items():
 				file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
 				run_test(fname=file, selectivity="1", slowdown=s, gpu_devices=gpu,
-					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(build_size * default_probe_scale))
+					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(536870912 * default_probe_scale))
 
 				#file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
 				#run_test(fname=file, selectivity="5", slowdown=s, gpu_devices=gpu,

@@ -36,7 +36,7 @@ hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 
 
 framework_columns = ["Bloom Filter size (MiB)"," Block size (bytes)", "bits to sort", "Probe size", "Hash time (ms)", "Sort time (ms)", "Probe time (ms)", "Total throughput"]
-result_path = "results/"
+result_path = "results"
 
 
 def plot_sorting_throughput():
@@ -53,7 +53,7 @@ def plot_sorting_throughput():
     (fig, ax1) = plt.subplots()
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print bf16
+        print(bf16)
 
     ofilename = "plot_bf_sort_throughput.pgf"
 
@@ -107,7 +107,7 @@ def plot_sorting_time():
     fig_size = fig.get_figheight()
     fig.set_figheight(fig_size * 1.5)
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print bf16
+        print(bf16)
 
     ofilename = "plot_bf_sort_time.pgf"
 
@@ -146,8 +146,8 @@ def plot_sorting_time():
     ax1[1].yaxis.get_major_formatter().set_useOffset(False)
     ax1[1].yaxis.set_minor_formatter(mticker.ScalarFormatter())
 
-    ax1[1].legend(loc="center right")
-    ax1[0].legend(loc="upper right")
+    ax1[1].legend(loc="center right",ncol=1)
+    #ax1[0].legend(loc="upper right")
     # Put a legend below current axis
 
     #handles, labels = ax1[1].get_legend_handles_labels()

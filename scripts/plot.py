@@ -188,8 +188,8 @@ def plot_bloomfilter():
 
     cpu = df[df['NAME']=="CPU"]
     gpu = df[df['NAME']=="GPU-Naive"]
-    #gpu_cluster = df[df['NAME']=="GPU-Clustering"]
-    #gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
+    gpu_cluster = df[df['NAME']=="GPU-Clustering"]
+    gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
 
     (fig, ax1) = plt.subplots()
 
@@ -210,9 +210,9 @@ def plot_bloomfilter():
     ax1.set_xlim(1, 2**9)
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU", basex=2)
-    #ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
-    #ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
+    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Default", basex=2)
+    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
+    ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
 
     ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.xaxis.get_major_formatter().set_scientific(False)
@@ -223,7 +223,11 @@ def plot_bloomfilter():
     ax1.yaxis.get_major_formatter().set_scientific(False)
     ax1.yaxis.get_major_formatter().set_useOffset(False)
     ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
-
+    #arrow with text
+    ax1.annotate('', xytext=(256, 300), xy=(250, 1400),
+            arrowprops=dict(facecolor='black', shrink=0.05, width=0.5), size=15, horizontalalignment='right', verticalalignment='top',
+            )
+    ax1.annotate('6x', xy=(170, 600),)
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
@@ -351,16 +355,16 @@ def main():
     #plot_joinspeed()
     plot_bloomfilter()
 
-    for sel in [1, 5]:
-        for file in ["cpu", "gpu", "gpuonly"]:
-            right = file == "cpu"
-            left = file == "gpu"
-            cpubf = True
-            if file == "gpuonly":
-                file = "gpu"
-                cpubf = False
+    # for sel in [1, 5]:
+    #     for file in ["cpu", "gpu", "gpuonly"]:
+    #         right = file == "cpu"
+    #         left = file == "gpu"
+    #         cpubf = True
+    #         if file == "gpuonly":
+    #             file = "gpu"
+    #             cpubf = False
 
-            plot_heatmap(sel, file, right, left, cpubf)
+    #         plot_heatmap(sel, file, right, left, cpubf)
 
 
     #plot_expensiveop(1)
