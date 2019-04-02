@@ -267,8 +267,8 @@ def plot_bloomfilter():
 
     cpu = df[df['NAME']=="CPU"]
     gpu = df[df['NAME']=="GPU-Naive"]
-    gpu_cluster = df[df['NAME']=="GPU-Clustering"]
-    gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
+    #gpu_cluster = df[df['NAME']=="GPU-Clustering"]
+    #gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
 
     (fig, ax1) = plt.subplots()
 
@@ -290,8 +290,8 @@ def plot_bloomfilter():
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
     ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Default", basex=2)
-    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
-    ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
+    #ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
+    #ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
 
     ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.xaxis.get_major_formatter().set_scientific(False)
