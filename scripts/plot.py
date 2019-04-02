@@ -115,6 +115,67 @@ def plot_sel():
     fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
     plt.close(fig)
 
+
+framework_columns2 = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime",
+        "CPUExpOpTime", "GPUProbeTime", "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples",
+        "PostJoinTuples", "CPUBloomFilter", "FilterSize", "Slowdown", "CPUMorselSize", "GPUMorselsize",
+        "Selectivity", "NumStreams", "GPUConsumed", "GPUProduced"]
+
+
+def plot_streams():
+    gpu = pd.read_csv("{}/op_vs_bfsize/results-streamgpu.csv".format(result_path),
+        sep='|', names=framework_columns2, header=None, skiprows=1)
+
+    gpu = gpu[gpu['CPUBloomFilter']==1]
+    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==1]
+
+    (fig, ax1) = plt.subplots()
+
+    #with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+    #    print gpu
+
+    ofilename = "plot_streams.pgf"
+    # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
+    # plt.xlabel("Query")
+
+    ax1.set_ylabel('Time (in s)')
+    ax1.set_xlabel('Number of streams')
+
+    ax2 = ax1.twinx()
+    ax2.set_ylabel('#Tuples filtered on GPU')
+    # ax1.grid(True)
+
+    # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
+    #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
+    ax1.plot(gpu['NumStreams'], gpu['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="GPU+CPU")
+    ax1.plot(gpukeys['NumStreams'], gpukeys['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)")
+    # PipelineSumThreadCycles
+
+    #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
+    ax2.plot(gpu['NumStreams'], gpu['GPUConsumed'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU")
+    ax2.plot(gpukeys['NumStreams'], gpukeys['GPUConsumed'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU (cached)")
+
+    if False:
+        ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
+        ax1.yaxis.get_major_formatter().set_scientific(False)
+        ax1.yaxis.get_major_formatter().set_useOffset(False)
+        ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
+
+    box = ax1.get_position()
+    ax1.set_position([box.x0, box.y0 + box.height * 0.1,
+                     box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
+    #          fancybox=False, ncol=3)
+    ax1.legend(loc='lower right', ncol=1)
+
+    fig.tight_layout()
+    #,legend2
+    fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
+    plt.close(fig)
+
+
 def df_div(df, colA, colB):
     return df[colA] / df[colB]
 
@@ -374,6 +435,9 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
 
 def main():
     mpl.rcParams.update({'font.size': 15})
+
+    plot_streams()
+    exit(0)
     plot_sel()
     plot_joinspeed()
     plot_bloomfilter()
