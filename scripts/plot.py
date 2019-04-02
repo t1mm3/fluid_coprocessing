@@ -122,38 +122,49 @@ framework_columns2 = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime
         "Selectivity", "NumStreams", "GPUConsumed", "GPUProduced"]
 
 
-def plot_streams():
-    gpu = pd.read_csv("{}/op_vs_bfsize/results-streamgpu.csv".format(result_path),
+def frac_tuples_gpu(df):
+    return (100.0 * df['GPUConsumed']) / (1024.0*1024.0*1024.0)
+
+def plot_streams(cpubf, fraction):
+    # keys on gpu
+    gpukeys = pd.read_csv("{}/op_vs_bfsize/results-stream_newnot_gpu.csv".format(result_path),
+        sep='|', names=framework_columns2, header=None, skiprows=1)
+    gpu = pd.read_csv("{}/op_vs_bfsize/results-stream_newgpu.csv".format(result_path),
         sep='|', names=framework_columns2, header=None, skiprows=1)
 
-    gpu = gpu[gpu['CPUBloomFilter']==1]
-    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==1]
+
+    gpu = gpu[gpu['CPUBloomFilter']==cpubf]
+    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==cpubf]
 
     (fig, ax1) = plt.subplots()
 
     #with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
     #    print gpu
 
-    ofilename = "plot_streams.pgf"
+    ofilename = "plot_streams_cpubf{}_frac{}.pgf".format(cpubf, fraction)
     # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
     # plt.xlabel("Query")
 
-    ax1.set_ylabel('Time (in s)')
-    ax1.set_xlabel('Number of streams')
+    if fraction:
+        ax1.set_ylabel('Tuples processed on GPU (in \\%)')
+        ax1.set_ylim(0, 100)
+    else:
+        ax1.set_ylabel('Time (in s)')
+    ax1.set_xlabel('\\#Streams')
 
-    ax2 = ax1.twinx()
-    ax2.set_ylabel('#Tuples filtered on GPU')
+    # ax2 = ax1.twinx()
     # ax1.grid(True)
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.plot(gpu['NumStreams'], gpu['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="GPU+CPU")
-    ax1.plot(gpukeys['NumStreams'], gpukeys['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)")
-    # PipelineSumThreadCycles
 
-    #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
-    ax2.plot(gpu['NumStreams'], gpu['GPUConsumed'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU")
-    ax2.plot(gpukeys['NumStreams'], gpukeys['GPUConsumed'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU (cached)")
+    if fraction:
+        ax1.plot(gpu['NumStreams'], frac_tuples_gpu(gpu), linestyle='--', marker='+', color=colors[0], label="GPU+CPU")
+        ax1.plot(gpukeys['NumStreams'], frac_tuples_gpu(gpukeys), linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)  ")
+    else:
+        ax1.plot(gpu['NumStreams'], gpu['PipelineTime'], linestyle='--', marker='+', color=colors[0], label="GPU+CPU")
+        ax1.plot(gpukeys['NumStreams'], gpukeys['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)  ")
+
 
     if False:
         ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
@@ -168,7 +179,14 @@ def plot_streams():
     # Put a legend below current axis
     #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
     #          fancybox=False, ncol=3)
-    ax1.legend(loc='lower right', ncol=1)
+    
+
+    if fraction:
+        ax1.legend(loc='lower right', ncol=1)
+    else:
+        ax1.legend(loc='center right', ncol=1)
+
+    #ax2.legend(loc='lower left', ncol=1)
 
     fig.tight_layout()
     #,legend2
@@ -434,10 +452,15 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     plt.close(fig)
 
 def main():
-    mpl.rcParams.update({'font.size': 15})
+    mpl.rcParams.update({'font.size': 20})
 
-    plot_streams()
-    exit(0)
+    for cpubf in [1]: 
+        for frac in [True, False]:
+            plot_streams(cpubf, frac)
+
+    # exit(0)
+
+    mpl.rcParams.update({'font.size': 15})
     plot_sel()
     plot_joinspeed()
     plot_bloomfilter()
