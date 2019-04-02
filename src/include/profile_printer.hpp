@@ -30,7 +30,10 @@ struct ProfilePrinter {
 		os << "Slowdown"		<< "|";
 		os << "CPUMorselSize"	<< "|";
 		os << "GPUMorselSize"	<< "|";
-		os << "Selectivity"		<< '\n';
+		os << "Selectivity"		<< '|';
+		os << "Streams"		<< '|';
+		os << "TuplesGpuProbe"	<< "|";
+		os << "TuplesGpuConsume"	<< "\n";
 
 	}
 
@@ -54,7 +57,10 @@ struct ProfilePrinter {
 		os << (params.slowdown)					<< "|";
 		os << (params.cpu_morsel_size)			<< "|";
 		os << (params.gpu_morsel_size)			<< "|";
-		os << (params.selectivity)				<< "\n";
+		os << (params.selectivity)				<< "|";
+		os << (params.num_gpu_streams)				<< "|";
+		os << (tuples_gpu_probe  / repetitions)			<< "|";
+		os << (tuples_gpu_consume  / repetitions)				<< "\n";
 	}
 
 	double pipeline_cycles{0};
@@ -68,6 +74,8 @@ struct ProfilePrinter {
 	int64_t pre_filter_tuples{0};
 	int64_t fitered_tuples{0};
 	int64_t pos_join_tuples{0};
+	int64_t tuples_gpu_probe{0};
+	int64_t tuples_gpu_consume{0};
 
 	size_t pre_join_tuples{0};
 
