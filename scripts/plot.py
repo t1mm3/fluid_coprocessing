@@ -319,7 +319,7 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=10)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
