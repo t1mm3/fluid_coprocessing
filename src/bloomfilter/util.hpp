@@ -380,6 +380,8 @@ params_t parse_command_line(int argc, char **argv) {
 			if (!params.build_size) {
 				params.build_size = defaults::build_size;
 			}
+		} else if (arg_name == "streams") {
+			params.num_gpu_streams = std::stoll(arg_value);
 		} else if (arg_name == "slowdown") {
 			params.slowdown = std::stoll(arg_value);
 		} else if (arg_name == "gpu_morsel_size") {

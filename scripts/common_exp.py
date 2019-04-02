@@ -74,8 +74,8 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 	repetitions=default_repetitions
 
 	# Execute Experiment
-	syscall("""{BINARY} --repetitions={REPS} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --probe_scale={PROBE_SCALE} --num_payloads={NUM_PAYLOADS} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU}""".format(
-		BINARY=binary, REPS=repetitions, FILTER_SIZE=filter_size, PROBE_SIZE=probe_size, BUILD_SIZE=build_size, GPU_MORSEL_SIZE=gpu_morsel_size, CPU_MORSEL_SIZE=cpu_morsel_size,
+	syscall("""{BINARY} --repetitions={REPS} --streams={STREAM} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --probe_scale={PROBE_SCALE} --num_payloads={NUM_PAYLOADS} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU}""".format(
+		BINARY=binary, STREAM=streams, REPS=repetitions, FILTER_SIZE=filter_size, PROBE_SIZE=probe_size, BUILD_SIZE=build_size, GPU_MORSEL_SIZE=gpu_morsel_size, CPU_MORSEL_SIZE=cpu_morsel_size,
 		DEVICES=gpu_devices, SELECTIVITY=selectivity, THREADS=threads, CPU_FILTER=cpu_filter, SLOWDOWN=slowdown, KEYS_ON_GPU=keys_on_gpu, PROBE_SCALE=probe_scale, NUM_PAYLOADS=num_payloads))
 
 	# We include the header in the first time

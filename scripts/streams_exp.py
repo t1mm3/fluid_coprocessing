@@ -5,10 +5,9 @@ from common_exp import run_test
 from common_exp import default_filter_size
 
 cpu_filter_values = [0,1]
-gpu_values = [None, 1]
+gpu_values = [1]
 
 streams = range(1,36,1)
-default_probe_scale = 64
 keys_on_gpu = [0,1]
 
 os.system('make')

@@ -353,6 +353,8 @@ int main(int argc, char** argv) {
                 profile_info.cpu_expop_time  += (double)pipeline.prof_expop_cpu.cycles;  
                 profile_info.gpu_time        += (double)pipeline.prof_aggr_gpu.cycles;
                 profile_info.cpu_gpu_time    += (double)pipeline.prof_aggr_gpu_cpu_join.cycles;
+                profile_info.tuples_gpu_probe    += (double)pipeline.tuples_gpu_probe;
+                profile_info.tuples_gpu_consume    += (double)pipeline.tuples_gpu_consume;
 
 #ifdef PROFILE
                 profile_info.pre_filter_tuples += pipeline.num_prefilter;
