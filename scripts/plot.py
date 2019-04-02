@@ -41,7 +41,7 @@ framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime"
         "Selectivity"]
 
 
-result_path = "results/"
+result_path = "results"
 
 max_sel = 70
 min_sel = 1
@@ -150,9 +150,9 @@ def plot_joinspeed():
     (fig, ax1) = plt.subplots()
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print gpu
+        print(gpu)
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print cpu_filter
+        print(cpu_filter)
 
     ofilename = "plot_joinspeed.pgf"
     # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
@@ -206,8 +206,8 @@ def plot_bloomfilter():
 
     cpu = df[df['NAME']=="CPU"]
     gpu = df[df['NAME']=="GPU-Naive"]
-    gpu_cluster = df[df['NAME']=="GPU-Clustering"]
-    gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
+    #gpu_cluster = df[df['NAME']=="GPU-Clustering"]
+    #gpu_cluster_only = df[df['NAME']=="GPU-Clustering_only"]
 
     (fig, ax1) = plt.subplots()
 
@@ -228,9 +228,9 @@ def plot_bloomfilter():
     ax1.set_xlim(1, 2**9)
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Naive", basex=2)
-    ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
-    ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
+    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU", basex=2)
+    #ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
+    #ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
 
     ax1.xaxis.set_major_formatter(mticker.ScalarFormatter())
     ax1.xaxis.get_major_formatter().set_scientific(False)
@@ -324,7 +324,7 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
 
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print cpu
+        print(cpu)
 
     if not cpubf:
         file = file + "_nocpubf"
@@ -337,7 +337,7 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=7)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
@@ -346,7 +346,7 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     if not rbar:
         plt.setp(ax1.get_yticklabels(), visible=False)
     else:
-        ax1.set_ylabel("Bloom filter size (bit)")
+        ax1.set_ylabel("Input size")
         l = [8, 16, 32, 64,
             128, 256, 512, 1024,
             2*1024, 4*1024]
@@ -365,8 +365,8 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
 
 def main():
     mpl.rcParams.update({'font.size': 15})
-    plot_sel()
-    plot_joinspeed()
+    #plot_sel()
+    #plot_joinspeed()
     plot_bloomfilter()
 
     for sel in [1, 5]:
@@ -381,8 +381,8 @@ def main():
             plot_heatmap(sel, file, right, left, cpubf)
 
 
-    plot_expensiveop(1)
-    plot_expensiveop(5)
+    #plot_expensiveop(1)
+    #plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()

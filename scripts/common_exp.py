@@ -8,10 +8,10 @@ gibi = 1024*mebi
 
 default_filter_size = 536870912    #64  MiB
 default_streams = 4
-default_probe_scale = 1024
+default_probe_scale = 128
 default_build_size = 4194304   	   #4   M keys
 default_probe_size = int(default_build_size * default_probe_scale)
-default_num_threads = 16
+default_num_threads = 10
 default_gpu_morsel_size = 16777216 #16  M keys
 default_cpu_morsel_size = 16384	   #16  K keys
 default_gpu_devices = 0
@@ -19,7 +19,7 @@ default_selectivity = 1
 default_cpu_filter = 1
 default_slowdown = 0
 default_keys_on_gpu = 0
-default_repetitions = 10
+default_repetitions = 3
 default_num_payloads = 1
 
 def run_timeout(cmd, timeout):
@@ -46,7 +46,7 @@ def syscall(cmd):
 
 	timed_out = True
 	# 100 seconds for large run * 20 reps * 2 (overalloc)
-	time_out_seconds = 15*60
+	time_out_seconds = 30*60
 	iterations = 0
 
 	while timed_out:

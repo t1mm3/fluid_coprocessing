@@ -1,0 +1,8960 @@
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 399870
+ Hash time (ms): 0.080026
+ Sort throughput: 416628
+ Sort time (ms): 0.076807
+ Probes per second: 65744
+ Probe time (ms): 0.486731
+ Candidate List time (ms): 0.086186
+ Total throughput: 43850
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 430483
+ Hash time (ms): 0.074335
+ Sort throughput: 430443
+ Sort time (ms): 0.074342
+ Probes per second: 65837
+ Probe time (ms): 0.486048
+ Candidate List time (ms): 0.064186
+ Total throughput: 45785
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 429576
+ Hash time (ms): 0.074492
+ Sort throughput: 454087
+ Sort time (ms): 0.070471
+ Probes per second: 65811
+ Probe time (ms): 0.486239
+ Candidate List time (ms): 0.063902
+ Total throughput: 46036
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 423454
+ Hash time (ms): 0.075569
+ Sort throughput: 453225
+ Sort time (ms): 0.070605
+ Probes per second: 65870
+ Probe time (ms): 0.485802
+ Candidate List time (ms): 0.062207
+ Total throughput: 46097
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 418207
+ Hash time (ms): 0.076517
+ Sort throughput: 452079
+ Sort time (ms): 0.070784
+ Probes per second: 65755
+ Probe time (ms): 0.486648
+ Candidate List time (ms): 0.063055
+ Total throughput: 45910
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428908
+ Hash time (ms): 0.074608
+ Sort throughput: 453379
+ Sort time (ms): 0.070581
+ Probes per second: 63768
+ Probe time (ms): 0.501817
+ Candidate List time (ms): 0.061778
+ Total throughput: 45147
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 426325
+ Hash time (ms): 0.07506
+ Sort throughput: 282154
+ Sort time (ms): 0.113413
+ Probes per second: 65870
+ Probe time (ms): 0.4858
+ Candidate List time (ms): 0.062755
+ Total throughput: 43417
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 431714
+ Hash time (ms): 0.074123
+ Sort throughput: 281452
+ Sort time (ms): 0.113696
+ Probes per second: 65852
+ Probe time (ms): 0.485932
+ Candidate List time (ms): 0.061266
+ Total throughput: 43536
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 422419
+ Hash time (ms): 0.075754
+ Sort throughput: 281249
+ Sort time (ms): 0.113778
+ Probes per second: 65643
+ Probe time (ms): 0.487484
+ Candidate List time (ms): 0.062495
+ Total throughput: 43271
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 421396
+ Hash time (ms): 0.075938
+ Sort throughput: 280040
+ Sort time (ms): 0.114269
+ Probes per second: 65788
+ Probe time (ms): 0.486404
+ Candidate List time (ms): 0.06414
+ Total throughput: 43199
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 423140
+ Hash time (ms): 0.075625
+ Sort throughput: 282465
+ Sort time (ms): 0.113288
+ Probes per second: 65847
+ Probe time (ms): 0.48597
+ Candidate List time (ms): 0.063047
+ Total throughput: 43364
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 430611
+ Hash time (ms): 0.074313
+ Sort throughput: 280586
+ Sort time (ms): 0.114047
+ Probes per second: 65876
+ Probe time (ms): 0.485757
+ Candidate List time (ms): 0.061291
+ Total throughput: 43513
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 362787
+ Hash time (ms): 0.088206
+ Sort throughput: 204244
+ Sort time (ms): 0.156675
+ Probes per second: 65940
+ Probe time (ms): 0.485284
+ Candidate List time (ms): 0.061478
+ Total throughput: 40422
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 433580
+ Hash time (ms): 0.073804
+ Sort throughput: 203240
+ Sort time (ms): 0.157449
+ Probes per second: 65917
+ Probe time (ms): 0.485457
+ Candidate List time (ms): 0.060363
+ Total throughput: 41180
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 421080
+ Hash time (ms): 0.075995
+ Sort throughput: 203608
+ Sort time (ms): 0.157164
+ Probes per second: 65788
+ Probe time (ms): 0.486405
+ Candidate List time (ms): 0.06229
+ Total throughput: 40928
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 419380
+ Hash time (ms): 0.076303
+ Sort throughput: 202828
+ Sort time (ms): 0.157769
+ Probes per second: 65836
+ Probe time (ms): 0.486056
+ Candidate List time (ms): 0.061917
+ Total throughput: 40918
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 419518
+ Hash time (ms): 0.076278
+ Sort throughput: 204115
+ Sort time (ms): 0.156774
+ Probes per second: 65784
+ Probe time (ms): 0.486438
+ Candidate List time (ms): 0.060915
+ Total throughput: 41004
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 425051
+ Hash time (ms): 0.075285
+ Sort throughput: 204093
+ Sort time (ms): 0.156791
+ Probes per second: 64792
+ Probe time (ms): 0.493883
+ Candidate List time (ms): 0.072015
+ Total throughput: 40101
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 437732
+ Hash time (ms): 0.073104
+ Sort throughput: 159503
+ Sort time (ms): 0.200623
+ Probes per second: 65834
+ Probe time (ms): 0.486064
+ Candidate List time (ms): 0.064305
+ Total throughput: 38830
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 272765
+ Hash time (ms): 0.117317
+ Sort throughput: 159587
+ Sort time (ms): 0.200517
+ Probes per second: 65400
+ Probe time (ms): 0.489292
+ Candidate List time (ms): 0.062067
+ Total throughput: 36815
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 425045
+ Hash time (ms): 0.075286
+ Sort throughput: 159506
+ Sort time (ms): 0.200619
+ Probes per second: 65712
+ Probe time (ms): 0.486973
+ Candidate List time (ms): 0.062233
+ Total throughput: 38782
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428937
+ Hash time (ms): 0.074603
+ Sort throughput: 159520
+ Sort time (ms): 0.200601
+ Probes per second: 65865
+ Probe time (ms): 0.485838
+ Candidate List time (ms): 0.060917
+ Total throughput: 38931
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 426155
+ Hash time (ms): 0.07509
+ Sort throughput: 159600
+ Sort time (ms): 0.2005
+ Probes per second: 65789
+ Probe time (ms): 0.486402
+ Candidate List time (ms): 0.062117
+ Total throughput: 38829
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 417541
+ Hash time (ms): 0.076639
+ Sort throughput: 159256
+ Sort time (ms): 0.200934
+ Probes per second: 65905
+ Probe time (ms): 0.485542
+ Candidate List time (ms): 0.061533
+ Total throughput: 38804
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428512
+ Hash time (ms): 0.074677
+ Sort throughput: 130945
+ Sort time (ms): 0.244376
+ Probes per second: 65940
+ Probe time (ms): 0.485284
+ Candidate List time (ms): 0.063044
+ Total throughput: 36892
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 432163
+ Hash time (ms): 0.074046
+ Sort throughput: 131266
+ Sort time (ms): 0.243779
+ Probes per second: 64350
+ Probe time (ms): 0.497279
+ Candidate List time (ms): 0.061068
+ Total throughput: 36522
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 425758
+ Hash time (ms): 0.07516
+ Sort throughput: 130773
+ Sort time (ms): 0.244697
+ Probes per second: 65945
+ Probe time (ms): 0.485248
+ Candidate List time (ms): 0.062291
+ Total throughput: 36892
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 324530
+ Hash time (ms): 0.098604
+ Sort throughput: 131018
+ Sort time (ms): 0.244241
+ Probes per second: 65877
+ Probe time (ms): 0.485753
+ Candidate List time (ms): 0.061304
+ Total throughput: 35959
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 425000
+ Hash time (ms): 0.075294
+ Sort throughput: 131032
+ Sort time (ms): 0.244215
+ Probes per second: 65665
+ Probe time (ms): 0.48732
+ Candidate List time (ms): 0.062482
+ Total throughput: 36810
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 425006
+ Hash time (ms): 0.075293
+ Sort throughput: 130990
+ Sort time (ms): 0.244292
+ Probes per second: 65759
+ Probe time (ms): 0.486619
+ Candidate List time (ms): 0.061902
+ Total throughput: 36861
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 313703
+ Hash time (ms): 0.102007
+ Sort throughput: 111321
+ Sort time (ms): 0.287456
+ Probes per second: 65863
+ Probe time (ms): 0.485852
+ Candidate List time (ms): 0.062303
+ Total throughput: 34129
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 1
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 429437
+ Hash time (ms): 0.074516
+ Sort throughput: 111299
+ Sort time (ms): 0.287513
+ Probes per second: 65859
+ Probe time (ms): 0.48588
+ Candidate List time (ms): 0.06172
+ Total throughput: 35179
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428002
+ Hash time (ms): 0.074766
+ Sort throughput: 451601
+ Sort time (ms): 0.070859
+ Probes per second: 65681
+ Probe time (ms): 0.487201
+ Candidate List time (ms): 0.061819
+ Total throughput: 46066
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 426911
+ Hash time (ms): 0.074957
+ Sort throughput: 455315
+ Sort time (ms): 0.070281
+ Probes per second: 65806
+ Probe time (ms): 0.486274
+ Candidate List time (ms): 0.062228
+ Total throughput: 46126
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 304686
+ Hash time (ms): 0.105026
+ Sort throughput: 456406
+ Sort time (ms): 0.070113
+ Probes per second: 65955
+ Probe time (ms): 0.485172
+ Candidate List time (ms): 0.063347
+ Total throughput: 44219
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 427761
+ Hash time (ms): 0.074808
+ Sort throughput: 456048
+ Sort time (ms): 0.070168
+ Probes per second: 65803
+ Probe time (ms): 0.486294
+ Candidate List time (ms): 0.063023
+ Total throughput: 46090
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428741
+ Hash time (ms): 0.074637
+ Sort throughput: 452335
+ Sort time (ms): 0.070744
+ Probes per second: 65701
+ Probe time (ms): 0.487052
+ Candidate List time (ms): 0.062234
+ Total throughput: 46065
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 429052
+ Hash time (ms): 0.074583
+ Sort throughput: 440201
+ Sort time (ms): 0.072694
+ Probes per second: 65452
+ Probe time (ms): 0.488903
+ Candidate List time (ms): 0.062514
+ Total throughput: 45799
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 276510
+ Hash time (ms): 0.115728
+ Sort throughput: 280578
+ Sort time (ms): 0.11405
+ Probes per second: 65725
+ Probe time (ms): 0.486877
+ Candidate List time (ms): 0.062732
+ Total throughput: 41057
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 435664
+ Hash time (ms): 0.073451
+ Sort throughput: 280293
+ Sort time (ms): 0.114166
+ Probes per second: 65932
+ Probe time (ms): 0.485342
+ Candidate List time (ms): 0.062287
+ Total throughput: 43522
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 435101
+ Hash time (ms): 0.073546
+ Sort throughput: 281254
+ Sort time (ms): 0.113776
+ Probes per second: 65848
+ Probe time (ms): 0.485963
+ Candidate List time (ms): 0.062334
+ Total throughput: 43500
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 429276
+ Hash time (ms): 0.074544
+ Sort throughput: 281150
+ Sort time (ms): 0.113818
+ Probes per second: 65886
+ Probe time (ms): 0.485684
+ Candidate List time (ms): 0.061941
+ Total throughput: 43479
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 427916
+ Hash time (ms): 0.074781
+ Sort throughput: 282259
+ Sort time (ms): 0.113371
+ Probes per second: 65801
+ Probe time (ms): 0.48631
+ Candidate List time (ms): 0.062612
+ Total throughput: 43414
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428701
+ Hash time (ms): 0.074644
+ Sort throughput: 279994
+ Sort time (ms): 0.114288
+ Probes per second: 65904
+ Probe time (ms): 0.485554
+ Candidate List time (ms): 0.062879
+ Total throughput: 43397
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 426712
+ Hash time (ms): 0.074992
+ Sort throughput: 204066
+ Sort time (ms): 0.156812
+ Probes per second: 65964
+ Probe time (ms): 0.485109
+ Candidate List time (ms): 0.062657
+ Total throughput: 41048
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 428512
+ Hash time (ms): 0.074677
+ Sort throughput: 203394
+ Sort time (ms): 0.15733
+ Probes per second: 65729
+ Probe time (ms): 0.486841
+ Candidate List time (ms): 0.061897
+ Total throughput: 40986
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 287715
+ Hash time (ms): 0.111221
+ Sort throughput: 203121
+ Sort time (ms): 0.157541
+ Probes per second: 65859
+ Probe time (ms): 0.485886
+ Candidate List time (ms): 0.063038
+ Total throughput: 39134
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 423067
+ Hash time (ms): 0.075638
+ Sort throughput: 203716
+ Sort time (ms): 0.157081
+ Probes per second: 64542
+ Probe time (ms): 0.495801
+ Candidate List time (ms): 0.062974
+ Total throughput: 40429
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 423953
+ Hash time (ms): 0.07548
+ Sort throughput: 203655
+ Sort time (ms): 0.157128
+ Probes per second: 65683
+ Probe time (ms): 0.487188
+ Candidate List time (ms): 0.062235
+ Total throughput: 40919
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 439651
+ Hash time (ms): 0.072785
+ Sort throughput: 203205
+ Sort time (ms): 0.157476
+ Probes per second: 60672
+ Probe time (ms): 0.527424
+ Candidate List time (ms): 0.200519
+ Total throughput: 33395
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 451047
+ Hash time (ms): 0.070946
+ Sort throughput: 152475
+ Sort time (ms): 0.20987
+ Probes per second: 62841
+ Probe time (ms): 0.509214
+ Candidate List time (ms): 0.108922
+ Total throughput: 35597
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 431144
+ Hash time (ms): 0.074221
+ Sort throughput: 152503
+ Sort time (ms): 0.209831
+ Probes per second: 62643
+ Probe time (ms): 0.51083
+ Candidate List time (ms): 0.102201
+ Total throughput: 35671
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 454113
+ Hash time (ms): 0.070467
+ Sort throughput: 152293
+ Sort time (ms): 0.21012
+ Probes per second: 62919
+ Probe time (ms): 0.508583
+ Candidate List time (ms): 0.102197
+ Total throughput: 35899
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 459367
+ Hash time (ms): 0.069661
+ Sort throughput: 153462
+ Sort time (ms): 0.20852
+ Probes per second: 63092
+ Probe time (ms): 0.507191
+ Candidate List time (ms): 0.10864
+ Total throughput: 35793
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 447796
+ Hash time (ms): 0.071461
+ Sort throughput: 152894
+ Sort time (ms): 0.209295
+ Probes per second: 64122
+ Probe time (ms): 0.499047
+ Candidate List time (ms): 0.08061
+ Total throughput: 37191
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 434422
+ Hash time (ms): 0.073661
+ Sort throughput: 154329
+ Sort time (ms): 0.207348
+ Probes per second: 64398
+ Probe time (ms): 0.496908
+ Candidate List time (ms): 0.079505
+ Total throughput: 37321
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 445651
+ Hash time (ms): 0.071805
+ Sort throughput: 128800
+ Sort time (ms): 0.248447
+ Probes per second: 64394
+ Probe time (ms): 0.496933
+ Candidate List time (ms): 0.085353
+ Total throughput: 35455
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 438386
+ Hash time (ms): 0.072995
+ Sort throughput: 128709
+ Sort time (ms): 0.248621
+ Probes per second: 64218
+ Probe time (ms): 0.4983
+ Candidate List time (ms): 0.081188
+ Total throughput: 35511
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 436092
+ Hash time (ms): 0.073379
+ Sort throughput: 130072
+ Sort time (ms): 0.246016
+ Probes per second: 65404
+ Probe time (ms): 0.489261
+ Candidate List time (ms): 0.068199
+ Total throughput: 36494
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1267929
+ Hash time (ms): 0.025238
+ Sort throughput: 129477
+ Sort time (ms): 0.247148
+ Probes per second: 65296
+ Probe time (ms): 0.49007
+ Candidate List time (ms): 0.077688
+ Total throughput: 38088
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1316926
+ Hash time (ms): 0.024299
+ Sort throughput: 129827
+ Sort time (ms): 0.246481
+ Probes per second: 65404
+ Probe time (ms): 0.489261
+ Candidate List time (ms): 0.075308
+ Total throughput: 38307
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1327911
+ Hash time (ms): 0.024098
+ Sort throughput: 129694
+ Sort time (ms): 0.246733
+ Probes per second: 65334
+ Probe time (ms): 0.489789
+ Candidate List time (ms): 0.07593
+ Total throughput: 38252
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1373744
+ Hash time (ms): 0.023294
+ Sort throughput: 110771
+ Sort time (ms): 0.288884
+ Probes per second: 65693
+ Probe time (ms): 0.48711
+ Candidate List time (ms): 0.072283
+ Total throughput: 36715
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 2
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1406346
+ Hash time (ms): 0.022754
+ Sort throughput: 111027
+ Sort time (ms): 0.288216
+ Probes per second: 65550
+ Probe time (ms): 0.48817
+ Candidate List time (ms): 0.071929
+ Total throughput: 36736
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1423994
+ Hash time (ms): 0.022472
+ Sort throughput: 453495
+ Sort time (ms): 0.070563
+ Probes per second: 65452
+ Probe time (ms): 0.488904
+ Candidate List time (ms): 0.070456
+ Total throughput: 49050
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1407273
+ Hash time (ms): 0.022739
+ Sort throughput: 458380
+ Sort time (ms): 0.069811
+ Probes per second: 66071
+ Probe time (ms): 0.484322
+ Candidate List time (ms): 0.06147
+ Total throughput: 50129
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1562576
+ Hash time (ms): 0.020479
+ Sort throughput: 464090
+ Sort time (ms): 0.068952
+ Probes per second: 66097
+ Probe time (ms): 0.484134
+ Candidate List time (ms): 0.061464
+ Total throughput: 50391
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1596248
+ Hash time (ms): 0.020047
+ Sort throughput: 464927
+ Sort time (ms): 0.068828
+ Probes per second: 66181
+ Probe time (ms): 0.483518
+ Candidate List time (ms): 0.06189
+ Total throughput: 50450
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1597045
+ Hash time (ms): 0.020037
+ Sort throughput: 470055
+ Sort time (ms): 0.068077
+ Probes per second: 66154
+ Probe time (ms): 0.483716
+ Candidate List time (ms): 0.060724
+ Total throughput: 50588
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1623047
+ Hash time (ms): 0.019716
+ Sort throughput: 469607
+ Sort time (ms): 0.068142
+ Probes per second: 66452
+ Probe time (ms): 0.481546
+ Candidate List time (ms): 0.057682
+ Total throughput: 51029
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1627008
+ Hash time (ms): 0.019668
+ Sort throughput: 287175
+ Sort time (ms): 0.11143
+ Probes per second: 66430
+ Probe time (ms): 0.481704
+ Candidate List time (ms): 0.058158
+ Total throughput: 47692
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1661647
+ Hash time (ms): 0.019258
+ Sort throughput: 288228
+ Sort time (ms): 0.111023
+ Probes per second: 66334
+ Probe time (ms): 0.482405
+ Candidate List time (ms): 0.057151
+ Total throughput: 47772
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1694466
+ Hash time (ms): 0.018885
+ Sort throughput: 288714
+ Sort time (ms): 0.110836
+ Probes per second: 66355
+ Probe time (ms): 0.482249
+ Candidate List time (ms): 0.056828
+ Total throughput: 47847
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1700861
+ Hash time (ms): 0.018814
+ Sort throughput: 287777
+ Sort time (ms): 0.111197
+ Probes per second: 66442
+ Probe time (ms): 0.481623
+ Candidate List time (ms): 0.056819
+ Total throughput: 47871
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1673465
+ Hash time (ms): 0.019122
+ Sort throughput: 290102
+ Sort time (ms): 0.110306
+ Probes per second: 66469
+ Probe time (ms): 0.481423
+ Candidate List time (ms): 0.057743
+ Total throughput: 47861
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1256182
+ Hash time (ms): 0.025474
+ Sort throughput: 251116
+ Sort time (ms): 0.127431
+ Probes per second: 66298
+ Probe time (ms): 0.482664
+ Candidate List time (ms): 0.058911
+ Total throughput: 46077
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1655200
+ Hash time (ms): 0.019333
+ Sort throughput: 205722
+ Sort time (ms): 0.155549
+ Probes per second: 66440
+ Probe time (ms): 0.481635
+ Candidate List time (ms): 0.058548
+ Total throughput: 44751
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1652124
+ Hash time (ms): 0.019369
+ Sort throughput: 206177
+ Sort time (ms): 0.155206
+ Probes per second: 66483
+ Probe time (ms): 0.48132
+ Candidate List time (ms): 0.057283
+ Total throughput: 44869
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1696892
+ Hash time (ms): 0.018858
+ Sort throughput: 207145
+ Sort time (ms): 0.154481
+ Probes per second: 66439
+ Probe time (ms): 0.481639
+ Candidate List time (ms): 0.057468
+ Total throughput: 44915
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1697252
+ Hash time (ms): 0.018854
+ Sort throughput: 206620
+ Sort time (ms): 0.154873
+ Probes per second: 66471
+ Probe time (ms): 0.48141
+ Candidate List time (ms): 0.056454
+ Total throughput: 44969
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1693659
+ Hash time (ms): 0.018894
+ Sort throughput: 206876
+ Sort time (ms): 0.154682
+ Probes per second: 66418
+ Probe time (ms): 0.481791
+ Candidate List time (ms): 0.057706
+ Total throughput: 44876
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1665365
+ Hash time (ms): 0.019215
+ Sort throughput: 207206
+ Sort time (ms): 0.154435
+ Probes per second: 66552
+ Probe time (ms): 0.480822
+ Candidate List time (ms): 0.057219
+ Total throughput: 44963
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1732351
+ Hash time (ms): 0.018472
+ Sort throughput: 153444
+ Sort time (ms): 0.208544
+ Probes per second: 66500
+ Probe time (ms): 0.481196
+ Candidate List time (ms): 0.056098
+ Total throughput: 41867
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1649399
+ Hash time (ms): 0.019401
+ Sort throughput: 161294
+ Sort time (ms): 0.198395
+ Probes per second: 66387
+ Probe time (ms): 0.482015
+ Candidate List time (ms): 0.056678
+ Total throughput: 42300
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1708853
+ Hash time (ms): 0.018726
+ Sort throughput: 161213
+ Sort time (ms): 0.198495
+ Probes per second: 66407
+ Probe time (ms): 0.481875
+ Candidate List time (ms): 0.058401
+ Total throughput: 42244
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1693838
+ Hash time (ms): 0.018892
+ Sort throughput: 161642
+ Sort time (ms): 0.197968
+ Probes per second: 66530
+ Probe time (ms): 0.480983
+ Candidate List time (ms): 0.056889
+ Total throughput: 42399
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1712878
+ Hash time (ms): 0.018682
+ Sort throughput: 161541
+ Sort time (ms): 0.198091
+ Probes per second: 66444
+ Probe time (ms): 0.481606
+ Candidate List time (ms): 0.058612
+ Total throughput: 42272
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1693211
+ Hash time (ms): 0.018899
+ Sort throughput: 161405
+ Sort time (ms): 0.198259
+ Probes per second: 66479
+ Probe time (ms): 0.481352
+ Candidate List time (ms): 0.05685
+ Total throughput: 42363
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1732820
+ Hash time (ms): 0.018467
+ Sort throughput: 132043
+ Sort time (ms): 0.242344
+ Probes per second: 66437
+ Probe time (ms): 0.481658
+ Candidate List time (ms): 0.058324
+ Total throughput: 39960
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1701494
+ Hash time (ms): 0.018807
+ Sort throughput: 132177
+ Sort time (ms): 0.242098
+ Probes per second: 66481
+ Probe time (ms): 0.481336
+ Candidate List time (ms): 0.057384
+ Total throughput: 40018
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1706484
+ Hash time (ms): 0.018752
+ Sort throughput: 132152
+ Sort time (ms): 0.242145
+ Probes per second: 66446
+ Probe time (ms): 0.481589
+ Candidate List time (ms): 0.057274
+ Total throughput: 40012
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1738563
+ Hash time (ms): 0.018406
+ Sort throughput: 132088
+ Sort time (ms): 0.242262
+ Probes per second: 66390
+ Probe time (ms): 0.481994
+ Candidate List time (ms): 0.058756
+ Total throughput: 39929
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1690170
+ Hash time (ms): 0.018933
+ Sort throughput: 132067
+ Sort time (ms): 0.2423
+ Probes per second: 66552
+ Probe time (ms): 0.480824
+ Candidate List time (ms): 0.072366
+ Total throughput: 39291
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1745010
+ Hash time (ms): 0.018338
+ Sort throughput: 132378
+ Sort time (ms): 0.241731
+ Probes per second: 66536
+ Probe time (ms): 0.480936
+ Candidate List time (ms): 0.059008
+ Total throughput: 39999
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1669449
+ Hash time (ms): 0.019168
+ Sort throughput: 112050
+ Sort time (ms): 0.285585
+ Probes per second: 66339
+ Probe time (ms): 0.482368
+ Candidate List time (ms): 0.057835
+ Total throughput: 37871
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 4
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1738185
+ Hash time (ms): 0.01841
+ Sort throughput: 112103
+ Sort time (ms): 0.285451
+ Probes per second: 66420
+ Probe time (ms): 0.481781
+ Candidate List time (ms): 0.056761
+ Total throughput: 37986
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1679878
+ Hash time (ms): 0.019049
+ Sort throughput: 472338
+ Sort time (ms): 0.067748
+ Probes per second: 66542
+ Probe time (ms): 0.480894
+ Candidate List time (ms): 0.05824
+ Total throughput: 51123
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1662683
+ Hash time (ms): 0.019246
+ Sort throughput: 384527
+ Sort time (ms): 0.083219
+ Probes per second: 66583
+ Probe time (ms): 0.480597
+ Candidate List time (ms): 0.057348
+ Total throughput: 49967
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1629991
+ Hash time (ms): 0.019632
+ Sort throughput: 470920
+ Sort time (ms): 0.067952
+ Probes per second: 66344
+ Probe time (ms): 0.482333
+ Candidate List time (ms): 0.058836
+ Total throughput: 50894
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1653832
+ Hash time (ms): 0.019349
+ Sort throughput: 430645
+ Sort time (ms): 0.074307
+ Probes per second: 66532
+ Probe time (ms): 0.480965
+ Candidate List time (ms): 0.058136
+ Total throughput: 50572
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1624118
+ Hash time (ms): 0.019703
+ Sort throughput: 443514
+ Sort time (ms): 0.072151
+ Probes per second: 66546
+ Probe time (ms): 0.480869
+ Candidate List time (ms): 0.057645
+ Total throughput: 50763
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1559378
+ Hash time (ms): 0.020521
+ Sort throughput: 437206
+ Sort time (ms): 0.073192
+ Probes per second: 66408
+ Probe time (ms): 0.481863
+ Candidate List time (ms): 0.057332
+ Total throughput: 50560
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1550913
+ Hash time (ms): 0.020633
+ Sort throughput: 288522
+ Sort time (ms): 0.11091
+ Probes per second: 66374
+ Probe time (ms): 0.482112
+ Candidate List time (ms): 0.057595
+ Total throughput: 47672
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1352207
+ Hash time (ms): 0.023665
+ Sort throughput: 287645
+ Sort time (ms): 0.111248
+ Probes per second: 66599
+ Probe time (ms): 0.480482
+ Candidate List time (ms): 0.058854
+ Total throughput: 47460
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1682970
+ Hash time (ms): 0.019014
+ Sort throughput: 288116
+ Sort time (ms): 0.111066
+ Probes per second: 66294
+ Probe time (ms): 0.482693
+ Candidate List time (ms): 0.058391
+ Total throughput: 47678
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1677060
+ Hash time (ms): 0.019081
+ Sort throughput: 289440
+ Sort time (ms): 0.110558
+ Probes per second: 66512
+ Probe time (ms): 0.481109
+ Candidate List time (ms): 0.05824
+ Total throughput: 47833
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1783325
+ Hash time (ms): 0.017944
+ Sort throughput: 533778
+ Sort time (ms): 0.05995
+ Probes per second: 125994
+ Probe time (ms): 0.25398
+ Candidate List time (ms): 0.046206
+ Total throughput: 84638
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1949317
+ Hash time (ms): 0.016416
+ Sort throughput: 532109
+ Sort time (ms): 0.060138
+ Probes per second: 126252
+ Probe time (ms): 0.25346
+ Candidate List time (ms): 0.043779
+ Total throughput: 85608
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2020584
+ Hash time (ms): 0.015837
+ Sort throughput: 381702
+ Sort time (ms): 0.083835
+ Probes per second: 125590
+ Probe time (ms): 0.254796
+ Candidate List time (ms): 0.045
+ Total throughput: 80106
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2115003
+ Hash time (ms): 0.01513
+ Sort throughput: 389455
+ Sort time (ms): 0.082166
+ Probes per second: 126046
+ Probe time (ms): 0.253875
+ Candidate List time (ms): 0.044086
+ Total throughput: 80959
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2098498
+ Hash time (ms): 0.015249
+ Sort throughput: 384467
+ Sort time (ms): 0.083232
+ Probes per second: 125627
+ Probe time (ms): 0.254722
+ Candidate List time (ms): 0.045107
+ Total throughput: 80339
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1906350
+ Hash time (ms): 0.016786
+ Sort throughput: 368196
+ Sort time (ms): 0.08691
+ Probes per second: 125826
+ Probe time (ms): 0.254318
+ Candidate List time (ms): 0.045911
+ Total throughput: 79222
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2090956
+ Hash time (ms): 0.015304
+ Sort throughput: 373325
+ Sort time (ms): 0.085716
+ Probes per second: 126166
+ Probe time (ms): 0.253633
+ Candidate List time (ms): 0.044924
+ Total throughput: 80084
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2030070
+ Hash time (ms): 0.015763
+ Sort throughput: 388476
+ Sort time (ms): 0.082373
+ Probes per second: 125852
+ Probe time (ms): 0.254265
+ Candidate List time (ms): 0.043548
+ Total throughput: 80818
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2092597
+ Hash time (ms): 0.015292
+ Sort throughput: 308644
+ Sort time (ms): 0.103679
+ Probes per second: 125812
+ Probe time (ms): 0.254347
+ Candidate List time (ms): 0.043727
+ Total throughput: 76730
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2013338
+ Hash time (ms): 0.015894
+ Sort throughput: 307399
+ Sort time (ms): 0.104099
+ Probes per second: 125535
+ Probe time (ms): 0.254908
+ Candidate List time (ms): 0.04344
+ Total throughput: 76492
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2105263
+ Hash time (ms): 0.0152
+ Sort throughput: 308184
+ Sort time (ms): 0.103834
+ Probes per second: 126090
+ Probe time (ms): 0.253785
+ Candidate List time (ms): 0.043389
+ Total throughput: 76884
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2034199
+ Hash time (ms): 0.015731
+ Sort throughput: 308481
+ Sort time (ms): 0.103734
+ Probes per second: 126042
+ Probe time (ms): 0.253882
+ Candidate List time (ms): 0.043896
+ Total throughput: 76693
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1979340
+ Hash time (ms): 0.016167
+ Sort throughput: 308725
+ Sort time (ms): 0.103652
+ Probes per second: 125927
+ Probe time (ms): 0.254114
+ Candidate List time (ms): 0.043645
+ Total throughput: 76632
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2012198
+ Hash time (ms): 0.015903
+ Sort throughput: 306951
+ Sort time (ms): 0.104251
+ Probes per second: 125844
+ Probe time (ms): 0.254282
+ Candidate List time (ms): 0.04412
+ Total throughput: 76453
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1838024
+ Hash time (ms): 0.01741
+ Sort throughput: 254933
+ Sort time (ms): 0.125523
+ Probes per second: 122020
+ Probe time (ms): 0.262251
+ Candidate List time (ms): 0.049617
+ Total throughput: 70360
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1919270
+ Hash time (ms): 0.016673
+ Sort throughput: 252926
+ Sort time (ms): 0.126519
+ Probes per second: 125278
+ Probe time (ms): 0.25543
+ Candidate List time (ms): 0.046258
+ Total throughput: 71929
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1987948
+ Hash time (ms): 0.016097
+ Sort throughput: 254277
+ Sort time (ms): 0.125847
+ Probes per second: 125632
+ Probe time (ms): 0.254712
+ Candidate List time (ms): 0.045624
+ Total throughput: 72352
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1953959
+ Hash time (ms): 0.016377
+ Sort throughput: 254145
+ Sort time (ms): 0.125912
+ Probes per second: 125630
+ Probe time (ms): 0.254715
+ Candidate List time (ms): 0.045731
+ Total throughput: 72277
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1345895
+ Hash time (ms): 0.023776
+ Sort throughput: 254507
+ Sort time (ms): 0.125733
+ Probes per second: 126119
+ Probe time (ms): 0.253728
+ Candidate List time (ms): 0.043629
+ Total throughput: 71609
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2069188
+ Hash time (ms): 0.015465
+ Sort throughput: 255589
+ Sort time (ms): 0.125201
+ Probes per second: 125760
+ Probe time (ms): 0.254451
+ Candidate List time (ms): 0.045558
+ Total throughput: 72615
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1999125
+ Hash time (ms): 0.016007
+ Sort throughput: 217168
+ Sort time (ms): 0.147351
+ Probes per second: 125954
+ Probe time (ms): 0.254059
+ Candidate List time (ms): 0.043551
+ Total throughput: 69419
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 8
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2069991
+ Hash time (ms): 0.015459
+ Sort throughput: 217220
+ Sort time (ms): 0.147316
+ Probes per second: 125999
+ Probe time (ms): 0.253969
+ Candidate List time (ms): 0.043599
+ Total throughput: 69513
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1723209
+ Hash time (ms): 0.01857
+ Sort throughput: 829552
+ Sort time (ms): 0.038575
+ Probes per second: 122522
+ Probe time (ms): 0.261176
+ Candidate List time (ms): 0.045111
+ Total throughput: 88049
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1695543
+ Hash time (ms): 0.018873
+ Sort throughput: 821481
+ Sort time (ms): 0.038954
+ Probes per second: 126165
+ Probe time (ms): 0.253636
+ Candidate List time (ms): 0.045515
+ Total throughput: 89641
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1931900
+ Hash time (ms): 0.016564
+ Sort throughput: 833832
+ Sort time (ms): 0.038377
+ Probes per second: 122060
+ Probe time (ms): 0.262166
+ Candidate List time (ms): 0.046512
+ Total throughput: 88004
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1869595
+ Hash time (ms): 0.017116
+ Sort throughput: 820639
+ Sort time (ms): 0.038994
+ Probes per second: 125739
+ Probe time (ms): 0.254495
+ Candidate List time (ms): 0.04598
+ Total throughput: 89740
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1799471
+ Hash time (ms): 0.017783
+ Sort throughput: 829316
+ Sort time (ms): 0.038586
+ Probes per second: 122292
+ Probe time (ms): 0.261668
+ Candidate List time (ms): 0.046367
+ Total throughput: 87814
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1725160
+ Hash time (ms): 0.018549
+ Sort throughput: 833963
+ Sort time (ms): 0.038371
+ Probes per second: 121558
+ Probe time (ms): 0.263248
+ Candidate List time (ms): 0.049568
+ Total throughput: 86548
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1815087
+ Hash time (ms): 0.01763
+ Sort throughput: 528349
+ Sort time (ms): 0.060566
+ Probes per second: 121690
+ Probe time (ms): 0.262963
+ Candidate List time (ms): 0.046101
+ Total throughput: 82631
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1710955
+ Hash time (ms): 0.018703
+ Sort throughput: 531579
+ Sort time (ms): 0.060198
+ Probes per second: 121051
+ Probe time (ms): 0.26435
+ Candidate List time (ms): 0.04631
+ Total throughput: 82143
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1777185
+ Hash time (ms): 0.018006
+ Sort throughput: 530319
+ Sort time (ms): 0.060341
+ Probes per second: 121966
+ Probe time (ms): 0.262368
+ Candidate List time (ms): 0.045715
+ Total throughput: 82809
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1719043
+ Hash time (ms): 0.018615
+ Sort throughput: 533662
+ Sort time (ms): 0.059963
+ Probes per second: 120772
+ Probe time (ms): 0.26496
+ Candidate List time (ms): 0.045291
+ Total throughput: 82298
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1840032
+ Hash time (ms): 0.017391
+ Sort throughput: 906412
+ Sort time (ms): 0.035304
+ Probes per second: 226084
+ Probe time (ms): 0.14154
+ Candidate List time (ms): 0.040286
+ Total throughput: 136448
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1804036
+ Hash time (ms): 0.017738
+ Sort throughput: 914102
+ Sort time (ms): 0.035007
+ Probes per second: 227119
+ Probe time (ms): 0.140895
+ Candidate List time (ms): 0.040697
+ Total throughput: 136555
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2002628
+ Hash time (ms): 0.015979
+ Sort throughput: 685166
+ Sort time (ms): 0.046704
+ Probes per second: 227259
+ Probe time (ms): 0.140808
+ Candidate List time (ms): 0.039704
+ Total throughput: 131581
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1721633
+ Hash time (ms): 0.018587
+ Sort throughput: 699010
+ Sort time (ms): 0.045779
+ Probes per second: 227034
+ Probe time (ms): 0.140948
+ Candidate List time (ms): 0.043017
+ Total throughput: 128860
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1873645
+ Hash time (ms): 0.017079
+ Sort throughput: 694308
+ Sort time (ms): 0.046089
+ Probes per second: 226566
+ Probe time (ms): 0.141239
+ Candidate List time (ms): 0.044144
+ Total throughput: 128746
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1845124
+ Hash time (ms): 0.017343
+ Sort throughput: 693932
+ Sort time (ms): 0.046114
+ Probes per second: 227532
+ Probe time (ms): 0.140639
+ Candidate List time (ms): 0.039402
+ Total throughput: 131417
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2005389
+ Hash time (ms): 0.015957
+ Sort throughput: 704970
+ Sort time (ms): 0.045392
+ Probes per second: 226092
+ Probe time (ms): 0.141535
+ Candidate List time (ms): 0.041672
+ Total throughput: 130849
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1867413
+ Hash time (ms): 0.017136
+ Sort throughput: 700203
+ Sort time (ms): 0.045701
+ Probes per second: 226860
+ Probe time (ms): 0.141056
+ Candidate List time (ms): 0.039056
+ Total throughput: 131714
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1833495
+ Hash time (ms): 0.017453
+ Sort throughput: 565800
+ Sort time (ms): 0.056557
+ Probes per second: 220318
+ Probe time (ms): 0.145244
+ Candidate List time (ms): 0.040044
+ Total throughput: 123410
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1696262
+ Hash time (ms): 0.018865
+ Sort throughput: 635715
+ Sort time (ms): 0.050337
+ Probes per second: 252758
+ Probe time (ms): 0.126603
+ Candidate List time (ms): 0.040151
+ Total throughput: 135618
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1807399
+ Hash time (ms): 0.017705
+ Sort throughput: 640384
+ Sort time (ms): 0.04997
+ Probes per second: 259849
+ Probe time (ms): 0.123148
+ Candidate List time (ms): 0.03976
+ Total throughput: 138778
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1954317
+ Hash time (ms): 0.016374
+ Sort throughput: 648968
+ Sort time (ms): 0.049309
+ Probes per second: 259489
+ Probe time (ms): 0.123319
+ Candidate List time (ms): 0.039241
+ Total throughput: 140201
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1960664
+ Hash time (ms): 0.016321
+ Sort throughput: 649350
+ Sort time (ms): 0.04928
+ Probes per second: 257906
+ Probe time (ms): 0.124076
+ Candidate List time (ms): 0.038822
+ Total throughput: 140044
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2001751
+ Hash time (ms): 0.015986
+ Sort throughput: 645252
+ Sort time (ms): 0.049593
+ Probes per second: 259138
+ Probe time (ms): 0.123486
+ Candidate List time (ms): 0.039326
+ Total throughput: 140110
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2011060
+ Hash time (ms): 0.015912
+ Sort throughput: 540367
+ Sort time (ms): 0.059219
+ Probes per second: 259264
+ Probe time (ms): 0.123426
+ Candidate List time (ms): 0.038745
+ Total throughput: 134849
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1918350
+ Hash time (ms): 0.016681
+ Sort throughput: 777548
+ Sort time (ms): 0.041155
+ Probes per second: 379304
+ Probe time (ms): 0.084365
+ Candidate List time (ms): 0.036749
+ Total throughput: 178820
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2145778
+ Hash time (ms): 0.014913
+ Sort throughput: 809307
+ Sort time (ms): 0.03954
+ Probes per second: 338305
+ Probe time (ms): 0.094589
+ Candidate List time (ms): 0.035434
+ Total throughput: 173464
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2152273
+ Hash time (ms): 0.014868
+ Sort throughput: 803051
+ Sort time (ms): 0.039848
+ Probes per second: 334109
+ Probe time (ms): 0.095777
+ Candidate List time (ms): 0.035998
+ Total throughput: 171590
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2075226
+ Hash time (ms): 0.01542
+ Sort throughput: 811194
+ Sort time (ms): 0.039448
+ Probes per second: 341428
+ Probe time (ms): 0.093724
+ Candidate List time (ms): 0.036405
+ Total throughput: 172975
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2095886
+ Hash time (ms): 0.015268
+ Sort throughput: 813235
+ Sort time (ms): 0.039349
+ Probes per second: 336251
+ Probe time (ms): 0.095167
+ Candidate List time (ms): 0.035454
+ Total throughput: 172750
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2021605
+ Hash time (ms): 0.015829
+ Sort throughput: 706651
+ Sort time (ms): 0.045284
+ Probes per second: 337431
+ Probe time (ms): 0.094834
+ Candidate List time (ms): 0.034632
+ Total throughput: 167909
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 16
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 2042640
+ Hash time (ms): 0.015666
+ Sort throughput: 702385
+ Sort time (ms): 0.045559
+ Probes per second: 334378
+ Probe time (ms): 0.0957
+ Candidate List time (ms): 0.036342
+ Total throughput: 165574
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1934235
+ Hash time (ms): 0.016544
+ Sort throughput: 2172732
+ Sort time (ms): 0.014728
+ Probes per second: 378913
+ Probe time (ms): 0.084452
+ Candidate List time (ms): 0.034983
+ Total throughput: 212332
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1815087
+ Hash time (ms): 0.01763
+ Sort throughput: 2361972
+ Sort time (ms): 0.013548
+ Probes per second: 419122
+ Probe time (ms): 0.07635
+ Candidate List time (ms): 0.033348
+ Total throughput: 227150
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1918005
+ Hash time (ms): 0.016684
+ Sort throughput: 2375120
+ Sort time (ms): 0.013473
+ Probes per second: 503588
+ Probe time (ms): 0.063544
+ Candidate List time (ms): 0.03488
+ Total throughput: 248870
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1800585
+ Hash time (ms): 0.017772
+ Sort throughput: 2344494
+ Sort time (ms): 0.013649
+ Probes per second: 500845
+ Probe time (ms): 0.063892
+ Candidate List time (ms): 0.035575
+ Total throughput: 244483
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1861330
+ Hash time (ms): 0.017192
+ Sort throughput: 2363891
+ Sort time (ms): 0.013537
+ Probes per second: 496262
+ Probe time (ms): 0.064482
+ Candidate List time (ms): 0.0379
+ Total throughput: 240400
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1873975
+ Hash time (ms): 0.017076
+ Sort throughput: 2202794
+ Sort time (ms): 0.014527
+ Probes per second: 504000
+ Probe time (ms): 0.063492
+ Candidate List time (ms): 0.0363
+ Total throughput: 243540
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1929221
+ Hash time (ms): 0.016587
+ Sort throughput: 1877053
+ Sort time (ms): 0.017048
+ Probes per second: 498356
+ Probe time (ms): 0.064211
+ Candidate List time (ms): 0.034758
+ Total throughput: 241320
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1954795
+ Hash time (ms): 0.01637
+ Sort throughput: 1855502
+ Sort time (ms): 0.017246
+ Probes per second: 496439
+ Probe time (ms): 0.064459
+ Candidate List time (ms): 0.051031
+ Total throughput: 214612
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1827109
+ Hash time (ms): 0.017514
+ Sort throughput: 1865127
+ Sort time (ms): 0.017157
+ Probes per second: 500531
+ Probe time (ms): 0.063932
+ Candidate List time (ms): 0.035253
+ Total throughput: 239062
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1751696
+ Hash time (ms): 0.018268
+ Sort throughput: 1959343
+ Sort time (ms): 0.016332
+ Probes per second: 505537
+ Probe time (ms): 0.063299
+ Candidate List time (ms): 0.034452
+ Total throughput: 241781
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1873865
+ Hash time (ms): 0.017077
+ Sort throughput: 1833705
+ Sort time (ms): 0.017451
+ Probes per second: 508162
+ Probe time (ms): 0.062972
+ Candidate List time (ms): 0.051369
+ Total throughput: 214954
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1863715
+ Hash time (ms): 0.01717
+ Sort throughput: 1840349
+ Sort time (ms): 0.017388
+ Probes per second: 413939
+ Probe time (ms): 0.077306
+ Candidate List time (ms): 0.03701
+ Total throughput: 214946
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1812209
+ Hash time (ms): 0.017658
+ Sort throughput: 1579934
+ Sort time (ms): 0.020254
+ Probes per second: 424048
+ Probe time (ms): 0.075463
+ Candidate List time (ms): 0.03595
+ Total throughput: 214297
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1774819
+ Hash time (ms): 0.01803
+ Sort throughput: 1566477
+ Sort time (ms): 0.020428
+ Probes per second: 501488
+ Probe time (ms): 0.06381
+ Candidate List time (ms): 0.051555
+ Total throughput: 208031
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1832550
+ Hash time (ms): 0.017462
+ Sort throughput: 1577209
+ Sort time (ms): 0.020289
+ Probes per second: 508025
+ Probe time (ms): 0.062989
+ Candidate List time (ms): 0.052018
+ Total throughput: 209481
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1830977
+ Hash time (ms): 0.017477
+ Sort throughput: 1511144
+ Sort time (ms): 0.021176
+ Probes per second: 508727
+ Probe time (ms): 0.062902
+ Candidate List time (ms): 0.056957
+ Total throughput: 201877
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1896183
+ Hash time (ms): 0.016876
+ Sort throughput: 1546341
+ Sort time (ms): 0.020694
+ Probes per second: 509359
+ Probe time (ms): 0.062824
+ Candidate List time (ms): 0.050888
+ Total throughput: 211525
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1938571
+ Hash time (ms): 0.016507
+ Sort throughput: 1525334
+ Sort time (ms): 0.020979
+ Probes per second: 504827
+ Probe time (ms): 0.063388
+ Candidate List time (ms): 0.056127
+ Total throughput: 203820
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1782134
+ Hash time (ms): 0.017956
+ Sort throughput: 1316818
+ Sort time (ms): 0.024301
+ Probes per second: 421241
+ Probe time (ms): 0.075966
+ Candidate List time (ms): 0.034074
+ Total throughput: 210115
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1870907
+ Hash time (ms): 0.017104
+ Sort throughput: 1327690
+ Sort time (ms): 0.024102
+ Probes per second: 508913
+ Probe time (ms): 0.062879
+ Candidate List time (ms): 0.050191
+ Total throughput: 207420
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1934235
+ Hash time (ms): 0.016544
+ Sort throughput: 1347198
+ Sort time (ms): 0.023753
+ Probes per second: 504334
+ Probe time (ms): 0.06345
+ Candidate List time (ms): 0.036168
+ Total throughput: 228710
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1798460
+ Hash time (ms): 0.017793
+ Sort throughput: 1319968
+ Sort time (ms): 0.024243
+ Probes per second: 409841
+ Probe time (ms): 0.078079
+ Candidate List time (ms): 0.035907
+ Total throughput: 205099
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1923654
+ Hash time (ms): 0.016635
+ Sort throughput: 1284624
+ Sort time (ms): 0.02491
+ Probes per second: 505657
+ Probe time (ms): 0.063284
+ Candidate List time (ms): 0.050572
+ Total throughput: 205918
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1908169
+ Hash time (ms): 0.01677
+ Sort throughput: 1311367
+ Sort time (ms): 0.024402
+ Probes per second: 508339
+ Probe time (ms): 0.06295
+ Candidate List time (ms): 0.035622
+ Total throughput: 228990
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1823569
+ Hash time (ms): 0.017548
+ Sort throughput: 1159462
+ Sort time (ms): 0.027599
+ Probes per second: 505689
+ Probe time (ms): 0.06328
+ Candidate List time (ms): 0.050846
+ Total throughput: 200912
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1797247
+ Hash time (ms): 0.017805
+ Sort throughput: 1160134
+ Sort time (ms): 0.027583
+ Probes per second: 416308
+ Probe time (ms): 0.076866
+ Candidate List time (ms): 0.035912
+ Total throughput: 202319
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1873097
+ Hash time (ms): 0.017084
+ Sort throughput: 1139114
+ Sort time (ms): 0.028092
+ Probes per second: 511361
+ Probe time (ms): 0.062578
+ Candidate List time (ms): 0.049103
+ Total throughput: 204007
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1803629
+ Hash time (ms): 0.017742
+ Sort throughput: 1146296
+ Sort time (ms): 0.027916
+ Probes per second: 511468
+ Probe time (ms): 0.062565
+ Candidate List time (ms): 0.050967
+ Total throughput: 201017
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1862956
+ Hash time (ms): 0.017177
+ Sort throughput: 1118255
+ Sort time (ms): 0.028616
+ Probes per second: 507759
+ Probe time (ms): 0.063022
+ Candidate List time (ms): 0.051537
+ Total throughput: 199560
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1919500
+ Hash time (ms): 0.016671
+ Sort throughput: 1150210
+ Sort time (ms): 0.027821
+ Probes per second: 507694
+ Probe time (ms): 0.06303
+ Candidate List time (ms): 0.050466
+ Total throughput: 202547
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1799876
+ Hash time (ms): 0.017779
+ Sort throughput: 1029336
+ Sort time (ms): 0.031088
+ Probes per second: 503405
+ Probe time (ms): 0.063567
+ Candidate List time (ms): 0.035632
+ Total throughput: 216119
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 32
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1792315
+ Hash time (ms): 0.017854
+ Sort throughput: 1021124
+ Sort time (ms): 0.031338
+ Probes per second: 510578
+ Probe time (ms): 0.062674
+ Candidate List time (ms): 0.051341
+ Total throughput: 196070
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1781737
+ Hash time (ms): 0.01796
+ Sort throughput: 2457191
+ Sort time (ms): 0.013023
+ Probes per second: 507163
+ Probe time (ms): 0.063096
+ Candidate List time (ms): 0.050859
+ Total throughput: 220784
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1758145
+ Hash time (ms): 0.018201
+ Sort throughput: 2438838
+ Sort time (ms): 0.013121
+ Probes per second: 483317
+ Probe time (ms): 0.066209
+ Candidate List time (ms): 0.054452
+ Total throughput: 210549
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1727955
+ Hash time (ms): 0.018519
+ Sort throughput: 2325412
+ Sort time (ms): 0.013761
+ Probes per second: 506553
+ Probe time (ms): 0.063172
+ Candidate List time (ms): 0.050221
+ Total throughput: 219670
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1855717
+ Hash time (ms): 0.017244
+ Sort throughput: 2421124
+ Sort time (ms): 0.013217
+ Probes per second: 507509
+ Probe time (ms): 0.063053
+ Candidate List time (ms): 0.051316
+ Total throughput: 220948
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1716277
+ Hash time (ms): 0.018645
+ Sort throughput: 2400600
+ Sort time (ms): 0.01333
+ Probes per second: 505170
+ Probe time (ms): 0.063345
+ Candidate List time (ms): 0.035977
+ Total throughput: 243722
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1789108
+ Hash time (ms): 0.017886
+ Sort throughput: 2346557
+ Sort time (ms): 0.013637
+ Probes per second: 503905
+ Probe time (ms): 0.063504
+ Candidate List time (ms): 0.051437
+ Total throughput: 218483
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1708306
+ Hash time (ms): 0.018732
+ Sort throughput: 1907600
+ Sort time (ms): 0.016775
+ Probes per second: 500986
+ Probe time (ms): 0.063874
+ Candidate List time (ms): 0.051202
+ Total throughput: 212507
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1833180
+ Hash time (ms): 0.017456
+ Sort throughput: 1888685
+ Sort time (ms): 0.016943
+ Probes per second: 506641
+ Probe time (ms): 0.063161
+ Candidate List time (ms): 0.051134
+ Total throughput: 215207
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1809443
+ Hash time (ms): 0.017685
+ Sort throughput: 1894275
+ Sort time (ms): 0.016893
+ Probes per second: 508897
+ Probe time (ms): 0.062881
+ Candidate List time (ms): 0.052574
+ Total throughput: 213286
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1899109
+ Hash time (ms): 0.01685
+ Sort throughput: 1915823
+ Sort time (ms): 0.016703
+ Probes per second: 505657
+ Probe time (ms): 0.063284
+ Candidate List time (ms): 0.045904
+ Total throughput: 224182
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1749398
+ Hash time (ms): 0.018292
+ Sort throughput: 1926898
+ Sort time (ms): 0.016607
+ Probes per second: 478826
+ Probe time (ms): 0.06683
+ Candidate List time (ms): 0.035606
+ Total throughput: 233006
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1433948
+ Hash time (ms): 0.022316
+ Sort throughput: 1918350
+ Sort time (ms): 0.016681
+ Probes per second: 506457
+ Probe time (ms): 0.063184
+ Candidate List time (ms): 0.05564
+ Total throughput: 202761
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1673902
+ Hash time (ms): 0.019117
+ Sort throughput: 1503476
+ Sort time (ms): 0.021284
+ Probes per second: 509708
+ Probe time (ms): 0.062781
+ Candidate List time (ms): 0.035695
+ Total throughput: 230419
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1906804
+ Hash time (ms): 0.016782
+ Sort throughput: 1500797
+ Sort time (ms): 0.021322
+ Probes per second: 511337
+ Probe time (ms): 0.062581
+ Candidate List time (ms): 0.051504
+ Total throughput: 210264
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1745867
+ Hash time (ms): 0.018329
+ Sort throughput: 1566707
+ Sort time (ms): 0.020425
+ Probes per second: 507139
+ Probe time (ms): 0.063099
+ Candidate List time (ms): 0.051038
+ Total throughput: 209299
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1845550
+ Hash time (ms): 0.017339
+ Sort throughput: 1595850
+ Sort time (ms): 0.020052
+ Probes per second: 507139
+ Probe time (ms): 0.063099
+ Candidate List time (ms): 0.050526
+ Total throughput: 211898
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1811594
+ Hash time (ms): 0.017664
+ Sort throughput: 1553171
+ Sort time (ms): 0.020603
+ Probes per second: 505170
+ Probe time (ms): 0.063345
+ Candidate List time (ms): 0.052568
+ Total throughput: 207549
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1785813
+ Hash time (ms): 0.017919
+ Sort throughput: 1564409
+ Sort time (ms): 0.020455
+ Probes per second: 471246
+ Probe time (ms): 0.067905
+ Candidate List time (ms): 0.035989
+ Total throughput: 224927
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1764057
+ Hash time (ms): 0.01814
+ Sort throughput: 1310079
+ Sort time (ms): 0.024426
+ Probes per second: 505321
+ Probe time (ms): 0.063326
+ Candidate List time (ms): 0.053067
+ Total throughput: 201309
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1910561
+ Hash time (ms): 0.016749
+ Sort throughput: 1316709
+ Sort time (ms): 0.024303
+ Probes per second: 508251
+ Probe time (ms): 0.062961
+ Candidate List time (ms): 0.051674
+ Total throughput: 205540
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1798156
+ Hash time (ms): 0.017796
+ Sort throughput: 1335447
+ Sort time (ms): 0.023962
+ Probes per second: 502496
+ Probe time (ms): 0.063682
+ Candidate List time (ms): 0.035826
+ Total throughput: 226523
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1807705
+ Hash time (ms): 0.017702
+ Sort throughput: 1334111
+ Sort time (ms): 0.023986
+ Probes per second: 502212
+ Probe time (ms): 0.063718
+ Candidate List time (ms): 0.051119
+ Total throughput: 204440
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1835704
+ Hash time (ms): 0.017432
+ Sort throughput: 1338856
+ Sort time (ms): 0.023901
+ Probes per second: 500907
+ Probe time (ms): 0.063884
+ Candidate List time (ms): 0.051182
+ Total throughput: 204604
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1769226
+ Hash time (ms): 0.018087
+ Sort throughput: 1318228
+ Sort time (ms): 0.024275
+ Probes per second: 506088
+ Probe time (ms): 0.06323
+ Candidate List time (ms): 0.036398
+ Total throughput: 225367
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1818181
+ Hash time (ms): 0.0176
+ Sort throughput: 1142122
+ Sort time (ms): 0.028018
+ Probes per second: 510586
+ Probe time (ms): 0.062673
+ Candidate List time (ms): 0.036488
+ Total throughput: 221026
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1896296
+ Hash time (ms): 0.016875
+ Sort throughput: 1159210
+ Sort time (ms): 0.027605
+ Probes per second: 509513
+ Probe time (ms): 0.062805
+ Candidate List time (ms): 0.051336
+ Total throughput: 201738
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1899899
+ Hash time (ms): 0.016843
+ Sort throughput: 1142653
+ Sort time (ms): 0.028005
+ Probes per second: 505872
+ Probe time (ms): 0.063257
+ Candidate List time (ms): 0.051658
+ Total throughput: 200296
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1823361
+ Hash time (ms): 0.01755
+ Sort throughput: 1157072
+ Sort time (ms): 0.027656
+ Probes per second: 507404
+ Probe time (ms): 0.063066
+ Candidate List time (ms): 0.050415
+ Total throughput: 201654
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1828571
+ Hash time (ms): 0.0175
+ Sort throughput: 1130821
+ Sort time (ms): 0.028298
+ Probes per second: 508380
+ Probe time (ms): 0.062945
+ Candidate List time (ms): 0.053462
+ Total throughput: 197281
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1447570
+ Hash time (ms): 0.022106
+ Sort throughput: 1149384
+ Sort time (ms): 0.027841
+ Probes per second: 502583
+ Probe time (ms): 0.063671
+ Candidate List time (ms): 0.051593
+ Total throughput: 193691
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1735734
+ Hash time (ms): 0.018436
+ Sort throughput: 1026134
+ Sort time (ms): 0.031185
+ Probes per second: 508873
+ Probe time (ms): 0.062884
+ Candidate List time (ms): 0.051617
+ Total throughput: 194976
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 64
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1840243
+ Hash time (ms): 0.017389
+ Sort throughput: 1008509
+ Sort time (ms): 0.03173
+ Probes per second: 508089
+ Probe time (ms): 0.062981
+ Candidate List time (ms): 0.052
+ Total throughput: 195003
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1729916
+ Hash time (ms): 0.018498
+ Sort throughput: 2429211
+ Sort time (ms): 0.013173
+ Probes per second: 510945
+ Probe time (ms): 0.062629
+ Candidate List time (ms): 0.05316
+ Total throughput: 217008
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1821908
+ Hash time (ms): 0.017564
+ Sort throughput: 2351903
+ Sort time (ms): 0.013606
+ Probes per second: 505896
+ Probe time (ms): 0.063254
+ Candidate List time (ms): 0.036259
+ Total throughput: 244867
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1733853
+ Hash time (ms): 0.018456
+ Sort throughput: 2336789
+ Sort time (ms): 0.013694
+ Probes per second: 507396
+ Probe time (ms): 0.063067
+ Candidate List time (ms): 0.053794
+ Total throughput: 214749
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1771185
+ Hash time (ms): 0.018067
+ Sort throughput: 2333552
+ Sort time (ms): 0.013713
+ Probes per second: 417672
+ Probe time (ms): 0.076615
+ Candidate List time (ms): 0.040111
+ Total throughput: 215479
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1711138
+ Hash time (ms): 0.018701
+ Sort throughput: 2299841
+ Sort time (ms): 0.013914
+ Probes per second: 507083
+ Probe time (ms): 0.063106
+ Candidate List time (ms): 0.052676
+ Total throughput: 215637
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1718859
+ Hash time (ms): 0.018617
+ Sort throughput: 2313643
+ Sort time (ms): 0.013831
+ Probes per second: 423235
+ Probe time (ms): 0.075608
+ Candidate List time (ms): 0.03415
+ Total throughput: 225025
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1835915
+ Hash time (ms): 0.01743
+ Sort throughput: 1852495
+ Sort time (ms): 0.017274
+ Probes per second: 507284
+ Probe time (ms): 0.063081
+ Candidate List time (ms): 0.051372
+ Total throughput: 214539
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1741780
+ Hash time (ms): 0.018372
+ Sort throughput: 1925159
+ Sort time (ms): 0.016622
+ Probes per second: 500171
+ Probe time (ms): 0.063978
+ Candidate List time (ms): 0.052337
+ Total throughput: 211487
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1735075
+ Hash time (ms): 0.018443
+ Sort throughput: 1891700
+ Sort time (ms): 0.016916
+ Probes per second: 421968
+ Probe time (ms): 0.075835
+ Candidate List time (ms): 0.036085
+ Total throughput: 217274
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1726836
+ Hash time (ms): 0.018531
+ Sort throughput: 1834441
+ Sort time (ms): 0.017444
+ Probes per second: 482145
+ Probe time (ms): 0.06637
+ Candidate List time (ms): 0.051373
+ Total throughput: 208173
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1888574
+ Hash time (ms): 0.016944
+ Sort throughput: 1835704
+ Sort time (ms): 0.017432
+ Probes per second: 506609
+ Probe time (ms): 0.063165
+ Candidate List time (ms): 0.051273
+ Total throughput: 215033
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1710498
+ Hash time (ms): 0.018708
+ Sort throughput: 1919500
+ Sort time (ms): 0.016671
+ Probes per second: 504660
+ Probe time (ms): 0.063409
+ Candidate List time (ms): 0.051561
+ Total throughput: 212838
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1760854
+ Hash time (ms): 0.018173
+ Sort throughput: 1498478
+ Sort time (ms): 0.021355
+ Probes per second: 507388
+ Probe time (ms): 0.063068
+ Candidate List time (ms): 0.052546
+ Total throughput: 206262
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1751121
+ Hash time (ms): 0.018274
+ Sort throughput: 1511787
+ Sort time (ms): 0.021167
+ Probes per second: 508978
+ Probe time (ms): 0.062871
+ Candidate List time (ms): 0.051078
+ Total throughput: 208618
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1805665
+ Hash time (ms): 0.017722
+ Sort throughput: 1561966
+ Sort time (ms): 0.020487
+ Probes per second: 505361
+ Probe time (ms): 0.063321
+ Candidate List time (ms): 0.05089
+ Total throughput: 209946
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1715541
+ Hash time (ms): 0.018653
+ Sort throughput: 1577053
+ Sort time (ms): 0.020291
+ Probes per second: 511656
+ Probe time (ms): 0.062542
+ Candidate List time (ms): 0.053889
+ Total throughput: 205953
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1842044
+ Hash time (ms): 0.017372
+ Sort throughput: 1516443
+ Sort time (ms): 0.021102
+ Probes per second: 387413
+ Probe time (ms): 0.082599
+ Candidate List time (ms): 0.040445
+ Total throughput: 198120
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1717844
+ Hash time (ms): 0.018628
+ Sort throughput: 1539275
+ Sort time (ms): 0.020789
+ Probes per second: 506184
+ Probe time (ms): 0.063218
+ Candidate List time (ms): 0.052412
+ Total throughput: 206389
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1707668
+ Hash time (ms): 0.018739
+ Sort throughput: 1372271
+ Sort time (ms): 0.023319
+ Probes per second: 431942
+ Probe time (ms): 0.074084
+ Candidate List time (ms): 0.035633
+ Total throughput: 210838
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1714990
+ Hash time (ms): 0.018659
+ Sort throughput: 1331835
+ Sort time (ms): 0.024027
+ Probes per second: 512623
+ Probe time (ms): 0.062424
+ Candidate List time (ms): 0.052878
+ Total throughput: 202547
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1769128
+ Hash time (ms): 0.018088
+ Sort throughput: 1317848
+ Sort time (ms): 0.024282
+ Probes per second: 421019
+ Probe time (ms): 0.076006
+ Candidate List time (ms): 0.036335
+ Total throughput: 206837
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1701403
+ Hash time (ms): 0.018808
+ Sort throughput: 1326150
+ Sort time (ms): 0.02413
+ Probes per second: 507710
+ Probe time (ms): 0.063028
+ Candidate List time (ms): 0.052705
+ Total throughput: 201675
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1713337
+ Hash time (ms): 0.018677
+ Sort throughput: 1288919
+ Sort time (ms): 0.024827
+ Probes per second: 500758
+ Probe time (ms): 0.063903
+ Candidate List time (ms): 0.042078
+ Total throughput: 214068
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1802106
+ Hash time (ms): 0.017757
+ Sort throughput: 1342281
+ Sort time (ms): 0.02384
+ Probes per second: 413880
+ Probe time (ms): 0.077317
+ Candidate List time (ms): 0.034858
+ Total throughput: 208100
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1766004
+ Hash time (ms): 0.01812
+ Sort throughput: 1144696
+ Sort time (ms): 0.027955
+ Probes per second: 505170
+ Probe time (ms): 0.063345
+ Candidate List time (ms): 0.05136
+ Total throughput: 199029
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1731508
+ Hash time (ms): 0.018481
+ Sort throughput: 1157491
+ Sort time (ms): 0.027646
+ Probes per second: 509019
+ Probe time (ms): 0.062866
+ Candidate List time (ms): 0.052204
+ Total throughput: 198514
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1714255
+ Hash time (ms): 0.018667
+ Sort throughput: 1148352
+ Sort time (ms): 0.027866
+ Probes per second: 507292
+ Probe time (ms): 0.06308
+ Candidate List time (ms): 0.052347
+ Total throughput: 197579
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1779062
+ Hash time (ms): 0.017987
+ Sort throughput: 1159840
+ Sort time (ms): 0.02759
+ Probes per second: 512491
+ Probe time (ms): 0.06244
+ Candidate List time (ms): 0.052265
+ Total throughput: 199648
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1799066
+ Hash time (ms): 0.017787
+ Sort throughput: 1134027
+ Sort time (ms): 0.028218
+ Probes per second: 512295
+ Probe time (ms): 0.062464
+ Candidate List time (ms): 0.052625
+ Total throughput: 198641
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1783226
+ Hash time (ms): 0.017945
+ Sort throughput: 1148847
+ Sort time (ms): 0.027854
+ Probes per second: 491672
+ Probe time (ms): 0.065084
+ Candidate List time (ms): 0.051204
+ Total throughput: 197424
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1731508
+ Hash time (ms): 0.018481
+ Sort throughput: 1021059
+ Sort time (ms): 0.03134
+ Probes per second: 503200
+ Probe time (ms): 0.063593
+ Candidate List time (ms): 0.036078
+ Total throughput: 214058
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 128
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1717567
+ Hash time (ms): 0.018631
+ Sort throughput: 1020668
+ Sort time (ms): 0.031352
+ Probes per second: 493301
+ Probe time (ms): 0.064869
+ Candidate List time (ms): 0.050792
+ Total throughput: 193185
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1691421
+ Hash time (ms): 0.018919
+ Sort throughput: 2373007
+ Sort time (ms): 0.013485
+ Probes per second: 501882
+ Probe time (ms): 0.06376
+ Candidate List time (ms): 0.057403
+ Total throughput: 208378
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1765225
+ Hash time (ms): 0.018128
+ Sort throughput: 2243252
+ Sort time (ms): 0.014265
+ Probes per second: 506994
+ Probe time (ms): 0.063117
+ Candidate List time (ms): 0.052117
+ Total throughput: 216762
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1798257
+ Hash time (ms): 0.017795
+ Sort throughput: 2358490
+ Sort time (ms): 0.013568
+ Probes per second: 507863
+ Probe time (ms): 0.063009
+ Candidate List time (ms): 0.052408
+ Total throughput: 218013
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1766491
+ Hash time (ms): 0.018115
+ Sort throughput: 1758724
+ Sort time (ms): 0.018195
+ Probes per second: 507252
+ Probe time (ms): 0.063085
+ Candidate List time (ms): 0.051974
+ Total throughput: 211403
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1648719
+ Hash time (ms): 0.019409
+ Sort throughput: 2435497
+ Sort time (ms): 0.013139
+ Probes per second: 500570
+ Probe time (ms): 0.063927
+ Candidate List time (ms): 0.035744
+ Total throughput: 242022
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1743584
+ Hash time (ms): 0.018353
+ Sort throughput: 2344837
+ Sort time (ms): 0.013647
+ Probes per second: 420875
+ Probe time (ms): 0.076032
+ Candidate List time (ms): 0.036862
+ Total throughput: 220851
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1708124
+ Hash time (ms): 0.018734
+ Sort throughput: 1934820
+ Sort time (ms): 0.016539
+ Probes per second: 503643
+ Probe time (ms): 0.063537
+ Candidate List time (ms): 0.053488
+ Total throughput: 210114
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1808420
+ Hash time (ms): 0.017695
+ Sort throughput: 1853138
+ Sort time (ms): 0.017268
+ Probes per second: 504915
+ Probe time (ms): 0.063377
+ Candidate List time (ms): 0.057974
+ Total throughput: 204716
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1687763
+ Hash time (ms): 0.01896
+ Sort throughput: 1866868
+ Sort time (ms): 0.017141
+ Probes per second: 422765
+ Probe time (ms): 0.075692
+ Candidate List time (ms): 0.036416
+ Total throughput: 215911
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1708671
+ Hash time (ms): 0.018728
+ Sort throughput: 1842893
+ Sort time (ms): 0.017364
+ Probes per second: 503184
+ Probe time (ms): 0.063595
+ Candidate List time (ms): 0.053575
+ Total throughput: 208792
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1734135
+ Hash time (ms): 0.018453
+ Sort throughput: 1836863
+ Sort time (ms): 0.017421
+ Probes per second: 500109
+ Probe time (ms): 0.063986
+ Candidate List time (ms): 0.03666
+ Total throughput: 234397
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1758145
+ Hash time (ms): 0.018201
+ Sort throughput: 1883239
+ Sort time (ms): 0.016992
+ Probes per second: 502008
+ Probe time (ms): 0.063744
+ Candidate List time (ms): 0.037057
+ Total throughput: 235304
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1682970
+ Hash time (ms): 0.019014
+ Sort throughput: 1556117
+ Sort time (ms): 0.020564
+ Probes per second: 507155
+ Probe time (ms): 0.063097
+ Candidate List time (ms): 0.05277
+ Total throughput: 205860
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1727302
+ Hash time (ms): 0.018526
+ Sort throughput: 1540461
+ Sort time (ms): 0.020773
+ Probes per second: 502110
+ Probe time (ms): 0.063731
+ Candidate List time (ms): 0.052891
+ Total throughput: 205232
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1701856
+ Hash time (ms): 0.018803
+ Sort throughput: 1541648
+ Sort time (ms): 0.020757
+ Probes per second: 501049
+ Probe time (ms): 0.063866
+ Candidate List time (ms): 0.052435
+ Total throughput: 205311
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1775804
+ Hash time (ms): 0.01802
+ Sort throughput: 1590615
+ Sort time (ms): 0.020118
+ Probes per second: 506994
+ Probe time (ms): 0.063117
+ Candidate List time (ms): 0.052566
+ Total throughput: 208034
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1785614
+ Hash time (ms): 0.017921
+ Sort throughput: 1524317
+ Sort time (ms): 0.020993
+ Probes per second: 504270
+ Probe time (ms): 0.063458
+ Candidate List time (ms): 0.052334
+ Total throughput: 206843
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1721818
+ Hash time (ms): 0.018585
+ Sort throughput: 1543135
+ Sort time (ms): 0.020737
+ Probes per second: 498163
+ Probe time (ms): 0.064236
+ Candidate List time (ms): 0.056364
+ Total throughput: 200097
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1629908
+ Hash time (ms): 0.019633
+ Sort throughput: 1313305
+ Sort time (ms): 0.024366
+ Probes per second: 505106
+ Probe time (ms): 0.063353
+ Candidate List time (ms): 0.052069
+ Total throughput: 200726
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1746438
+ Hash time (ms): 0.018323
+ Sort throughput: 1307563
+ Sort time (ms): 0.024473
+ Probes per second: 503968
+ Probe time (ms): 0.063496
+ Candidate List time (ms): 0.053227
+ Total throughput: 200603
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1750451
+ Hash time (ms): 0.018281
+ Sort throughput: 1334222
+ Sort time (ms): 0.023984
+ Probes per second: 504206
+ Probe time (ms): 0.063466
+ Candidate List time (ms): 0.037057
+ Total throughput: 224108
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1779953
+ Hash time (ms): 0.017978
+ Sort throughput: 1323571
+ Sort time (ms): 0.024177
+ Probes per second: 504079
+ Probe time (ms): 0.063482
+ Candidate List time (ms): 0.053375
+ Total throughput: 201242
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1754867
+ Hash time (ms): 0.018235
+ Sort throughput: 1324996
+ Sort time (ms): 0.024151
+ Probes per second: 507404
+ Probe time (ms): 0.063066
+ Candidate List time (ms): 0.052898
+ Total throughput: 202083
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1749876
+ Hash time (ms): 0.018287
+ Sort throughput: 1318282
+ Sort time (ms): 0.024274
+ Probes per second: 418054
+ Probe time (ms): 0.076545
+ Candidate List time (ms): 0.036759
+ Total throughput: 205305
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1718582
+ Hash time (ms): 0.01862
+ Sort throughput: 1135154
+ Sort time (ms): 0.02819
+ Probes per second: 505154
+ Probe time (ms): 0.063347
+ Candidate List time (ms): 0.051524
+ Total throughput: 197920
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1697252
+ Hash time (ms): 0.018854
+ Sort throughput: 1127753
+ Sort time (ms): 0.028375
+ Probes per second: 498108
+ Probe time (ms): 0.064243
+ Candidate List time (ms): 0.069195
+ Total throughput: 177121
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1790810
+ Hash time (ms): 0.017869
+ Sort throughput: 1148930
+ Sort time (ms): 0.027852
+ Probes per second: 504238
+ Probe time (ms): 0.063462
+ Candidate List time (ms): 0.053077
+ Total throughput: 197214
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1758048
+ Hash time (ms): 0.018202
+ Sort throughput: 1136444
+ Sort time (ms): 0.028158
+ Probes per second: 499134
+ Probe time (ms): 0.064111
+ Candidate List time (ms): 0.053107
+ Total throughput: 195625
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1747965
+ Hash time (ms): 0.018307
+ Sort throughput: 1162157
+ Sort time (ms): 0.027535
+ Probes per second: 507759
+ Probe time (ms): 0.063022
+ Candidate List time (ms): 0.052208
+ Total throughput: 198668
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1759208
+ Hash time (ms): 0.01819
+ Sort throughput: 1127276
+ Sort time (ms): 0.028387
+ Probes per second: 438092
+ Probe time (ms): 0.073044
+ Candidate List time (ms): 0.037695
+ Total throughput: 203412
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1654174
+ Hash time (ms): 0.019345
+ Sort throughput: 1004520
+ Sort time (ms): 0.031856
+ Probes per second: 495409
+ Probe time (ms): 0.064593
+ Candidate List time (ms): 0.052306
+ Total throughput: 190362
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 256
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1713428
+ Hash time (ms): 0.018676
+ Sort throughput: 1023181
+ Sort time (ms): 0.031275
+ Probes per second: 502417
+ Probe time (ms): 0.063692
+ Candidate List time (ms): 0.053206
+ Total throughput: 191790
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 1 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1718859
+ Hash time (ms): 0.018617
+ Sort throughput: 2387703
+ Sort time (ms): 0.013402
+ Probes per second: 505074
+ Probe time (ms): 0.063357
+ Candidate List time (ms): 0.053127
+ Total throughput: 215483
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 2 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1726742
+ Hash time (ms): 0.018532
+ Sort throughput: 2418745
+ Sort time (ms): 0.01323
+ Probes per second: 496301
+ Probe time (ms): 0.064477
+ Candidate List time (ms): 0.036629
+ Total throughput: 240840
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 3 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1700409
+ Hash time (ms): 0.018819
+ Sort throughput: 2410546
+ Sort time (ms): 0.013275
+ Probes per second: 510147
+ Probe time (ms): 0.062727
+ Candidate List time (ms): 0.051297
+ Total throughput: 219001
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 4 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1704848
+ Hash time (ms): 0.01877
+ Sort throughput: 2394671
+ Sort time (ms): 0.013363
+ Probes per second: 504191
+ Probe time (ms): 0.063468
+ Candidate List time (ms): 0.052926
+ Total throughput: 215449
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 5 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1707759
+ Hash time (ms): 0.018738
+ Sort throughput: 2304977
+ Sort time (ms): 0.013883
+ Probes per second: 505696
+ Probe time (ms): 0.063279
+ Candidate List time (ms): 0.052874
+ Total throughput: 215091
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 6 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1788808
+ Hash time (ms): 0.017889
+ Sort throughput: 2357795
+ Sort time (ms): 0.013572
+ Probes per second: 510497
+ Probe time (ms): 0.062684
+ Candidate List time (ms): 0.050816
+ Total throughput: 220749
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 7 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1405049
+ Hash time (ms): 0.022775
+ Sort throughput: 1930152
+ Sort time (ms): 0.016579
+ Probes per second: 497984
+ Probe time (ms): 0.064259
+ Candidate List time (ms): 0.053232
+ Total throughput: 204023
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 8 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1763279
+ Hash time (ms): 0.018148
+ Sort throughput: 1871016
+ Sort time (ms): 0.017103
+ Probes per second: 497404
+ Probe time (ms): 0.064334
+ Candidate List time (ms): 0.053575
+ Total throughput: 208931
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 9 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1744724
+ Hash time (ms): 0.018341
+ Sort throughput: 1910904
+ Sort time (ms): 0.016746
+ Probes per second: 505289
+ Probe time (ms): 0.06333
+ Candidate List time (ms): 0.052292
+ Total throughput: 212329
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 10 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1708124
+ Hash time (ms): 0.018734
+ Sort throughput: 1916511
+ Sort time (ms): 0.016697
+ Probes per second: 506473
+ Probe time (ms): 0.063182
+ Candidate List time (ms): 0.053301
+ Total throughput: 210645
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 11 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1755637
+ Hash time (ms): 0.018227
+ Sort throughput: 1893043
+ Sort time (ms): 0.016904
+ Probes per second: 499804
+ Probe time (ms): 0.064025
+ Candidate List time (ms): 0.051234
+ Total throughput: 212780
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 12 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1745867
+ Hash time (ms): 0.018329
+ Sort throughput: 1894387
+ Sort time (ms): 0.016892
+ Probes per second: 501811
+ Probe time (ms): 0.063769
+ Candidate List time (ms): 0.051176
+ Total throughput: 213097
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 13 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1781538
+ Hash time (ms): 0.017962
+ Sort throughput: 1597284
+ Sort time (ms): 0.020034
+ Probes per second: 500265
+ Probe time (ms): 0.063966
+ Candidate List time (ms): 0.056339
+ Total throughput: 202146
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 14 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1736205
+ Hash time (ms): 0.018431
+ Sort throughput: 1570706
+ Sort time (ms): 0.020373
+ Probes per second: 503310
+ Probe time (ms): 0.063579
+ Candidate List time (ms): 0.051816
+ Total throughput: 207524
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 15 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1752176
+ Hash time (ms): 0.018263
+ Sort throughput: 1572713
+ Sort time (ms): 0.020347
+ Probes per second: 508444
+ Probe time (ms): 0.062937
+ Candidate List time (ms): 0.052404
+ Total throughput: 207858
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 16 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1724974
+ Hash time (ms): 0.018551
+ Sort throughput: 1543805
+ Sort time (ms): 0.020728
+ Probes per second: 508243
+ Probe time (ms): 0.062962
+ Candidate List time (ms): 0.053217
+ Total throughput: 205843
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 17 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1742729
+ Hash time (ms): 0.018362
+ Sort throughput: 1544625
+ Sort time (ms): 0.020717
+ Probes per second: 503944
+ Probe time (ms): 0.063499
+ Candidate List time (ms): 0.051265
+ Total throughput: 208004
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 18 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1644567
+ Hash time (ms): 0.019458
+ Sort throughput: 1535434
+ Sort time (ms): 0.020841
+ Probes per second: 503477
+ Probe time (ms): 0.063558
+ Candidate List time (ms): 0.052785
+ Total throughput: 204287
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 19 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1775804
+ Hash time (ms): 0.01802
+ Sort throughput: 1329124
+ Sort time (ms): 0.024076
+ Probes per second: 506273
+ Probe time (ms): 0.063207
+ Candidate List time (ms): 0.053263
+ Total throughput: 201808
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 20 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1697162
+ Hash time (ms): 0.018855
+ Sort throughput: 1319261
+ Sort time (ms): 0.024256
+ Probes per second: 496393
+ Probe time (ms): 0.064465
+ Candidate List time (ms): 0.03721
+ Total throughput: 221015
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 21 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1770988
+ Hash time (ms): 0.018069
+ Sort throughput: 1339136
+ Sort time (ms): 0.023896
+ Probes per second: 501834
+ Probe time (ms): 0.063766
+ Candidate List time (ms): 0.053369
+ Total throughput: 201131
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 22 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1774130
+ Hash time (ms): 0.018037
+ Sort throughput: 1311744
+ Sort time (ms): 0.024395
+ Probes per second: 506377
+ Probe time (ms): 0.063194
+ Candidate List time (ms): 0.052229
+ Total throughput: 202717
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 23 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1726184
+ Hash time (ms): 0.018538
+ Sort throughput: 1307616
+ Sort time (ms): 0.024472
+ Probes per second: 421268
+ Probe time (ms): 0.075961
+ Candidate List time (ms): 0.036664
+ Total throughput: 205609
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 24 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1717198
+ Hash time (ms): 0.018635
+ Sort throughput: 1367989
+ Sort time (ms): 0.023392
+ Probes per second: 510448
+ Probe time (ms): 0.06269
+ Candidate List time (ms): 0.052332
+ Total throughput: 203758
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 25 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1423424
+ Hash time (ms): 0.022481
+ Sort throughput: 1160303
+ Sort time (ms): 0.027579
+ Probes per second: 501198
+ Probe time (ms): 0.063847
+ Candidate List time (ms): 0.053056
+ Total throughput: 191659
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 26 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1731320
+ Hash time (ms): 0.018483
+ Sort throughput: 1162663
+ Sort time (ms): 0.027523
+ Probes per second: 500829
+ Probe time (ms): 0.063894
+ Candidate List time (ms): 0.056042
+ Total throughput: 192838
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 27 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1704394
+ Hash time (ms): 0.018775
+ Sort throughput: 1149755
+ Sort time (ms): 0.027832
+ Probes per second: 503548
+ Probe time (ms): 0.063549
+ Candidate List time (ms): 0.052735
+ Total throughput: 196450
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 28 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1749207
+ Hash time (ms): 0.018294
+ Sort throughput: 1160934
+ Sort time (ms): 0.027564
+ Probes per second: 509878
+ Probe time (ms): 0.06276
+ Candidate List time (ms): 0.052131
+ Total throughput: 199068
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 29 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1745010
+ Hash time (ms): 0.018338
+ Sort throughput: 1147035
+ Sort time (ms): 0.027898
+ Probes per second: 507404
+ Probe time (ms): 0.063066
+ Candidate List time (ms): 0.052496
+ Total throughput: 197777
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 30 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1734511
+ Hash time (ms): 0.018449
+ Sort throughput: 1150251
+ Sort time (ms): 0.02782
+ Probes per second: 503239
+ Probe time (ms): 0.063588
+ Candidate List time (ms): 0.053135
+ Total throughput: 196328
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 31 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1826692
+ Hash time (ms): 0.017518
+ Sort throughput: 1024098
+ Sort time (ms): 0.031247
+ Probes per second: 418032
+ Probe time (ms): 0.076549
+ Candidate List time (ms): 0.058392
+ Total throughput: 174191
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
+to_insert.size(): 0 K-keys
+to_lookup.size(): 0 K-keys
+bits to sort: 32 bits
+Clustering bench
+hash1
+sort
+probe1
+=============================== 
+ Results: 
+ Word count: 32
+ Block size: 128
+ Zone count: 1
+ k: 2
+ Bloom filter size(MiB): 512
+ Lookup size: 32
+ Blocks: 0
+ CUDA Block size: 0
+ Hash throughput: 1723023
+ Hash time (ms): 0.018572
+ Sort throughput: 895205
+ Sort time (ms): 0.035746
+ Probes per second: 419644
+ Probe time (ms): 0.076255
+ Candidate List time (ms): 0.036812
+ Total throughput: 191176
+=============================== 
+
+possible matches found 0 - matches found 0 total 32
