@@ -43,6 +43,13 @@ framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime"
 
 result_path = "results"
 
+max_sel = 70
+min_sel = 1
+
+def df_filter_sel(df):
+    df = df[df['Selectivity'] <= max_sel]
+    return df[df['Selectivity'] >= min_sel]
+
 def plot_sel():
     cpu = pd.read_csv("{}/selectivity/results-selectivity_cpu.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
@@ -50,6 +57,10 @@ def plot_sel():
         sep='|', names=framework_columns, header=None, skiprows=1)
     gpukeys = pd.read_csv("{}/selectivity/results-selectivity_gpukeys.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
+
+    cpu = df_filter_sel(cpu)
+    gpu = df_filter_sel(gpu)
+    gpukeys = df_filter_sel(gpukeys)
 
     cpu=cpu.sort_values(by=['Selectivity'])
     gpu=gpu.sort_values(by=['Selectivity'])
@@ -122,6 +133,10 @@ def plot_joinspeed():
     gpukeys = pd.read_csv("{}/selectivity/results-selectivity_gpukeys.csv".format(result_path),
         sep='|', names=framework_columns, header=None, skiprows=1)
 
+    cpu = df_filter_sel(cpu)
+    gpu = df_filter_sel(gpu)
+    gpukeys = df_filter_sel(gpukeys)
+
     cpu=cpu.sort_values(by=['Selectivity'])
     gpu=gpu.sort_values(by=['Selectivity'])
     gpukeys=gpukeys.sort_values(by=['Selectivity'])
@@ -143,14 +158,17 @@ def plot_joinspeed():
     # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
     # plt.xlabel("Query")
 
-    ax1.set_ylabel('Join time (in cycles/tuple)')
+    ax1.set_ylabel('Join probe time (in cycles/tuple)')
     ax1.set_xlabel('Selectivity (in \\%)')
     # ax1.grid(True)
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.plot(cpu_nofilter['Selectivity'], df_joinspeed(cpu_nofilter),
-        linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    
+
+    #ax1.plot(cpu_nofilter['Selectivity'], df_joinspeed(cpu_nofilter),
+    #    linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    
     ax1.plot(cpu_filter['Selectivity'], df_joinspeed(cpu_filter),
         linestyle='--', marker='x', color=colors[1], label="CPU, BF")
     # PipelineSumThreadCycles
@@ -319,7 +337,7 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=10)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
