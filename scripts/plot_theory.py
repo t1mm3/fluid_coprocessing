@@ -64,7 +64,7 @@ def plot_amdahl(crazy):
     (fig, ax1) = plt.subplots()
 
     ax1.set_ylabel('Maximal Speedup')
-    ax1.set_xlabel('Fraction of tuples (in \\%s)')
+    ax1.set_xlabel('Tuples processed on Accelerator (in \\%s)')
 
     for i, npar in enumerate(npars):
         mu = list(map(lambda x: amdahl_fraction_par(x, npar), fractions))
