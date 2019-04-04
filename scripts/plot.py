@@ -87,13 +87,13 @@ def plot_sel():
 
     # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
     #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
-    ax1.semilogy(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
-    ax1.semilogy(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
+    ax1.plot(cpu_nofilter['Selectivity'], cpu_nofilter['PipelineTime'], linestyle='--', marker='o', color=colors[0], label="CPU, no BF")
+    ax1.plot(cpu_filter['Selectivity'], cpu_filter['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="CPU, BF")
     # PipelineSumThreadCycles
 
     #ax1.plot(filter1['Selectivity'], filter1['CPUJoinTime'], linestyle='--', marker='o', color=colors[3], label="CPU \fjoin, CPU filter")
-    ax1.semilogy(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
-    ax1.semilogy(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
+    ax1.plot(gpu['Selectivity'], gpu['PipelineTime'], linestyle='--', marker='^', color=colors[2], label="GPU+CPU, BF")
+    ax1.plot(gpukeys['Selectivity'], gpukeys['PipelineTime'], linestyle='--', marker='+', color=colors[3], label="GPU+CPU, BF (cached)")
 
     if False:
         ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
@@ -114,6 +114,85 @@ def plot_sel():
     #,legend2
     fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
     plt.close(fig)
+
+
+framework_columns2 = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime",
+        "CPUExpOpTime", "GPUProbeTime", "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples",
+        "PostJoinTuples", "CPUBloomFilter", "FilterSize", "Slowdown", "CPUMorselSize", "GPUMorselsize",
+        "Selectivity", "NumStreams", "GPUConsumed", "GPUProduced"]
+
+
+def frac_tuples_gpu(df):
+    return (100.0 * df['GPUConsumed']) / (1024.0*1024.0*1024.0)
+
+def plot_streams(cpubf, fraction):
+    # keys on gpu
+    gpukeys = pd.read_csv("{}/op_vs_bfsize/results-stream_newnot_gpu.csv".format(result_path),
+        sep='|', names=framework_columns2, header=None, skiprows=1)
+    gpu = pd.read_csv("{}/op_vs_bfsize/results-stream_newgpu.csv".format(result_path),
+        sep='|', names=framework_columns2, header=None, skiprows=1)
+
+
+    gpu = gpu[gpu['CPUBloomFilter']==cpubf]
+    gpukeys = gpukeys[gpukeys['CPUBloomFilter']==cpubf]
+
+    (fig, ax1) = plt.subplots()
+
+    #with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+    #    print gpu
+
+    ofilename = "plot_streams_cpubf{}_frac{}.pgf".format(cpubf, fraction)
+    # plt.title("Breakdown for \\emph{{{}}}".format(wbname))
+    # plt.xlabel("Query")
+
+    if fraction:
+        ax1.set_ylabel('Tuples processed on GPU (in \\%)')
+        ax1.set_ylim(0, 100)
+    else:
+        ax1.set_ylabel('Time (in s)')
+    ax1.set_xlabel('\\#Streams')
+
+    # ax2 = ax1.twinx()
+    # ax1.grid(True)
+
+    # ax1.plot(df['Selectivity'], df['PipelineCycles'], linestyle='--', marker='o', color=colors[0], label="Probe pipeline")
+    #ax1.plot(filter0['Selectivity'], filter0['CPUJoinTime'], linestyle='--', marker='o', color=colors[1], label="CPU \fjoin, no Bloom filter")
+
+    if fraction:
+        ax1.plot(gpu['NumStreams'], frac_tuples_gpu(gpu), linestyle='--', marker='+', color=colors[0], label="GPU+CPU")
+        ax1.plot(gpukeys['NumStreams'], frac_tuples_gpu(gpukeys), linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)  ")
+    else:
+        ax1.plot(gpu['NumStreams'], gpu['PipelineTime'], linestyle='--', marker='+', color=colors[0], label="GPU+CPU")
+        ax1.plot(gpukeys['NumStreams'], gpukeys['PipelineTime'], linestyle='--', marker='x', color=colors[1], label="GPU+CPU (cached)  ")
+
+
+    if False:
+        ax1.yaxis.set_major_formatter(mticker.ScalarFormatter())
+        ax1.yaxis.get_major_formatter().set_scientific(False)
+        ax1.yaxis.get_major_formatter().set_useOffset(False)
+        ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
+
+    box = ax1.get_position()
+    ax1.set_position([box.x0, box.y0 + box.height * 0.1,
+                     box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    #legend = ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2),
+    #          fancybox=False, ncol=3)
+    
+
+    if fraction:
+        ax1.legend(loc='lower right', ncol=1)
+    else:
+        ax1.legend(loc='center right', ncol=1)
+
+    #ax2.legend(loc='lower left', ncol=1)
+
+    fig.tight_layout()
+    #,legend2
+    fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
+    plt.close(fig)
+
 
 def df_div(df, colA, colB):
     return df[colA] / df[colB]
@@ -228,7 +307,7 @@ def plot_bloomfilter():
     ax1.set_xlim(1, 2**9)
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU", basex=2)
+    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Default", basex=2)
     #ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
     #ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
 
@@ -241,7 +320,11 @@ def plot_bloomfilter():
     ax1.yaxis.get_major_formatter().set_scientific(False)
     ax1.yaxis.get_major_formatter().set_useOffset(False)
     ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
-
+    #arrow with text
+    ax1.annotate('', xytext=(256, 300), xy=(250, 1400),
+            arrowprops=dict(facecolor='black', shrink=0.05, width=0.5), size=15, horizontalalignment='right', verticalalignment='top',
+            )
+    ax1.annotate('6x', xy=(170, 600),)
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
@@ -334,12 +417,14 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     #Cols = ['A', 'B', 'C', 'D']
     #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
 
-    df['NormalizedPipelineTime'] = df['PipelineTime'] / (df['FilterSize'] / 8.0) * 1024.0 * 1000 * 1000
+    cpu['NormalizedPipelineTime'] = cpu['PipelineTime'] / ((cpu['FilterSize'] / (8.0 * 1024))) * 3.0 * 1000.0 * 1000.0 # * 1000.0 * 1000.0 * 1000.0 * 1000.0
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print(cpu)    
 
     df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=900)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
@@ -348,13 +433,13 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     if not rbar:
         plt.setp(ax1.get_yticklabels(), visible=False)
     else:
-        ax1.set_ylabel("Input size")
+        ax1.set_ylabel("Inner Relation Cardinality (MiTuples)")
         l = [8, 16, 32, 64,
             128, 256, 512, 1024,
             2*1024, 4*1024]
-        p = ["1~MiB", "2~MiB", "4~MiB", "8~MiB",
-            "16~MiB", "32~MiB", "64~MiB", "128~MiB",
-            "256~MiB", "512~MiB"]
+        p = ["1", "2", "4", "8",
+            "16", "32", "64", "128",
+            "256", "512"]
         ax1.set_yticklabels(p)
 
     if lbar:
@@ -366,25 +451,32 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     plt.close(fig)
 
 def main():
+    mpl.rcParams.update({'font.size': 20})
+
+    for cpubf in [1]: 
+        for frac in [True, False]:
+            plot_streams(cpubf, frac)
+
+    # exit(0)
+
     mpl.rcParams.update({'font.size': 15})
-    #plot_sel()
-    #plot_joinspeed()
+    plot_sel()
+    plot_joinspeed()
     plot_bloomfilter()
 
-    for sel in [1, 5]:
-        for file in ["cpu", "gpu", "gpuonly"]:
+    for sel in [1]: #, 5]:
+        for file in ["cpu", "gpu"]: #, "gpuonly"]:
             right = file == "cpu"
             left = file == "gpu"
             cpubf = True
             if file == "gpuonly":
                 file = "gpu"
                 cpubf = False
-
             plot_heatmap(sel, file, right, left, cpubf)
 
 
-    #plot_expensiveop(1)
-    #plot_expensiveop(5)
+    plot_expensiveop(1)
+    plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()

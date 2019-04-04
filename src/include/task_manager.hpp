@@ -309,7 +309,7 @@ void WorkerThread::execute_pipeline() {
 		cudaSetDevice(device);
 		int64_t offset = 0;
 		const int64_t tuples = pipeline.params.gpu_morsel_size;
-		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
+		for (int i = 0; i < pipeline.params.num_gpu_streams; i++) {
 			// create probes
 			// printf("inflight_probe offset %ld, tuples %ld\n", offset, tuples);
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples, pipeline.params.in_gpu_keys));
