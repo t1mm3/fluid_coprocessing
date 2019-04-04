@@ -334,7 +334,9 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     #Cols = ['A', 'B', 'C', 'D']
     #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
 
-    df = pd.pivot_table(cpu, values="PipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
+    df['NormalizedPipelineTime'] = df['PipelineTime'] / (df['FilterSize'] / 8.0) * 1024.0 * 1000 * 1000
+
+    df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
     c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=60)
