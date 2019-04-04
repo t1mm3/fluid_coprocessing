@@ -33,9 +33,10 @@ struct TimelineEvent {
 	char* name;
 	int64_t offset;
 	int64_t num_tuples;
+	void* probe = nullptr;
 
 	void serialize(std::ostream& f, const char* sep) const {
-		f << name << sep << offset << sep << num_tuples;
+		f << name << sep << offset << sep << num_tuples << sep << probe;
 	}
 };
 
@@ -290,7 +291,7 @@ public:
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(i == 0 ? 0 : 1, pipeline, filter, cf, profile_printer, timeline, i));
+			workers.push_back(new WorkerThread(i < 4 ? 0 : 1, pipeline, filter, cf, profile_printer, timeline, i));
 		}
 
 		for (auto &worker : workers) {
@@ -325,7 +326,7 @@ void WorkerThread::execute_pipeline() {
 		cudaSetDevice(device);
 		int64_t offset = 0;
 		const int64_t tuples = pipeline.params.gpu_morsel_size;
-		for (int i = 0; i < NUMBER_OF_STREAMS; i++) {
+		for (int i = 0; i < 1; i++) {
 			// create probes
 			// printf("inflight_probe offset %ld, tuples %ld\n", offset, tuples);
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device, offset, tuples, pipeline.params.in_gpu_keys));
@@ -358,6 +359,7 @@ void WorkerThread::execute_pipeline() {
 				printf("%d: cpu share %p\n",
 					std::this_thread::get_id(), inflight_probe);
 #endif
+				timeline.push(TimelineEvent {"FINISHPROBE", offset, num, inflight_probe});
 				pipeline.g_queue_add(inflight_probe);
 				break;
 			}
@@ -386,7 +388,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
-			timeline.push(TimelineEvent {"SCHEDPROBE", offset, num});
+			timeline.push(TimelineEvent {"SCHEDPROBE", offset, num, inflight_probe});
 			inflight_probe->probe->contains(&tkeys[offset], num, offset, pipeline.params.in_gpu_keys);
 #ifdef GPU_SYNC
 			inflight_probe->wait();
@@ -419,7 +421,7 @@ void WorkerThread::execute_pipeline() {
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
 
-					timeline.push(TimelineEvent {"CPUJOIN", offset, num});
+					timeline.push(TimelineEvent {"CPUJOIN", offset, num, probe});
 					do_cpu_join(results, num, offset, probe->offset);
 				}
 
