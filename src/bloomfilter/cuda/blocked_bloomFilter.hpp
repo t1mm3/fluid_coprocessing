@@ -384,7 +384,7 @@ template <typename filter_t> struct cuda_filter {
 			contains_naive_kernel<<<block_count, block_size>>>(filter, device_word_array, &device_keys_array[offset], key_cnt,
 			                                                device_bitmap);
 		}
-		cudaDeviceSynchronize();
+		// cudaDeviceSynchronize();
 	}
 
 	//! batch_probe for co-processing
