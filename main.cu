@@ -188,10 +188,10 @@ int main(int argc, char** argv) {
     std::ofstream results_file;
     results_file.open("results.csv", std::ios::out);
 
-    std::ofstream time_file;
-    time_file.open("timeline.csv", std::ios::out);
-
-    FileTimeline<TimelineEvent> timeline(time_file);
+    FileTimeline<TimelineEvent>* timeline = nullptr;
+    if (params.timeline_path.size() > 0) {
+        timeline = new FileTimeline<TimelineEvent>(params.timeline_path);
+    }
 
     std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
@@ -303,7 +303,6 @@ int main(int argc, char** argv) {
     std::vector<HashTablinho*> hts = {ht};
     Pipeline pipeline(hts, table_probe, params);
 
-    timeline.set_active(false);
 
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
@@ -344,13 +343,11 @@ int main(int argc, char** argv) {
         profile_info.write_header(results_file);
 
         for(auto i = 0; i < params.num_repetitions + params.num_warmup; ++i) {
-            if (i == params.num_repetitions + params.num_warmup - 1) {
-                timeline.set_active(true);
-            }
             //execute probe
             const auto start = std::chrono::system_clock::now();
             const auto start_cycles = rdtsc();
-            manager.execute_query(pipeline, filter, cf, profile_info, timeline);
+            manager.execute_query(pipeline, filter, cf, profile_info,
+                i == params.num_warmup ? timeline : nullptr);
             auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();
 
@@ -383,7 +380,6 @@ int main(int argc, char** argv) {
         profile_info.write_profile(results_file);
     }
     results_file.close();
-    time_file.close();
 
     return 0;
 }

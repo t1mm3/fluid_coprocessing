@@ -21,6 +21,7 @@ protected:
 private:
 	Timeline* m_parent;
 
+
 	std::vector<Entry> m_buf;
 	size_t m_num;
 	size_t m_cap;
@@ -84,7 +85,7 @@ public:
 
 	~Timeline() {
 		flush();
-		m_parent->flush();
+		// m_parent->flush();
 	}
 };
 
@@ -96,21 +97,35 @@ struct FileTimeline : Timeline<Event> {
 private:
 	std::mutex m_mutex;
 
-	std::ofstream& m_file;
-	bool m_active;
+	std::ofstream m_file;
 
 	using Entry = typename Timeline<Event>::Entry;
 
 	static constexpr char *sep = "|";
 public:
-	FileTimeline(std::ofstream& f) : m_file(f), m_active(true) {
+	FileTimeline(const std::string& path) {
+        m_file.open(path.c_str(), std::ios::out);
+        if (!m_file.is_open()) {
+        	std::cerr << "Cannot open timeline file" << std::endl;
+        	exit(1); 
+        }
+	}
+
+	~FileTimeline() {
+		std::cout << "Closing ... timeline stream" << std::endl;
+
+		flush();
+
+		if (m_file.is_open()) {
+			m_file.close();
+		}
 	}
 
 protected:
 	virtual void bulk_write(size_t id, const Entry* entries, size_t n) override {
 		std::lock_guard<std::mutex> guard(m_mutex);
 
-		if (!m_active) {
+		if (!m_file.is_open()) {
 			return;
 		}
 
@@ -124,13 +139,10 @@ protected:
 
 public:
 	virtual void flush() {
+		if (!m_file.is_open()) {
+			return;
+		}
 		m_file.flush();
-	}
-
-	void set_active(bool active) {
-		std::lock_guard<std::mutex> guard(m_mutex);
-
-		m_active = active;
 	}
 };
 

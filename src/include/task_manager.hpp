@@ -62,7 +62,10 @@ struct WorkerThread {
 	Pipeline &pipeline;
 	FilterWrapper &filter;
 	FilterWrapper::cuda_filter_t &cuda_filter;
-	Timeline<TimelineEvent> timeline;
+
+	Timeline<TimelineEvent>* parent_timeline;
+	int64_t id;
+	Timeline<TimelineEvent>* timeline = nullptr;
 
 	HashTablinho::StaticProbeContext<kVecSize> ctx;
 
@@ -90,13 +93,11 @@ struct WorkerThread {
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
 	              FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer,
-	              Timeline<TimelineEvent>& parent_timeline, int64_t id)
+	              Timeline<TimelineEvent>* parent_timeline, int64_t id)
 	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf),
-	    	timeline(parent_timeline) {
-	    payload = new int32_t[kVecSize * pipeline.params.num_payloads];
-	    thread = new std::thread(ExecuteWorkerThread, this);
+	    	parent_timeline(parent_timeline), id(id) {
 
-	    timeline.set_id(id);
+	    thread = new std::thread(ExecuteWorkerThread, this);
 	}
 
 	void join() {
@@ -110,12 +111,19 @@ struct WorkerThread {
 			inflight_probe = nullptr;
 		}
 		delete thread;
-		delete payload;
 	}
 
 	NO_INLINE void execute_pipeline();
 
 	void _execute_pipeline() {
+		payload = new int32_t[kVecSize * pipeline.params.num_payloads];
+	    if (parent_timeline) {
+	    	timeline = new Timeline<TimelineEvent>(*parent_timeline);
+	    	timeline->set_id(id);
+	    } else {
+	    	timeline = nullptr;
+	    }
+
 		Profiling::Time prof_pipeline_cycles;
 		{
 			Profiling::Scope __prof(prof_pipeline_cycles);	
@@ -124,6 +132,12 @@ struct WorkerThread {
 		}
 
 		pipeline.prof_pipeline_cycles.atomic_aggregate(prof_pipeline_cycles);
+
+		delete payload;
+
+		if (timeline) {
+			delete timeline;
+		}
 	}
 
 	NO_INLINE void do_cpu_work(int64_t mnum, int64_t moffset) {
@@ -285,7 +299,7 @@ class TaskManager {
 public:
 
 	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf,
-			ProfilePrinter &profile_printer, Timeline<TimelineEvent>& timeline) {
+			ProfilePrinter &profile_printer, Timeline<TimelineEvent>* timeline) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
@@ -359,7 +373,7 @@ void WorkerThread::execute_pipeline() {
 				printf("%d: cpu share %p\n",
 					std::this_thread::get_id(), inflight_probe);
 #endif
-				timeline.push(TimelineEvent {"FINISHPROBE", offset, num, inflight_probe});
+				if (timeline) timeline->push(TimelineEvent {"FINISHPROBE", offset, num, inflight_probe});
 				pipeline.g_queue_add(inflight_probe);
 				break;
 			}
@@ -388,7 +402,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
-			timeline.push(TimelineEvent {"SCHEDPROBE", offset, num, inflight_probe});
+			if (timeline) timeline->push(TimelineEvent {"SCHEDPROBE", offset, num, inflight_probe});
 			inflight_probe->probe->contains(&tkeys[offset], num, offset, pipeline.params.in_gpu_keys);
 #ifdef GPU_SYNC
 			inflight_probe->wait();
@@ -421,7 +435,7 @@ void WorkerThread::execute_pipeline() {
 				{
 					Profiling::Scope prof(prof_aggr_gpu_cpu_join);
 
-					timeline.push(TimelineEvent {"CPUJOIN", offset, num, probe});
+					if (timeline) timeline->push(TimelineEvent {"CPUJOIN", offset, num, probe});
 					do_cpu_join(results, num, offset, probe->offset);
 				}
 
@@ -466,7 +480,7 @@ void WorkerThread::execute_pipeline() {
 			continue;
 		}
 
-		timeline.push(TimelineEvent {"CPUWORK", offset, num});
+		if (timeline) timeline->push(TimelineEvent {"CPUWORK", offset, num});
 		do_cpu_work(num, offset);
 		pipeline.processed_tuples(num, false);
 #endif
@@ -493,5 +507,5 @@ void WorkerThread::execute_pipeline() {
 		(double)num_postjoin / (double)num_prejoin * 100.0);
 #endif
 
-	timeline.push(TimelineEvent {"DONE", 0, 0});
+	if (timeline) timeline->push(TimelineEvent {"DONE", 0, 0});
 }
