@@ -2,6 +2,7 @@
 #include "profile_printer.hpp"
 #include "bloomfilter.hpp"
 #include "task_manager.hpp"
+#include "timeline.hpp"
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <random>
@@ -187,6 +188,11 @@ int main(int argc, char** argv) {
     std::ofstream results_file;
     results_file.open("results.csv", std::ios::out);
 
+    FileTimeline<TimelineEvent>* timeline = nullptr;
+    if (params.timeline_path.size() > 0) {
+        timeline = new FileTimeline<TimelineEvent>(params.timeline_path);
+    }
+
     std::cout << " Probe Size: " << params.probe_size << " -- Build Size: " << params.build_size << std::endl;
 
     size_t build_size = params.build_size;
@@ -297,6 +303,7 @@ int main(int argc, char** argv) {
     std::vector<HashTablinho*> hts = {ht};
     Pipeline pipeline(hts, table_probe, params);
 
+
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
         size_t m = params.filter_size;
@@ -339,7 +346,8 @@ int main(int argc, char** argv) {
             //execute probe
             const auto start = std::chrono::system_clock::now();
             const auto start_cycles = rdtsc();
-            manager.execute_query(pipeline, filter, cf, profile_info);
+            manager.execute_query(pipeline, filter, cf, profile_info,
+                i == params.num_warmup ? timeline : nullptr);
             auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();
 

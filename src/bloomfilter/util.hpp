@@ -313,6 +313,7 @@ struct params_t {
 	int cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
 	std::size_t selectivity 	  {defaults::selectivity};
 	std::string csv_path		  {""};
+	std::string timeline_path	  {""};
 	bool only_generate {defaults::only_generate};
 
 	std::size_t num_threads 	  {std::thread::hardware_concurrency()};
@@ -364,6 +365,8 @@ params_t parse_command_line(int argc, char **argv) {
 			exit(EXIT_FAILURE);
 		} else if (arg_name == "csv_path") {
 			params.csv_path = arg_value;
+		} else if (arg_name == "timeline") {
+			params.timeline_path = arg_value;
 		} else if (arg_name == "num_blocks") {
 			params.num_blocks = std::stoll(arg_value);
 		} else if (arg_name == "threads-per-block") {
