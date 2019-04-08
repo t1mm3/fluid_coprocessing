@@ -21,6 +21,7 @@ import numpy as np
 import math
 import matplotlib.ticker as mticker
 from matplotlib.ticker import MultipleLocator, FuncFormatter
+from matplotlib.figure import figaspect
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
@@ -47,10 +48,11 @@ def plot_timeline(num, tfile, ofile):
     times = pd.read_csv(tfile,
         sep='|', names=["ID", "TABS", "TREL", "NAME", "OFFSET", "NUM_TUPLES", "PROBE_PTR"], header=None)
 
-    (fig, ax1) = plt.subplots()
+    w, h = figaspect(0.5)
+    (fig, ax1) = plt.subplots(figsize=(w,h))
 
-    #ax1.set_ylabel('Maximal Speedup')
-    #ax1.set_xlabel('Time')
+    ax1.set_ylabel('Worker')
+    ax1.set_xlabel('Time (in cycles)')
 
 
     for tid in range(0, num):
@@ -141,9 +143,9 @@ def main():
         infile = args.infile
 
 
+    mpl.rcParams.update({'font.size': 15})
     plot_timeline(num, infile, outfile)
 
-    # mpl.rcParams.update({'font.size': 15})
 
 if __name__ == '__main__':
     main()
