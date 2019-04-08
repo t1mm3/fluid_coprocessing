@@ -44,6 +44,12 @@ struct InflightProbe {
 		}
 		return true;
 	}
+
+	void contains(const uint32_t *keys, int64_t key_cnt, int64_t offset, bool in_gpu_keys) {
+		probe->contains(keys, key_cnt, offset, in_gpu_keys);
+		assert(!probe->is_done());
+	}
+
 	void wait() {
 		return probe->wait();
 	}

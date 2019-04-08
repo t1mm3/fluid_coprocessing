@@ -367,7 +367,7 @@ template <typename filter_t> struct cuda_filter {
 		cuda_check_error();
 	}
 	//! batch_probe for co-processing
-	void contains_baseline(u32 *__restrict__ d_keys, int64_t key_cnt, $u32 *__restrict__ device_bitmap, bool in_gpu_keys, int64_t offset) {
+	void contains_baseline(u32 *__restrict__ d_keys, int64_t key_cnt, $u32 *__restrict__ device_bitmap, bool in_gpu_keys, int64_t offset, cudaStream_t stream) {
 	
 		i32 block_size = 32;
 		// Probe
@@ -378,13 +378,12 @@ template <typename filter_t> struct cuda_filter {
 		cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
 		// In case keys are not on GPU memory
 		if(!in_gpu_keys){
-			contains_naive_kernel<<<block_count, block_size>>>(filter, device_word_array, d_keys, key_cnt,
+			contains_naive_kernel<<<block_count, block_size, 0, stream>>>(filter, device_word_array, d_keys, key_cnt,
 			                                                device_bitmap);
 		} else {
-			contains_naive_kernel<<<block_count, block_size>>>(filter, device_word_array, &device_keys_array[offset], key_cnt,
+			contains_naive_kernel<<<block_count, block_size, 0, stream>>>(filter, device_word_array, &device_keys_array[offset], key_cnt,
 			                                                device_bitmap);
 		}
-		// cudaDeviceSynchronize();
 	}
 
 	//! batch_probe for co-processing
@@ -562,45 +561,17 @@ template <typename filter_t> struct cuda_filter {
 			cudaSetDevice(device_no_);
 			// copy the keys to the pre-allocated device memory
 			assert(key_cnt > 0);
-			cudaEventRecord(start_event, 0);
+			cudaEventRecord(start_event, cuda_stream);
 			if(!in_gpu_keys){
 				assert(device_in_keys != nullptr);
 				cudaMemcpyAsync(device_in_keys, keys, key_cnt * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
 
 			}
-			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0], in_gpu_keys, offset);
+			cuda_filter_instance.contains_baseline(&device_in_keys[0], key_cnt, &device_bitmap[0], in_gpu_keys, offset, cuda_stream);
 			// copy back the result bitmap to pre-allocated host memory
 			cudaMemcpyAsync(host_bitmap, device_bitmap, key_cnt / 8, cudaMemcpyDeviceToHost, cuda_stream);
-			cudaEventRecord(stop_event, 0);
-		}
-
-
-		/// asynchronously batch-probe the filter
-		void contains_sort(const key_t *keys, int64_t key_cnt, int64_t offset) {
-			cudaSetDevice(device_no_);
-			// copy the keys to the pre-allocated device memory
-			assert(key_cnt > 0);
-			assert(device_in_keys != nullptr);
-			cudaEventRecord(start_event, 0);
-			cudaMemcpyAsync(device_in_keys, keys, key_cnt * sizeof(key_t), cudaMemcpyHostToDevice, cuda_stream);
-			size_t no_matches_size = 0;
-			cuda_filter_instance.contains_with_sorting(&device_in_keys[0], key_cnt, &device_bitmap[0], &no_matches_size);
-			// copy back the result bitmap to pre-allocated host memory
-			cudaMemcpyAsync(host_bitmap, device_bitmap, no_matches_size, cudaMemcpyDeviceToHost, cuda_stream);
-			cudaEventRecord(stop_event, 0);
-		}
-
-		/// asynchronously batch-probe the filter
-		void contains_in_gpu_data(int64_t key_cnt, int64_t offset) {
-			cudaSetDevice(device_no_);
-			// copy the keys to the pre-allocated device memory
-			assert(key_cnt > 0);
-			assert(offset > 0);
-			cudaEventRecord(start_event, 0);
-			cuda_filter_instance.contains_with_keys_on_gpu(offset, key_cnt, &device_bitmap[0]);
-			// copy back the result bitmap to pre-allocated host memory
-			cudaMemcpyAsync(host_bitmap, device_bitmap, key_cnt / 8, cudaMemcpyDeviceToHost, cuda_stream);
-			cudaEventRecord(stop_event, 0);
+			auto err = cudaEventRecord(stop_event, cuda_stream);
+			assert(err == cudaSuccess);
 		}
 
 		/// blocks until a asynchronously executed query is finished.
@@ -609,7 +580,9 @@ template <typename filter_t> struct cuda_filter {
 		}
 		// checks whether the gpu has finished
 		bool is_done() {
-    		return cudaEventQuery(stop_event) == cudaSuccess;
+			auto res = cudaEventQuery(stop_event);
+			assert(res == cudaErrorNotReady || res == cudaSuccess);
+    		return res == cudaSuccess;
   		}
 
   		$u32* get_results() {

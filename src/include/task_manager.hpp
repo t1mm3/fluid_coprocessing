@@ -408,7 +408,7 @@ void WorkerThread::execute_pipeline() {
 			inflight_probe->status = InflightProbe::Status::FILTERING;
 			inflight_probe->prof_start = Profiling::start(true);
 			if (timeline) timeline->push(TimelineEvent {"SCHEDPROBE", offset, num, inflight_probe});
-			inflight_probe->probe->contains(&tkeys[offset], num, offset, pipeline.params.in_gpu_keys);
+			inflight_probe->contains(&tkeys[offset], num, offset, pipeline.params.in_gpu_keys);
 #ifdef GPU_SYNC
 			inflight_probe->wait();
 #endif
@@ -433,6 +433,9 @@ void WorkerThread::execute_pipeline() {
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 #endif
 				uint32_t* results = probe->probe->get_results();
+
+				assert(probe->is_gpu_available());
+				// probe->wait();
 
 				// printf("cpu morsel probe %p offset %ld num %ld bf_results %p\n", probe, offset, num, results);
 				assert(results != nullptr);
