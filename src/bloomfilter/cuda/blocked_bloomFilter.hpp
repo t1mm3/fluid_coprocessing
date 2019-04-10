@@ -11,6 +11,7 @@
 #include <thrust/host_vector.h>
 #include <thrust/remove.h>
 #include <thrust/sequence.h>
+#include <amsfilter/cuda/internal/cuda_api_helper.hpp>
 
 #define BEGIN_BIT 26
 #define END_BIT 32

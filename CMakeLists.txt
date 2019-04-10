@@ -33,6 +33,16 @@ include_directories(${CUDA_API_WRAPPERS_INCLUDE_DIRS})
 
 link_libraries(${CUDA_API_WRAPPERS_LIBS} stdc++fs)
 
+# The target architecture.
+set(TARGET_ARCH "native")
+
+# Include the AMS-Filter.
+set(AMSFILTER_NO_MAGIC 1) # Disables MAGIC addressing.
+set(AMSFILTER_PARTIAL_BUILD 0) # Compiles only a small number of filters.
+add_subdirectory(../dtl/amsfilter amsfilter)
+include_directories(../dtl/amsfilter/src)
+set_target_properties(amsfilter PROPERTIES COMPILE_FLAGS "-march=${TARGET_ARCH}")
+
 find_package(CUDA 9.1)
 if (CUDA_FOUND)
     message("CUDA found")
@@ -116,7 +126,7 @@ cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
 target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 #framework
 cuda_add_executable(main_cu ${FRAMEWORK})
-target_link_libraries(main_cu cudart numa pthread)
+target_link_libraries(main_cu cudart numa pthread amsfilter)
 #bechmark bloom size
 cuda_add_executable(bloom_size_benchmark ${BLOOM_SIZE_FILES})
 target_link_libraries(blocked_bloom_benchmark cudart numa pthread)

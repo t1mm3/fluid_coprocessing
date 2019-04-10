@@ -12,7 +12,7 @@ bench:
 	@if [ ! -d "../dtl" ]; \
 	then \
 		cd ..; \
-		git clone https://github.com/diegomestre2/bloomfilter-bsd.git dtl; \
+		git clone -b gpu --single-branch https://github.com/peterboncz/bloomfilter-bsd dtl; \
 		echo "dtl downloaded!"; \
 		cd $(DIR); \
 	fi
@@ -108,7 +108,7 @@ main:
 	@if [ ! -d "../dtl" ]; \
 	then \
 		cd ..; \
-		git clone https://github.com/diegomestre2/bloomfilter-bsd.git dtl; \
+		git clone -b gpu --single-branch https://github.com/peterboncz/bloomfilter-bsd dtl; \
 		echo "dtl downloaded!"; \
 		cd $(DIR); \
 	fi

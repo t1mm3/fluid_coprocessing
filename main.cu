@@ -8,7 +8,28 @@
 #include <random>
 #include <iostream>
 #include "bloomfilter/util.hpp"
+#include <amsfilter/amsfilter_lite.hpp>
+#include <amsfilter/internal/blocked_bloomfilter_template.hpp>
+#include <boost/tokenizer.hpp>
+#include <dtl/env.hpp>
+#include <dtl/thread.hpp>
 
+
+amsfilter::Config parse_filter_config(const std::string config_str) {
+
+    using tokenizer = boost::tokenizer<boost::char_separator<char>>;
+    boost::char_separator<char> sep{","};
+    tokenizer tok{config_str, sep};
+    auto tok_it = tok.begin();
+
+    // The filter parameters.
+    amsfilter::Config config;
+    config.word_cnt_per_block = u32(std::stoul(*tok_it)); tok_it++;
+    config.sector_cnt = u32(std::stoul(*tok_it)); tok_it++;
+    config.zone_cnt = u32(std::stoul(*tok_it)); tok_it++;
+    config.k = u32(std::stoul(*tok_it)); tok_it++;
+    return config;
+}
 
 void gen_csv(const std::string& fname, const Table& t, bool probe, size_t num_payload) {
     uint32_t *table_keys = (uint32_t *)t.columns[0];
@@ -306,8 +327,18 @@ int main(int argc, char** argv) {
 
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
+        cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
+        amsfilter::Config config = parse_filter_config("32,1,1,2");
+        std::cout << "Filter parameters: w=" << config.word_cnt_per_block
+        << ", s=" << config.sector_cnt 
+        << ", z=" << config.zone_cnt 
+        << ", k=" << config.k 
+        << std::endl;
+
         size_t m = params.filter_size;
-        FilterWrapper filter(m);
+         // Construct the filter.
+       FilterWrapper filter(m, config);
+
         uint32_t *table_keys = (uint32_t *)table_build.columns[0];
         uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
         std::set<uint32_t> positions;
@@ -336,9 +367,6 @@ int main(int argc, char** argv) {
             keys = static_cast<uint32_t*>(table_probe.columns[0]);
         } 
 
-        FilterWrapper::cuda_filter_t cf(filter.bloom_filter, &(filter.filter_data[0]), filter.bloom_filter.word_cnt(), &probe_keys[0], key_cnt);
-
-
         ProfilePrinter profile_info(params);
         profile_info.write_header(results_file);
 
@@ -346,7 +374,7 @@ int main(int argc, char** argv) {
             //execute probe
             const auto start = std::chrono::system_clock::now();
             const auto start_cycles = rdtsc();
-            manager.execute_query(pipeline, filter, cf, profile_info,
+            manager.execute_query(pipeline, filter, profile_info,
                 i == params.num_warmup ? timeline : nullptr);
             auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();

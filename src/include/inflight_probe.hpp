@@ -4,6 +4,8 @@
 #include "bloomfilter/util.hpp"
 #include "profiling.hpp"
 #include <atomic>
+#include <amsfilter/amsfilter_lite.hpp>
+#include <amsfilter/internal/blocked_bloomfilter_template.hpp>
 
 struct InflightProbe {
 	InflightProbe* q_next = nullptr;
@@ -20,7 +22,7 @@ struct InflightProbe {
 
 	Status status = Status::FRESH;
 
-	FilterWrapper::cuda_probe_t *probe;
+	amsfilter::cuda::ProbeLite *probe;
 	int64_t num;
 	int64_t offset;
 
@@ -30,10 +32,9 @@ struct InflightProbe {
 	Profiling::Time prof_start;
 
 	cudaStream_t stream;
-	InflightProbe(FilterWrapper &filter, FilterWrapper::cuda_filter_t &cf, uint32_t device, 
+	InflightProbe(FilterWrapper &filter, uint32_t device, 
 			int64_t start, int64_t tuples_to_process, bool in_gpu_keys) : num(tuples_to_process), offset(start) {
-		cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking  & cudaEventDisableTiming);
-		probe = new typename FilterWrapper::cuda_probe_t(cf, num, stream, device, in_gpu_keys);
+		probe = new typename amsfilter::cuda::ProbeLite(filter.bloom_filter.batch_probe_cuda(tuples_to_process, device));
 
 		cpu_offset = 0;
 		processed = 0;
@@ -46,7 +47,7 @@ struct InflightProbe {
 	}
 
 	void contains(const uint32_t *keys, int64_t key_cnt, int64_t offset, bool in_gpu_keys) {
-		probe->contains(keys, key_cnt, offset, in_gpu_keys);
+		probe->operator()(&keys[offset], key_cnt);
 		assert(!probe->is_done());
 	}
 
@@ -62,6 +63,11 @@ struct InflightProbe {
 		cpu_offset = 0;
 		assert(!q_next);
 		assert(!q_prev);
+	}
+
+	uint32_t* get_results() {
+		assert(probe->is_done());
+		return probe->get_results().begin();
 	}
 
 	~InflightProbe() {

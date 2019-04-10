@@ -61,7 +61,6 @@ struct WorkerThread {
 
 	Pipeline &pipeline;
 	FilterWrapper &filter;
-	FilterWrapper::cuda_filter_t &cuda_filter;
 
 	Timeline<TimelineEvent>* parent_timeline;
 	int64_t id;
@@ -92,9 +91,9 @@ struct WorkerThread {
 
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
-	              FilterWrapper::cuda_filter_t &cf, ProfilePrinter &profile_printer,
+	              ProfilePrinter &profile_printer,
 	              Timeline<TimelineEvent>* parent_timeline, int64_t id)
-	    : pipeline(pipeline), device(gpu_device), filter(filter), cuda_filter(cf),
+	    : pipeline(pipeline), device(gpu_device), filter(filter),
 	    	parent_timeline(parent_timeline), id(id) {
 
 	    thread = new std::thread(ExecuteWorkerThread, this);
@@ -298,14 +297,14 @@ void ExecuteWorkerThread(WorkerThread *ptr) {
 class TaskManager {
 public:
 
-	void execute_query(Pipeline &pipeline,  FilterWrapper &filter,  FilterWrapper::cuda_filter_t &cf,
+	void execute_query(Pipeline &pipeline, FilterWrapper &filter,
 			ProfilePrinter &profile_printer, Timeline<TimelineEvent>* timeline) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(0, pipeline, filter, cf, profile_printer, timeline, i));
+			workers.push_back(new WorkerThread(0, pipeline, filter, profile_printer, timeline, i));
 		}
 
 		for (auto &worker : workers) {
@@ -343,7 +342,7 @@ void WorkerThread::execute_pipeline() {
 
 		auto new_stream = [&] () {
 			// create probes
-			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device,
+			local_inflight.push_back(new InflightProbe(filter, device,
 				offset, tuples, pipeline.params.in_gpu_keys));
 			offset += tuples;
 		};
@@ -432,7 +431,7 @@ void WorkerThread::execute_pipeline() {
 #ifdef PROFILE
 				std::atomic_fetch_add(&pipeline.tuples_gpu_consume, num);
 #endif
-				uint32_t* results = probe->probe->get_results();
+				uint32_t* results = probe->get_results();
 
 				assert(probe->is_gpu_available());
 				// probe->wait();
