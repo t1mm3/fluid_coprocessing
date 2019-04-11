@@ -108,7 +108,7 @@ main:
 	@if [ ! -d "../dtl" ]; \
 	then \
 		cd ..; \
-		git clone -b gpu --single-branch https://github.com/peterboncz/bloomfilter-bsd dtl; \
+		git clone -b gpu --single-branch https://github.com/diegomestre2/bloomfilter-bsd.git dtl; \
 		echo "dtl downloaded!"; \
 		cd $(DIR); \
 	fi

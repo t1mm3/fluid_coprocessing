@@ -321,6 +321,7 @@ struct params_t {
 	std::size_t slowdown 	  	  {defaults::slowdown};
 	std::size_t num_warmup 		  {defaults::num_warmup};
 	bool in_gpu_keys 			  {defaults::in_gpu_keys};
+	std::string filter_config     {"32,1,1,2"};
 
 	std::size_t probe_scale {0};
 	std::size_t num_payloads {32};
@@ -409,6 +410,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.num_payloads = std::stoll(arg_value);
 		} else if (arg_name == "num_payload") {
 			params.num_payloads = std::stoll(arg_value);
+		} else if (arg_name == "filter_config") {
+			params.filter_config = std::string(arg_value);
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoll(arg_value);
 			if (n > 0) {

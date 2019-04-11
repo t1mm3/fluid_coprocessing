@@ -328,7 +328,7 @@ int main(int argc, char** argv) {
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
         cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
-        amsfilter::Config config = parse_filter_config("32,1,1,2");
+        amsfilter::Config config = parse_filter_config(params.filter_config);
         std::cout << "Filter parameters: w=" << config.word_cnt_per_block
         << ", s=" << config.sector_cnt 
         << ", z=" << config.zone_cnt 
