@@ -26,10 +26,9 @@ struct Pipeline {
 
 	std::atomic<int64_t> tuples_morsel;
 
+#ifdef PROFILE
 	std::atomic<int64_t> tuples_gpu_probe;
 	std::atomic<int64_t> tuples_gpu_consume;
-#ifdef PROFILE
-
 	std::atomic<uint64_t> num_prefilter;
 	std::atomic<uint64_t> num_postfilter;
 	std::atomic<uint64_t> num_prejoin;

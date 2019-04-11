@@ -68,7 +68,7 @@ if (CUDA_FOUND)
     set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -Wno-deprecated-declarations)
 
     set(CUDA_NVCC_FLAGS_DEBUG -g --generate-line-info --keep -DDEBUG)
-    set(CUDA_NVCC_FLAGS_RELEASE -O3 --use_fast_math -DNDEBUG)
+    set(CUDA_NVCC_FLAGS_RELEASE -O3 -g --use_fast_math -DNDEBUG)
 
 
     set(CUDA_PROPAGATE_HOST_FLAGS OFF)
