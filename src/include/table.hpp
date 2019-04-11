@@ -63,8 +63,12 @@ public:
 		}
 	}
 
+	bool has_tuples() const {
+		return start < capacity;
+	}
+
 	bool get_range(int64_t &onum, int64_t &ostart, int64_t num) {
-		if (start >= capacity) {
+		if (!has_tuples()) {
 			return false;
 		}
 
