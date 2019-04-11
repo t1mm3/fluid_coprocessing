@@ -346,11 +346,21 @@ void WorkerThread::execute_pipeline() {
 			local_inflight.push_back(new InflightProbe(filter, cuda_filter, device,
 				offset, tuples, pipeline.params.in_gpu_keys));
 			offset += tuples;
+			// printf("%lld: stream\n", id);
 		};
 
-		for (int i=id; i<pipeline.params.num_gpu_streams; i+=pipeline.params.num_threads) {
-			new_stream();
+		if (pipeline.params.num_gpu_stream_threads <= 1) {
+			if (id == 0) {
+				for (int i=0; i<pipeline.params.num_gpu_streams; i++) {
+					new_stream();
+				}	
+			}	
+		} else {
+			for (int i=id; i<pipeline.params.num_gpu_streams; i+=pipeline.params.num_gpu_stream_threads) {
+				new_stream();
+			}
 		}
+		
 	}
 #endif
 
@@ -378,6 +388,7 @@ void WorkerThread::execute_pipeline() {
 				printf("%d: cpu share %p\n",
 					std::this_thread::get_id(), inflight_probe);
 #endif
+				num = inflight_probe->num;
 				if (timeline) timeline->push(TimelineEvent {"FINISHPROBE", offset, num, inflight_probe});
 				pipeline.g_queue_add(inflight_probe);
 				break;
@@ -386,7 +397,7 @@ void WorkerThread::execute_pipeline() {
 			morsel_size = pipeline.params.gpu_morsel_size;
 			auto success = pipeline.table.get_range(num, offset, morsel_size);
 			if (!success) {
-				break;
+				continue;
 			}
 
 			assert(num % 8 == 0 && "Otherwise we cannot divide num_keys by 8");
@@ -404,14 +415,17 @@ void WorkerThread::execute_pipeline() {
 			std::atomic_fetch_add(&pipeline.tuples_gpu_probe, num);
 #endif
 			// printf("probe schedule(%p)\n", inflight_probe);
+			rwticket_wrlock(&pipeline.g_queue_rwlock);
 			inflight_probe->reset(offset, num);
 			inflight_probe->status = InflightProbe::Status::FILTERING;
+			rwticket_wrunlock(&pipeline.g_queue_rwlock);
 			inflight_probe->prof_start = Profiling::start(true);
 			if (timeline) timeline->push(TimelineEvent {"SCHEDPROBE", offset, num, inflight_probe});
 			inflight_probe->contains(&tkeys[offset], num, offset, pipeline.params.in_gpu_keys);
 #ifdef GPU_SYNC
 			inflight_probe->wait();
 #endif
+			num = 0;
 
 #ifdef GPU_DEBUG
 			printf("%d: schedule probe %p offset %ld num %ld\n",
@@ -424,7 +438,7 @@ void WorkerThread::execute_pipeline() {
 		morsel_size = pipeline.params.cpu_morsel_size;
 		bool lock_busy = false;
 
-		if (pipeline.params.gpu > 0) {
+		if (pipeline.params.gpu) {
 			// preferably do CPU join on GPU filtered data
 			InflightProbe* probe = pipeline.g_queue_get_range(num, offset, lock_busy, morsel_size);
 
@@ -463,7 +477,7 @@ void WorkerThread::execute_pipeline() {
 				pipeline.processed_tuples(num, true);
 				continue;
 			}
-		}
+		} // pipeline.params.gpu
 
 #ifdef CPU_WORK
 		morsel_size = pipeline.params.cpu_morsel_size;
@@ -492,7 +506,7 @@ void WorkerThread::execute_pipeline() {
 		do_cpu_work(num, offset);
 		pipeline.processed_tuples(num, false);
 #endif
-	}
+	} // while
 
 	pipeline.prof_aggr_cpu.atomic_aggregate(prof_aggr_cpu);
 	pipeline.prof_join_cpu.atomic_aggregate(prof_join_cpu);

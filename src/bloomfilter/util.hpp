@@ -299,6 +299,7 @@ struct params_t {
 	std::string kernel_variant    {defaults::kernel_variant};
 	bool should_print_results     {defaults::should_print_results};
 	int num_gpu_streams           {defaults::num_gpu_streams};
+	int num_gpu_stream_threads    {1};
 	size_t num_threads_per_block  {defaults::num_threads_per_block};
 	int num_blocks                {defaults::num_blocks};
 	int num_query_execution_runs  {defaults::num_query_execution_runs};
