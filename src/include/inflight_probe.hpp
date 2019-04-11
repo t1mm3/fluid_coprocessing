@@ -31,7 +31,7 @@ struct InflightProbe {
 
 	Profiling::Time prof_start;
 
-	cudaStream_t stream;
+	//cudaStream_t stream;
 	InflightProbe(FilterWrapper &filter, uint32_t device, 
 			int64_t start, int64_t tuples_to_process, bool in_gpu_keys) : num(tuples_to_process), offset(start) {
 		probe = new typename amsfilter::cuda::ProbeLite(filter.bloom_filter.batch_probe_cuda(tuples_to_process, device));
@@ -47,8 +47,8 @@ struct InflightProbe {
 	}
 
 	void contains(const uint32_t *keys, int64_t key_cnt, int64_t offset, bool in_gpu_keys) {
-		probe->operator()(&keys[offset], key_cnt);
-		assert(!probe->is_done());
+		probe->operator()(&keys[0], key_cnt);
+		//assert(!probe->is_done());
 	}
 
 	void wait() {
@@ -71,7 +71,7 @@ struct InflightProbe {
 	}
 
 	~InflightProbe() {
-		cudaStreamDestroy(stream);
+		//cudaStreamDestroy(stream);
 		delete probe;
 	}
 
