@@ -18,7 +18,7 @@ enum {
 	num_query_execution_runs = 5,
 	filter_size = 64ull * 1024ull * 1024ull * 8ull, // 64MiB
 	build_size = 1024ull * 1024ull * 4ull,
-	probe_size = 1024ull * 1024ull * 1024ull * 2,
+	probe_size = 1024ull * 1024ull * 1024ull * 1,
 	num_repetitions = 3,
 	gpu = true,
 	cpu_bloomfilter = 1,
