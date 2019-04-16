@@ -38,7 +38,7 @@ hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime", "CPUTime", "CPUJoinTime",
         "CPUExpOpTime", "GPUProbeTime", "CPUGPUTime", "PreFilterTuples", "FilteredTuples", "PreJoinTuples",
         "PostJoinTuples", "CPUBloomFilter", "FilterSize", "Slowdown", "CPUMorselSize", "GPUMorselsize",
-        "Selectivity"]
+        "Selectivity", "Streams", "TuplesGpuProbe", "TuplesGpuConsume"]
 
 
 result_path = "results"
@@ -450,6 +450,93 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
     plt.close(fig)
 
+import copy
+
+def autofix_unit(x):
+    units = [
+            (1024*1024*1024, "{div}~Gi"),
+            (1024*1024, "{div}~Mi"),
+            (1024, "{div}~Ki")
+        ]
+
+    flt = False
+
+    txt = x.get_text()
+    try:
+        for scale, label in units:
+            if flt:
+                num = float(txt)
+            else:
+                num = int(txt)
+
+            if num >= scale:
+                x.set_text(label.format(div=num / scale))
+                return x
+    except ValueError:
+        # Cannot cast
+        return x
+
+    # Not found
+    return x
+
+
+def morselsize_labels(labels):
+    return list(map(lambda x: autofix_unit(x), labels))
+
+
+def plot_morselsizes():
+    coproc = pd.read_csv("{p}/morsel/results-morsel.csv".format(
+        p=result_path),
+        sep='|', names=framework_columns, header=None, skiprows=1)
+    #gpu = pd.read_csv("{}/op_vs_bfsize/results-op_vs_bfsizegpu.csv".format(result_path),
+    #    sep='|', names=framework_columns, header=None, skiprows=1)
+    (fig, ax1) = plt.subplots()
+
+    ax1.set_aspect(1.0)
+
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print(coproc)
+
+    ofilename = "plot-morsel.pgf"
+
+    #Index= ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
+    #Cols = ['A', 'B', 'C', 'D']
+    #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
+
+    coproc['NormalizedPipelineTime'] = coproc['PipelineTime']
+    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+        print(coproc)    
+
+    df = pd.pivot_table(coproc, values="NormalizedPipelineTime",index=["CPUMorselSize"], columns=["GPUMorselsize"], fill_value=0)
+    # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
+
+    c = plt.pcolor(df, cmap="plasma")
+    plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
+    plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
+
+    plt.xticks(rotation=30)
+
+    locs, labels = plt.yticks()
+    labels = morselsize_labels(labels)
+    ax1.set_yticklabels(labels)
+
+    locs, labels = plt.xticks()
+    labels = morselsize_labels(labels)
+    #for label in labels:
+    #    txt = int(label.get_text()) / 1024
+    #    label.set_text("{}".format(txt))
+    ax1.set_xticklabels(labels)
+
+    ax1.set_ylabel("CPU morsel size")
+    ax1.set_xlabel("GPU morsel size")
+
+    fig.colorbar(c, ax=ax1, orientation='horizontal')
+
+    fig.tight_layout()
+    #,legend2
+    fig.savefig(ofilename, bbox_extra_artists=(), bbox_inches='tight')
+    plt.close(fig)
+
 def main():
     mpl.rcParams.update({'font.size': 20})
 
@@ -459,24 +546,34 @@ def main():
 
     # exit(0)
 
+    mpl.rcParams.update({'font.size': 10})
+
+    plot_morselsizes()
+
     mpl.rcParams.update({'font.size': 15})
+
+    print("1")
     plot_sel()
+    print("2")
     plot_joinspeed()
+    print("3")
     plot_bloomfilter()
+    print("4")
 
-    for sel in [1]: #, 5]:
-        for file in ["cpu", "gpu"]: #, "gpuonly"]:
-            right = file == "cpu"
-            left = file == "gpu"
-            cpubf = True
-            if file == "gpuonly":
-                file = "gpu"
-                cpubf = False
-            plot_heatmap(sel, file, right, left, cpubf)
+    if False:
+        for sel in [1]: #, 5]:
+            for file in ["cpu", "gpu"]: #, "gpuonly"]:
+                right = file == "cpu"
+                left = file == "gpu"
+                cpubf = True
+                if file == "gpuonly":
+                    file = "gpu"
+                    cpubf = False
+                plot_heatmap(sel, file, right, left, cpubf)
 
-
-    plot_expensiveop(1)
-    plot_expensiveop(5)
+    if False:
+        plot_expensiveop(1)
+        plot_expensiveop(5)
 
 if __name__ == '__main__':
     main()
