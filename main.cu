@@ -1,16 +1,24 @@
+#include <iostream>
+#include <random>
+#include <algorithm>
+
 #include "hash_table.hpp"
 #include "profile_printer.hpp"
 #include "bloomfilter.hpp"
 #include "task_manager.hpp"
 #include "timeline.hpp"
+
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
-#include <random>
-#include <iostream>
+
 #include "bloomfilter/util.hpp"
+
+#include <amsfilter_model/model.hpp>
 #include <amsfilter/amsfilter_lite.hpp>
 #include <amsfilter/internal/blocked_bloomfilter_template.hpp>
+
 #include <boost/tokenizer.hpp>
+
 #include <dtl/env.hpp>
 #include <dtl/thread.hpp>
 
@@ -327,17 +335,64 @@ int main(int argc, char** argv) {
 
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
+        // Obtain a model instance. - Note: The calibration tool needs to be executed
+        // before.
+        amsfilter::Model model;
+
+        //CPU env
+        const auto thread_count = params.num_threads;//std::thread::hardware_concurrency() / 2;
+        const auto cpu_env = amsfilter::model::Env::cpu(thread_count);
+
+        // GPU env
+        const auto device_no = 0u; // cuda device
+        const auto gpu_env = amsfilter::model::Env::gpu(device_no, amsfilter::model::Memory::HOST_PINNED);
+
+        // Obtain the parameters for a (close to) performance-optimal filter.
+        // The model needs the following two values to find the optimal parameters:
+        //   build size (n):  The number of keys that will be inserted in the filter.
+        //   work time (tw):  The execution time in nanoseconds that is saved when an
+        //                    element is filtered out.
+        const auto n = params.build_size;
+        const auto tw = params.tw; // [ns]
+
+        const auto cpu_params = model.determine_filter_params(cpu_env, n, tw);
+        const auto gpu_params = model.determine_filter_params(gpu_env, n, tw);
+
+        std::cout
+            << "Host-side filter:   m=" << cpu_params.get_filter_size()
+            << ", config=" << cpu_params.get_filter_config() << std::endl;
+        std::cout
+            << "Device-side filter: m=" << gpu_params.get_filter_size()
+            << ", config=" << gpu_params.get_filter_config() << std::endl;
+
+
         cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
-        amsfilter::Config config = parse_filter_config(params.filter_config);
-        std::cout << "Filter parameters: w=" << config.word_cnt_per_block
-        << ", s=" << config.sector_cnt 
-        << ", z=" << config.zone_cnt 
-        << ", k=" << config.k 
+        // CPU Config
+        const auto cpu_config = cpu_params.get_filter_config();
+        const auto cpu_m = cpu_params.get_filter_size();
+        //amsfilter::Config config = parse_filter_config(params.filter_config);
+        std::cout << "Filter parameters: w=" << cpu_config.word_cnt_per_block
+        << ", s=" << cpu_config.sector_cnt 
+        << ", z=" << cpu_config.zone_cnt 
+        << ", k=" << cpu_config.k 
+        << ", m=" << cpu_m 
         << std::endl;
 
-        size_t m = params.filter_size;
-         // Construct the filter.
-        FilterWrapper filter(m, config);
+        // GPU Config
+        const auto gpu_config = gpu_params.get_filter_config();
+        const auto gpu_m = gpu_params.get_filter_size();
+        std::cout << "Filter parameters: w=" << gpu_config.word_cnt_per_block
+        << ", s=" << gpu_config.sector_cnt 
+        << ", z=" << gpu_config.zone_cnt 
+        << ", k=" << gpu_config.k 
+        << ", m=" << gpu_m 
+        << std::endl;
+
+
+        //size_t m = params.filter_size;
+        // Construct the filter.
+        FilterWrapper filter_cpu(cpu_m, cpu_config);
+        FilterWrapper filter_gpu(gpu_m, gpu_config);
 
         uint32_t *table_keys = (uint32_t *)table_build.columns[0];
         uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
@@ -346,14 +401,16 @@ int main(int argc, char** argv) {
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
             //std::cout << "Insert key " << key << " position " << i << '\n';
-            filter.insert(key);
+            filter_cpu.insert(key);
+            filter_gpu.insert(key);
         }
 
         // Validate Filter on CPU
         for (std::size_t i = 0; i < table_build.size(); ++i) {
             const auto key = (uint32_t)*(table_keys + i);
-            auto match = filter.contains(key);
-            if(!match)
+            auto match_cpu = filter_cpu.contains(key);
+            auto match_gpu = filter_gpu.contains(key);
+            if(!match_cpu || !match_gpu)
                 std::cout << "no match key " << key << " position "<< i << '\n';
 
         }
@@ -365,7 +422,7 @@ int main(int argc, char** argv) {
         if(params.in_gpu_keys){
             key_cnt = table_probe.size();
             keys = static_cast<uint32_t*>(table_probe.columns[0]);
-            filter.cache_keys(keys, key_cnt);
+            filter_gpu.cache_keys(keys, key_cnt);
         } 
 
         ProfilePrinter profile_info(params);
@@ -375,7 +432,7 @@ int main(int argc, char** argv) {
             //execute probe
             const auto start = std::chrono::system_clock::now();
             const auto start_cycles = rdtsc();
-            manager.execute_query(pipeline, filter, profile_info,
+            manager.execute_query(pipeline, filter_cpu, filter_gpu, profile_info,
                 i == params.num_warmup ? timeline : nullptr);
             auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();

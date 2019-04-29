@@ -18,3 +18,4 @@ plot_bf_sort_time.pgf
 plot*
 scripts/amsfilter
 scripts/common_exp.pyc
+changes_bloomfilter-bsd.hpp

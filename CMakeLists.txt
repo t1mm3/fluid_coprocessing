@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(JoinsInWarpSpeed VERSION 0.1)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -9,6 +10,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" 
 
 #subdirectories
 include_directories(../dtl/src)
+include_directories(../dtl/amsfilter/thirdparty)
+include_directories(../dtl/amsfilter)
 include_directories(../dtl/thirdparty)
 include_directories(../cub cub)
 include_directories(thirdparty/)

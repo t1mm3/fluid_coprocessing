@@ -60,7 +60,8 @@ struct WorkerThread {
 	int64_t tuples_morsel = 0;
 
 	Pipeline &pipeline;
-	FilterWrapper &filter;
+	FilterWrapper &filter_cpu;
+	FilterWrapper &filter_gpu;
 
 	Timeline<TimelineEvent>* parent_timeline;
 	int64_t id;
@@ -90,10 +91,11 @@ struct WorkerThread {
 
 
 
-	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter,
+	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter_cpu, FilterWrapper &filter_gpu,
 	              ProfilePrinter &profile_printer,
 	              Timeline<TimelineEvent>* parent_timeline, int64_t id)
-	    : pipeline(pipeline), device(gpu_device), filter(filter),
+	    : pipeline(pipeline), device(gpu_device), filter_cpu(filter_cpu), 
+	    	filter_gpu(filter_gpu),
 	    	parent_timeline(parent_timeline), id(id) {
 
 	    thread = new std::thread(ExecuteWorkerThread, this);
@@ -179,7 +181,7 @@ struct WorkerThread {
 #ifdef GPU_BF_CHECK_AGAINST_CPU
 				{
 					assert(!sel && "not implemented");
-					filter.contains_chr(&tmp8[0], keys, sel, n);
+					filter_cpu.contains_chr(&tmp8[0], keys, sel, n);
 
 					for (int i=0; i<n; i++) {
 						int w = i / 8;
@@ -225,11 +227,11 @@ struct WorkerThread {
 #endif
 				switch (pipeline.params.cpu_bloomfilter) {
 				case 1:
-					num = filter.contains_sel(&sel3[0], keys, sel, num);
+					num = filter_cpu.contains_sel(&sel3[0], keys, sel, num);
 					sel = &sel3[0];	
 					break;
 				case 2:
-					filter.contains_chr(&tmp8[0], keys, sel, num);
+					filter_cpu.contains_chr(&tmp8[0], keys, sel, num);
 					num = Vectorized::select_match(&sel3[0], &tmp8[0], sel, num);
 					sel = &sel3[0];	
 					break;
@@ -297,14 +299,14 @@ void ExecuteWorkerThread(WorkerThread *ptr) {
 class TaskManager {
 public:
 
-	void execute_query(Pipeline &pipeline, FilterWrapper &filter,
+	void execute_query(Pipeline &pipeline, FilterWrapper &filter_cpu, FilterWrapper &filter_gpu,
 			ProfilePrinter &profile_printer, Timeline<TimelineEvent>* timeline) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(0, pipeline, filter, profile_printer, timeline, i));
+			workers.push_back(new WorkerThread(0, pipeline, filter_cpu, filter_gpu, profile_printer, timeline, i));
 		}
 
 		for (auto &worker : workers) {
@@ -342,7 +344,7 @@ void WorkerThread::execute_pipeline() {
 
 		auto new_stream = [&] () {
 			// create probes
-			local_inflight.push_back(new InflightProbe(filter, device,
+			local_inflight.push_back(new InflightProbe(filter_gpu, device,
 				offset, tuples, pipeline.params.in_gpu_keys));
 			offset += tuples;
 			// printf("%lld: stream\n", id);
