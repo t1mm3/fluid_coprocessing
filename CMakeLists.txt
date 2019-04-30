@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
+set(AMSFILTER_NO_MAGIC 0) # Disables MAGIC addressing.
+set(AMSFILTER_PARTIAL_BUILD 0) # Compiles only a small number of filters.
 
 #subdirectories
 include_directories(../dtl/src)

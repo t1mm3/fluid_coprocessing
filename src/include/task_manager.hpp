@@ -4,10 +4,6 @@
 // #define GPU_SYNC
 #define CPU_WORK
 
-#ifdef DEBUG 
-#define GPU_BF_CHECK_AGAINST_CPU
-#endif
-
 #include "bloomfilter/bloom_cuda.hpp"
 #include "bloomfilter/util.hpp"
 
@@ -62,6 +58,7 @@ struct WorkerThread {
 	Pipeline &pipeline;
 	FilterWrapper &filter_cpu;
 	FilterWrapper &filter_gpu;
+	CpuProbe cpu_probe;
 
 	Timeline<TimelineEvent>* parent_timeline;
 	int64_t id;
@@ -98,7 +95,7 @@ struct WorkerThread {
 	              ProfilePrinter &profile_printer,
 	              Timeline<TimelineEvent>* parent_timeline, int64_t id)
 	    : pipeline(pipeline), device(gpu_device), filter_cpu(filter_cpu), 
-	    	filter_gpu(filter_gpu),
+	    	filter_gpu(filter_gpu), cpu_probe(filter_cpu),
 	    	parent_timeline(parent_timeline), id(id) {
 
 	    thread = new std::thread(ExecuteWorkerThread, this);
@@ -181,25 +178,6 @@ struct WorkerThread {
 
 				uint8_t* filter_base = (uint8_t*)bf_results + offset/8;
 
-#ifdef GPU_BF_CHECK_AGAINST_CPU
-				{
-					assert(!sel && "not implemented");
-					filter_cpu.contains_chr(&tmp8[0], keys, sel, n);
-
-					for (int i=0; i<n; i++) {
-						int w = i / 8;
-						int b = i % 8;
-
-						bool on = !!(filter_base[w] & (1 << b));
-						if (on != (bool)tmp8[i]) {
-							printf("@%d: gpu=%s vs cpu=%s", i,
-								on ? "1" : "0", (bool)tmp8[i] ? "1" : "0");
-						}
-						assert(on == (bool)tmp8[i]);
-					}
-				}
-#endif
-
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
@@ -232,19 +210,18 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prefilter += num;
 #endif
-				switch (pipeline.params.cpu_bloomfilter) {
-				case 1:
-					num = filter_cpu.contains_sel(&sel3[0], keys, sel, num);
-					sel = &sel3[0];	
-					break;
-				case 2:
-					filter_cpu.contains_chr(&tmp8[0], keys, sel, num);
-					num = Vectorized::select_match(&sel3[0], &tmp8[0], sel, num);
-					sel = &sel3[0];	
-					break;
-				default:
-					assert(false);
-					break;
+
+				if (pipeline.params.cpu_bloomfilter) {
+					cpu_probe.contains((uint32_t*)keys, num);
+
+					sel_tuples += num;
+					auto sel_start = rdtsc();
+					num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
+						cpu_probe.get_results(), num);
+					assert(num <= n);
+
+					sel_time += rdtsc() - sel_start;
+					sel = &sel2[0];
 				}
 				
 #ifdef PROFILE
