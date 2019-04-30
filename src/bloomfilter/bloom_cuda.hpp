@@ -23,7 +23,10 @@
 
 class FilterWrapper {
 public:
-	FilterWrapper(size_t bloom_size, amsfilter::Config config) : bloom_filter(config, bloom_size) {}
+	FilterWrapper(size_t bloom_size, amsfilter::Config config) : 
+		bloom_filter(config, bloom_size), 
+		filter_data(bloom_filter.size(), 0) {
+	}
 	~FilterWrapper() {}
 
 	// void insert_with_hash(const key_t key) noexcept {
@@ -39,6 +42,13 @@ public:
 	// 	auto hash_key = bloom_filter.hash(key);
 	// 	return bloom_filter.contains_with_hash(&filter_data[0], hash_key, key);
 	// }
+
+	void cache_keys(uint32_t* keys, size_t key_cnt) {
+		auto keys_size = key_cnt * sizeof(uint32_t);
+		cudaMalloc((void**)&device_keys, keys_size);
+		cudaMemcpy(device_keys, keys, keys_size, cudaMemcpyHostToDevice);
+		cuda_check_error();
+	}
 
 	bool contains(const key_t key) {
 		return bloom_filter.contains(key);
@@ -58,4 +68,6 @@ public:
 		});
 	}
 	amsfilter::AmsFilterLite bloom_filter;
+	std::vector<amsfilter::word_t> filter_data;
+	key_t* device_keys;
 };

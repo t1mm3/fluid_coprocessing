@@ -16,3 +16,5 @@ plot_bf_sort.pgf
 plot_bf_sort_throughput.pgf
 plot_bf_sort_time.pgf
 plot*
+scripts/amsfilter
+scripts/common_exp.pyc

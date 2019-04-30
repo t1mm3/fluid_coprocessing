@@ -337,7 +337,7 @@ int main(int argc, char** argv) {
 
         size_t m = params.filter_size;
          // Construct the filter.
-       FilterWrapper filter(m, config);
+        FilterWrapper filter(m, config);
 
         uint32_t *table_keys = (uint32_t *)table_build.columns[0];
         uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
@@ -365,6 +365,7 @@ int main(int argc, char** argv) {
         if(params.in_gpu_keys){
             key_cnt = table_probe.size();
             keys = static_cast<uint32_t*>(table_probe.columns[0]);
+            filter.cache_keys(keys, key_cnt);
         } 
 
         ProfilePrinter profile_info(params);
