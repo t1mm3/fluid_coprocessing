@@ -80,10 +80,12 @@ struct WorkerThread {
 	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
 
+#endif
+
+#ifdef PROFILE_SELECT
 	size_t sel_time = 0;
 	size_t sel_tuples = 0;
 #endif
-
 	// temporary vectors for slowdown
 	int64_t tmp1[kVecSize];
 	int64_t tmp2[kVecSize];
@@ -181,14 +183,18 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
+
+#ifdef PROFILE_SELECT
 				auto sel_start = rdtsc();
+#endif
 				num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
 					filter_base, n);
 				assert(num <= n);
 
+#ifdef PROFILE_SELECT
 				sel_tuples += n;
 				sel_time += rdtsc() - sel_start;
-
+#endif
 
 #ifdef PROFILE
 				num_postfilter += num;
@@ -214,19 +220,27 @@ struct WorkerThread {
 				if (pipeline.params.cpu_bloomfilter) {
 					cpu_probe.contains((uint32_t*)keys, num);
 
+#ifdef PROFILE_SELECT
 					sel_tuples += num;
 					auto sel_start = rdtsc();
+#endif
 					num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
 						cpu_probe.get_results(), num);
 					assert(num <= n);
-
+#ifdef PROFILE_SELECT
 					sel_time += rdtsc() - sel_start;
+#endif
 					sel = &sel2[0];
+
 				}
 				
 #ifdef PROFILE
 				num_postfilter += num;
 #endif
+			}
+
+			if (!num) {
+				return;
 			}
 
 			// Other pipeline stuff
@@ -512,7 +526,9 @@ void WorkerThread::execute_pipeline() {
 	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
 		(double)num_postjoin / (double)num_prejoin * 100.0);
+#endif
 
+#ifdef PROFILE_SELECT
 	printf("sel %f\n", (double)sel_time / (double)sel_tuples);
 #endif
 
