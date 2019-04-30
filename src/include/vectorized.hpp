@@ -10,7 +10,8 @@
 #include <stdint.h>
 #include <string>
 #include "constants.hpp"
-
+#include <immintrin.h>
+#include <x86intrin.h>
 #define bucket_t uint32_t
 
 struct Vectorized {
@@ -114,7 +115,234 @@ struct Vectorized {
 		return num;
 	}
 
-	static int NO_INLINE select_match_bit_branch(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+	static int NO_INLINE select_match_bit_branch64b(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		int res = 0;
+
+		int i = 0;
+
+		uint8_t *CPU_R au = (uint8_t*)a;
+		uint64_t *CPU_R af = (uint64_t*)a;
+
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
+		}
+
+#define A(z, o) B(w, 1 << o, z+o)
+
+		for (; i + 8 < num; i += 64) {
+			const auto w = af[i / 64];
+			if (!w) {
+				// nothing set, fast forward
+				continue;
+			}
+
+			int bit;
+			auto word = w;
+			int offset = 0;
+
+			do {
+				bit = __builtin_ctzll(word);
+				osel[res++] = offset + bit + i;
+
+				if (bit == 63) {
+					break;
+				}
+				word >>= (1+ bit);
+				offset += 1+bit;
+			} while (word);
+		}
+
+		for (; i < num; i++) {
+			const uint8_t w = au[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
+		}
+#undef A
+#undef B
+
+		return res;
+	}
+
+
+	static int NO_INLINE select_match_bit_branch32b(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		int res = 0;
+
+		int i = 0;
+
+		uint8_t *CPU_R au = (uint8_t*)a;
+		uint32_t *CPU_R af = (uint32_t*)a;
+
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
+		}
+
+#define A(z, o) B(w, 1 << o, z+o)
+
+		for (; i + 8 < num; i += 32) {
+			const auto w = af[i / 32];
+			if (!w) {
+				// nothing set, fast forward
+				continue;
+			}
+
+#if 1
+			int bit;
+			auto word = w;
+			int offset = 0;
+
+			do {
+				bit = __builtin_ctz(word);
+				osel[res++] = offset + bit + i;
+
+				if (bit == 31) {
+					break;
+				}
+				word >>= (1+ bit);
+				offset += 1+bit;
+			} while (word);
+#else
+			// slightly slower
+			const auto start = __builtin_ctz(w);
+			auto stop = 32-__builtin_clz(w);
+
+			// printf("%llu %d, %d\n", w, start, stop);
+
+			for (int k=start; k<stop; k++) {
+				const uint8_t w = au[(i+k) / 8];
+				uint8_t m = 1 << ((i+k) % 8);
+				B(w, m, (i+k));
+			}
+#endif
+		}
+
+		for (; i < num; i++) {
+			const uint8_t w = au[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
+		}
+#undef A
+#undef B
+
+		return res;
+	}
+
+	static int NO_INLINE select_match_bit_branch32(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		int res = 0;
+
+		int i = 0;
+
+		uint8_t *CPU_R au = (uint8_t*)a;
+		uint32_t *CPU_R af = (uint32_t*)a;
+
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
+		}
+
+#define A(z, o) B(w, 1 << o, z+o)
+
+		for (; i + 8 < num; i += 32) {
+			const auto w = af[i / 32];
+			if (!w) {
+				// nothing set, fast forward
+				continue;
+			}
+
+			A(i, 0);
+			A(i, 1);
+			A(i, 2);
+			A(i, 3);
+			A(i, 4);
+			A(i, 5);
+			A(i, 6);
+			A(i, 7);
+			A(i, 8);
+			A(i, 9);
+			A(i, 10);
+			A(i, 11);
+			A(i, 12);
+			A(i, 13);
+			A(i, 14);
+			A(i, 15);
+			A(i, 16);
+			A(i, 17);
+			A(i, 18);
+			A(i, 19);
+			A(i, 20);
+			A(i, 21);
+			A(i, 22);
+			A(i, 23);
+			A(i, 24);
+			A(i, 25);
+			A(i, 26);
+			A(i, 27);
+			A(i, 28);
+			A(i, 29);
+			A(i, 30);
+			A(i, 31);
+		}
+
+		for (; i < num; i++) {
+			const uint8_t w = au[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
+		}
+#undef A
+#undef B
+
+		return res;
+	}
+
+	static int NO_INLINE select_match_bit_branch16(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+		int res = 0;
+
+		int i = 0;
+
+		uint8_t *CPU_R au = (uint8_t*)a;
+		uint16_t *CPU_R af = (uint16_t*)a;
+
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
+		}
+
+#define A(z, o) B(w, 1 << o, z+o)
+
+		for (; i + 8 < num; i += 16) {
+			const auto w = af[i / 16];
+			if (!w) {
+				// nothing set, fast forward
+				continue;
+			}
+
+			A(i, 0);
+			A(i, 1);
+			A(i, 2);
+			A(i, 3);
+			A(i, 4);
+			A(i, 5);
+			A(i, 6);
+			A(i, 7);
+			A(i, 8);
+			A(i, 9);
+			A(i, 10);
+			A(i, 11);
+			A(i, 12);
+			A(i, 13);
+			A(i, 14);
+			A(i, 15);
+		}
+
+		for (; i < num; i++) {
+			const uint8_t w = au[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
+		}
+#undef A
+#undef B
+
+		return res;
+	}
+
+	static int NO_INLINE select_match_bit_branch8(int *CPU_R osel, uint8_t *CPU_R a, int num) {
 		int res = 0;
 
 		int i = 0;
@@ -153,8 +381,53 @@ struct Vectorized {
 		return res;
 	}
 
-	static int select_match_bit(bool branch, int *CPU_R osel, uint8_t *CPU_R a, int num) {
-		return select_match_bit_branch(osel, a ,num);
+	static int NO_INLINE select_match_bit_avx(int *CPU_R osel, uint8_t *CPU_R a, int num) {
+#ifdef __AVX512F__
+		int res = 0;
+
+		int i = 0;
+		auto pos = _mm512_set_epi32(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+		uint8_t *CPU_R au = (uint8_t*)a;
+		uint16_t *CPU_R af = (uint16_t*)a;
+
+#define B(w, m, pos) if ((w) & (m)) { \
+			osel[res++] = (pos); \
+		}
+
+#define A(z, o) B(w, 1 << o, z+o)
+
+		for (; i + 16 < num; i += 16) {
+			__mmask16 w1 = af[i / 16];
+
+			_mm512_mask_compressstoreu_epi32(osel + res, w1, pos);
+			res += __builtin_popcount(w1);
+			pos = _mm512_add_epi32(pos, _mm512_set1_epi32(16));
+		}
+
+		for (; i < num; i++) {
+			const uint8_t w = au[i / 8];
+			uint8_t m = 1 << (i % 8);
+			B(w, m, i);
+		}
+#undef A
+#undef B
+
+		return res;
+#else
+		// fastest for < 70 % except with AVX512
+		return select_match_bit_branch64b(osel, a, num);
+#endif
+	}
+
+	static int select_match_bit(int sel, int *CPU_R osel, uint8_t *CPU_R a, int num) {
+#ifdef __AVX512F__
+		if (sel >= 1) {
+			return select_match_bit_avx(osel, a, num);
+		} else {
+			return select_match_bit_branch64b(osel, a, num);
+		}
+#endif
+		return select_match_bit_branch64b(osel, a ,num);
 	}
 
 #if 1

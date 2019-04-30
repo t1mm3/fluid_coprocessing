@@ -15,7 +15,18 @@ include_directories(thirdparty/)
 include_directories(src/)
 include_directories(src/include)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer ")
+# The target architecture.
+set(TARGET_ARCH "native")
+
+ADD_DEFINITIONS(
+  -std=c++14
+  -march=${TARGET_ARCH}
+  -O3
+  -ftree-vectorize -ftree-slp-vectorize -funroll-all-loops -fpeel-loops -fomit-frame-pointer 
+)
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -march=${TARGET_ARCH} ")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=${TARGET_ARCH}")
 set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer ")
 
 
@@ -32,9 +43,6 @@ include_directories(${CUDA_API_WRAPPERS_INCLUDE_DIRS})
 # but what about the library search path?
 
 link_libraries(${CUDA_API_WRAPPERS_LIBS} stdc++fs)
-
-# The target architecture.
-set(TARGET_ARCH "native")
 
 # Include the AMS-Filter.
 set(AMSFILTER_NO_MAGIC 1) # Disables MAGIC addressing.
@@ -71,7 +79,7 @@ if (CUDA_FOUND)
     set(CUDA_NVCC_FLAGS_RELEASE -O3 -g --use_fast_math -DNDEBUG)
 
 
-    set(CUDA_PROPAGATE_HOST_FLAGS OFF)
+    set(CUDA_PROPAGATE_HOST_FLAGS ON)
     set(CUDA_SEPARABLE_COMPILATION OFF)
 
     include_directories(/usr/local/cuda/include)
@@ -85,8 +93,8 @@ else()
 endif()
 
 ### GCC Flags
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGPU -DDEBUG -O0 -g -march=native")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -O3 -g -march=native")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGPU -DDEBUG -O0 -g -march=${TARGET_ARCH}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGPU -O3 -g -march=${TARGET_ARCH}")
 
 
 SET(BLOOM_CUDA_SOURCE_FILES
@@ -107,32 +115,15 @@ SET(BLOOM_SIZE_FILES
 configure_file(build.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/build.hpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-
-#add_library(mainlib SHARED src/task_manager.cpp src/table.cpp src/query.cpp)
-#target_compile_options(mainlib PRIVATE -march=native -Wall -pedantic)
-
-#add_library(veclib SHARED src/hash_table.cpp src/vectorized.cpp)
-#target_compile_options(veclib PRIVATE -march=native -Wall -pedantic)
-#set_target_properties(veclib PROPERTIES COMPILE_FLAGS "-O3 -march=native")
-
-
-#add_executable(main main.cpp)
-
-#target_link_libraries(main mainlib veclib Threads::Threads)
-#target_compile_options(main PRIVATE -march=native -Wall -pedantic)
-
 #benchmark
 cuda_add_executable(blocked_bloom_benchmark ${BLOOM_CUDA_SOURCE_FILES})
 target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
 #framework
 cuda_add_executable(main_cu ${FRAMEWORK})
+set_target_properties(main_cu PROPERTIES COMPILE_FLAGS "-march=${TARGET_ARCH}")
 target_link_libraries(main_cu cudart numa pthread amsfilter)
 #bechmark bloom size
 cuda_add_executable(bloom_size_benchmark ${BLOOM_SIZE_FILES})
 target_link_libraries(blocked_bloom_benchmark cudart numa pthread)
-#enable_testing()
-#add_executable(test_cpp src/test.cpp src/table.cpp src/query.cpp)
-#target_link_libraries(test_cpp mainlib Threads::Threads)
-#add_test(NAME test_cpp COMMAND test_cpp)
 
 add_executable(determine_configuration determine_configuration.cpp)

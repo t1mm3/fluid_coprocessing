@@ -81,6 +81,9 @@ struct WorkerThread {
 	uint64_t num_postfilter = 0;
 	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
+
+	size_t sel_time = 0;
+	size_t sel_tuples = 0;
 #endif
 
 	// temporary vectors for slowdown
@@ -198,9 +201,13 @@ struct WorkerThread {
 #ifdef PROFILE
 				num_prefilter += n;
 #endif
-				num = Vectorized::select_match_bit(true, sel2,
+				auto sel_start = rdtsc();
+				num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
 					filter_base, n);
 				assert(num <= n);
+
+				sel_tuples += n;
+				sel_time += rdtsc() - sel_start;
 
 
 #ifdef PROFILE
@@ -526,6 +533,8 @@ void WorkerThread::execute_pipeline() {
 	printf("THREAD filter sel %4.2f%% -> join sel %4.2f%% \n",
 		(double)num_postfilter / (double)num_prefilter * 100.0,
 		(double)num_postjoin / (double)num_prejoin * 100.0);
+
+	printf("sel %f\n", (double)sel_time / (double)sel_tuples);
 #endif
 
 	if (timeline) timeline->push(TimelineEvent {"DONE", 0, 0});
