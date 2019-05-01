@@ -7,6 +7,23 @@
 #include <amsfilter/amsfilter_lite.hpp>
 #include <amsfilter/internal/blocked_bloomfilter_template.hpp>
 
+struct CpuProbe {
+	amsfilter::ProbeLite probe;
+
+	CpuProbe(FilterWrapper &filter) : probe(filter.bloom_filter.batch_probe(kVecSize)) {
+	}
+
+	void contains(uint32_t *keys, int64_t key_cnt) {
+		probe(keys, key_cnt);
+		probe.wait();
+	}
+
+	uint8_t* get_results() {
+		return (uint8_t*)probe.get_results().begin();
+	}
+
+};
+
 struct InflightProbe {
 	InflightProbe* q_next = nullptr;
 	InflightProbe* q_prev = nullptr;
@@ -22,7 +39,7 @@ struct InflightProbe {
 
 	Status status = Status::FRESH;
 
-	amsfilter::cuda::ProbeLite *probe;
+	amsfilter::cuda::ProbeLite *gpu_probe;
 	int64_t num;
 	int64_t offset;
 
@@ -36,14 +53,14 @@ struct InflightProbe {
 	InflightProbe(FilterWrapper &filter_wrapper, uint32_t device, 
 			int64_t start, int64_t tuples_to_process, bool in_gpu_keys) : num(tuples_to_process), offset(start), filter(filter_wrapper) {
 
-		probe = new typename amsfilter::cuda::ProbeLite(filter.bloom_filter.batch_probe_cuda(tuples_to_process, device));
+		gpu_probe = new typename amsfilter::cuda::ProbeLite(filter.bloom_filter.batch_probe_cuda(tuples_to_process, device));
 
 		cpu_offset = 0;
 		processed = 0;
 	}
 	bool is_gpu_available() {
 		if (status == Status::FILTERING) {
-			return probe->is_done();
+			return gpu_probe->is_done();
 		}
 		return true;
 	}
@@ -53,12 +70,12 @@ struct InflightProbe {
 		if(in_gpu_keys) {
 			keys_ptr = (uint32_t*)&filter.device_keys[offset];
 		}
-		probe->operator()(keys_ptr, key_cnt, in_gpu_keys);
+		gpu_probe->operator()(keys_ptr, key_cnt, in_gpu_keys);
 		//assert(!probe->is_done());
 	}
 
 	void wait() {
-		return probe->wait();
+		return gpu_probe->wait();
 	}
 
 	void reset(int64_t noffset, int64_t nnum) {
@@ -72,13 +89,13 @@ struct InflightProbe {
 	}
 
 	uint32_t* get_results() {
-		assert(probe->is_done());
-		return probe->get_results().begin();
+		assert(gpu_probe->is_done());
+		return gpu_probe->get_results().begin();
 	}
 
 	~InflightProbe() {
 		//cudaStreamDestroy(stream);
-		delete probe;
+		delete gpu_probe;
 	}
 
 };
