@@ -50,7 +50,7 @@ include_directories(${CUDA_API_WRAPPERS_INCLUDE_DIRS})
 link_libraries(${CUDA_API_WRAPPERS_LIBS} stdc++fs)
 
 # Include the AMS-Filter.
-set(AMSFILTER_NO_MAGIC 1) # Disables MAGIC addressing.
+set(AMSFILTER_NO_MAGIC 0) # Disables MAGIC addressing.
 set(AMSFILTER_PARTIAL_BUILD 0) # Compiles only a small number of filters.
 add_subdirectory(../dtl/amsfilter amsfilter)
 include_directories(../dtl/amsfilter/src)
