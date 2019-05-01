@@ -472,8 +472,8 @@ int main(int argc, char** argv) {
 
         if (params.measure_tw) {
             printf("TW %f ns %f cyc\n",
-                1000.0 * 1000.0 * 1000.0 * final_elapsed_time / (double)table_probe.size(),
-                profile_info.pipeline_cycles / (double)table_probe.size() / (double)params.num_repetitions);
+                1000.0 * 1000.0 * 1000.0 * final_elapsed_time / (double)table_probe.size() * (double)params.num_threads,
+                profile_info.pipeline_cycles / (double)table_probe.size() / (double)params.num_repetitions * (double)params.num_threads);
         } else {
             profile_info.write_profile(results_file);
         }
