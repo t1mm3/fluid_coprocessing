@@ -280,6 +280,11 @@ int main(int argc, char** argv) {
         return s.str();
     };
 
+    if (params.measure_tw) {
+        params.cpu_bloomfilter = 0;
+        params.gpu = 0;
+    }
+
     const std::string bfile(gen_fname(0));
     const std::string pfile(gen_fname(1));
     const std::string ksum(gen_fname(3));
@@ -476,7 +481,7 @@ int main(int argc, char** argv) {
 #ifdef PROFILE
                 profile_info.pre_filter_tuples += pipeline.num_prefilter;
                 profile_info.fitered_tuples    += pipeline.num_postfilter;
-                profile_info.pos_join_tuples   += pipeline.num_prejoin;
+                profile_info.pre_join_tuples   += pipeline.num_prejoin;
                 profile_info.pos_join_tuples   += pipeline.num_postjoin;
 #endif
             }
@@ -488,7 +493,13 @@ int main(int argc, char** argv) {
         double final_elapsed_time = profile_info.pipeline_time / (double)params.num_repetitions;
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
 
-        profile_info.write_profile(results_file);
+        if (params.measure_tw) {
+            printf("TW %f ns %f cyc\n",
+                1000.0 * 1000.0 * 1000.0 * final_elapsed_time / (double)table_probe.size() * (double)params.num_threads,
+                profile_info.pipeline_cycles / (double)table_probe.size() / (double)params.num_repetitions * (double)params.num_threads);
+        } else {
+            profile_info.write_profile(results_file);
+        }
     }
     results_file.close();
 

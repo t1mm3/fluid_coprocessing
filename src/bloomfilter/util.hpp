@@ -311,6 +311,7 @@ struct params_t {
 
 	std::size_t num_repetitions   {defaults::num_repetitions};
 	bool gpu  					  {defaults::gpu};
+	bool measure_tw				  {false};
 	int cpu_bloomfilter 		  {defaults::cpu_bloomfilter};
 	std::size_t selectivity 	  {defaults::selectivity};
 	std::string csv_path		  {""};
@@ -401,6 +402,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.selectivity = std::stoll(arg_value);
 		} else if (arg_name == "gpu") {
 			params.gpu = std::stoll(arg_value) != 0;
+		} else if (arg_name == "measure_tw") {
+			params.measure_tw = std::stoll(arg_value) != 0;
 		} else if (arg_name == "only_generate") {
 			params.only_generate = std::stoll(arg_value) != 0;
 		} else if (arg_name == "cpu_bloomfilter") {
