@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include <algorithm>
+#include <tuple>
 
 #include "hash_table.hpp"
 #include "profile_printer.hpp"
@@ -210,6 +211,44 @@ void test() {
     assert(sel[7] == 28);
 }
 //===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
+std::tuple<amsfilter::Params, amsfilter::Params> determine_filter_configuration(params_t params) {
+    // Obtain a model instance. - Note: The calibration tool needs to be executed
+    // before.
+    amsfilter::Model model;
+    
+    //CPU env
+    const auto thread_count = params.num_threads;//std::thread::hardware_concurrency() / 2;
+    const auto cpu_env = amsfilter::model::Env::cpu(thread_count);
+    
+    // GPU env
+    const auto device_no = 0u; // cuda device
+    const auto gpu_env = amsfilter::model::Env::gpu(device_no, amsfilter::model::Memory::HOST_PINNED);
+    
+    // Obtain the parameters for a (close to) performance-optimal filter.
+    // The model needs the following two values to find the optimal parameters:
+    //   build size (n):  The number of keys that will be inserted in the filter.
+    //   work time (tw):  The execution time in nanoseconds that is saved when an
+    //                    element is filtered out.
+    const auto n = params.build_size;
+    const auto tw = params.tw; // [ns]
+    const auto cpu_params = model.determine_filter_params(cpu_env, n, tw);
+    const auto gpu_params = model.determine_filter_params(gpu_env, n, tw);
+
+    std::cout
+        << "Host-side filter:   m=" << cpu_params.get_filter_size()
+        << ", config=" << cpu_params.get_filter_config() << std::endl;
+    std::cout
+        << "Device-side filter: m=" << gpu_params.get_filter_size()
+        << ", config=" << gpu_params.get_filter_config() << std::endl;
+
+    return std::make_tuple(cpu_params, gpu_params);
+}
+
+//===----------------------------------------------------------------------===//
+
+//===----------------------------------------------------------------------===//
 int main(int argc, char** argv) {
     test();
     auto params = parse_command_line(argc, argv);
@@ -335,42 +374,28 @@ int main(int argc, char** argv) {
 
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
-        // Obtain a model instance. - Note: The calibration tool needs to be executed
-        // before.
-        amsfilter::Model model;
+        amsfilter::Config cpu_config, gpu_config;
+        size_t cpu_m, gpu_m;
+        if(params.manual_filter) {
+            cpu_config = parse_filter_config(params.filter_config);
+            gpu_config = cpu_config;
+            cpu_m = params.filter_size;
+            gpu_m = cpu_m;
+        } else {
 
-        //CPU env
-        const auto thread_count = params.num_threads;//std::thread::hardware_concurrency() / 2;
-        const auto cpu_env = amsfilter::model::Env::cpu(thread_count);
+            const auto filter_tuple = determine_filter_configuration(params);
+            const auto cpu_params = std::get<0>(filter_tuple);
+            const auto gpu_params = std::get<1>(filter_tuple);
+            cpu_config = cpu_params.get_filter_config();
+            cpu_m = cpu_params.get_filter_size();
+            gpu_config = gpu_params.get_filter_config();
+            gpu_m = gpu_params.get_filter_size();
+        }
 
-        // GPU env
-        const auto device_no = 0u; // cuda device
-        const auto gpu_env = amsfilter::model::Env::gpu(device_no, amsfilter::model::Memory::HOST_PINNED);
-
-        // Obtain the parameters for a (close to) performance-optimal filter.
-        // The model needs the following two values to find the optimal parameters:
-        //   build size (n):  The number of keys that will be inserted in the filter.
-        //   work time (tw):  The execution time in nanoseconds that is saved when an
-        //                    element is filtered out.
-        const auto n = params.build_size;
-        const auto tw = params.tw; // [ns]
-
-        const auto cpu_params = model.determine_filter_params(cpu_env, n, tw);
-        const auto gpu_params = model.determine_filter_params(gpu_env, n, tw);
-
-        std::cout
-            << "Host-side filter:   m=" << cpu_params.get_filter_size()
-            << ", config=" << cpu_params.get_filter_config() << std::endl;
-        std::cout
-            << "Device-side filter: m=" << gpu_params.get_filter_size()
-            << ", config=" << gpu_params.get_filter_config() << std::endl;
 
 
         cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
         // CPU Config
-        const auto cpu_config = cpu_params.get_filter_config();
-        const auto cpu_m = cpu_params.get_filter_size();
-        //amsfilter::Config config = parse_filter_config(params.filter_config);
         std::cout << "Filter parameters: w=" << cpu_config.word_cnt_per_block
         << ", s=" << cpu_config.sector_cnt 
         << ", z=" << cpu_config.zone_cnt 
@@ -379,8 +404,6 @@ int main(int argc, char** argv) {
         << std::endl;
 
         // GPU Config
-        const auto gpu_config = gpu_params.get_filter_config();
-        const auto gpu_m = gpu_params.get_filter_size();
         std::cout << "Filter parameters: w=" << gpu_config.word_cnt_per_block
         << ", s=" << gpu_config.sector_cnt 
         << ", z=" << gpu_config.zone_cnt 

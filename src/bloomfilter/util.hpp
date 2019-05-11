@@ -323,6 +323,7 @@ struct params_t {
 	std::size_t num_warmup 		  {defaults::num_warmup};
 	std::size_t tw 		  		  {defaults::tw};
 	bool in_gpu_keys 			  {defaults::in_gpu_keys};
+	bool manual_filter 			  {defaults::manual_filter};
 	std::string filter_config     {"32,1,1,2"};
 
 	std::size_t probe_scale {0};
@@ -410,8 +411,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.probe_scale = std::stoll(arg_value);
 		} else if (arg_name == "num_payloads") {
 			params.num_payloads = std::stoll(arg_value);
-		} else if (arg_name == "num_payload") {
-			params.num_payloads = std::stoll(arg_value);
+		} else if (arg_name == "manual_filter") {
+			params.manual_filter = std::stoll(arg_value) != 0;
 		} else if (arg_name == "filter_config") {
 			params.filter_config = std::string(arg_value);
 		} else if (arg_name == "tw") {
