@@ -22,6 +22,8 @@
 #include <dtl/env.hpp>
 #include <dtl/thread.hpp>
 
+constexpr static double kTwScale = 1000.0;
+
 
 amsfilter::Config parse_filter_config(const std::string config_str) {
 
@@ -360,8 +362,10 @@ int main(int argc, char** argv) {
         const auto n = params.build_size;
         const auto tw = params.tw; // [ns]
 
-        const auto cpu_params = model.determine_filter_params(cpu_env, n, tw);
-        const auto gpu_params = model.determine_filter_params(gpu_env, n, tw);
+        printf("n=%lld", n);
+
+        const auto cpu_params = model.determine_filter_params(cpu_env, n, (double)tw / kTwScale);
+        const auto gpu_params = model.determine_filter_params(gpu_env, n, (double)tw / kTwScale);
 
         std::cout
             << "Host-side filter:   m=" << cpu_params.get_filter_size()
@@ -403,23 +407,25 @@ int main(int argc, char** argv) {
         uint32_t *probe_keys = static_cast<uint32_t*>(table_probe.columns[0]);
         std::set<uint32_t> positions;
 
-        for (std::size_t i = 0; i < table_build.size(); ++i) {
-            const auto key = (uint32_t)*(table_keys + i);
-            //std::cout << "Insert key " << key << " position " << i << '\n';
-            filter_cpu.insert(key);
-            filter_gpu.insert(key);
-        }
+        if (!params.measure_tw) {
+            for (std::size_t i = 0; i < table_build.size(); ++i) {
+                const auto key = (uint32_t)*(table_keys + i);
+                //std::cout << "Insert key " << key << " position " << i << '\n';
+                filter_cpu.insert(key);
+                filter_gpu.insert(key);
+            }
 
-        // Validate Filter on CPU
-        for (std::size_t i = 0; i < table_build.size(); ++i) {
-            const auto key = (uint32_t)*(table_keys + i);
-            auto match_cpu = filter_cpu.contains(key);
-            auto match_gpu = filter_gpu.contains(key);
-            if(!match_cpu || !match_gpu)
-                std::cout << "no match key " << key << " position "<< i << '\n';
+            // Validate Filter on CPU
+            for (std::size_t i = 0; i < table_build.size(); ++i) {
+                const auto key = (uint32_t)*(table_keys + i);
+                auto match_cpu = filter_cpu.contains(key);
+                auto match_gpu = filter_gpu.contains(key);
+                if(!match_cpu || !match_gpu)
+                    std::cout << "no match key " << key << " position "<< i << '\n';
 
+            }
         }
-        std::cout << std::endl;
+            std::cout << std::endl;
 
         // cuda instance of bloom filter logic on GPU with keys on CPU
          int64_t key_cnt = 0;
@@ -461,6 +467,7 @@ int main(int argc, char** argv) {
                 profile_info.pre_join_tuples   += pipeline.num_prejoin;
                 profile_info.pos_join_tuples   += pipeline.num_postjoin;
 #endif
+                profile_info.semijoin_time     += pipeline.prof_semijoin_time;
             }
             if(expected_ksum != pipeline.ksum) {
                 std::cout << " invalid ksum:" << pipeline.ksum << " expected:" << expected_ksum << std::endl;
@@ -471,9 +478,15 @@ int main(int argc, char** argv) {
         std::cout << " Probe time (sec):" << final_elapsed_time << std::endl;
 
         if (params.measure_tw) {
-            printf("TW %f ns %f cyc\n",
-                1000.0 * 1000.0 * 1000.0 * final_elapsed_time / (double)table_probe.size() * (double)params.num_threads,
-                profile_info.pipeline_cycles / (double)table_probe.size() / (double)params.num_repetitions * (double)params.num_threads);
+            double total_semijoin_cycles = profile_info.semijoin_time / (double)params.num_repetitions;
+            double total_cycles = profile_info.pipeline_sum_thread_cycles / (double)params.num_repetitions;
+            double semijoin_frac = total_semijoin_cycles / total_cycles;
+            printf("TotCycles %f SJCycles %f SJPerc %f\n", total_cycles, total_semijoin_cycles, semijoin_frac);
+            double giga = 1000.0 * 1000.0 * 1000.0;
+            double tw_cyc = total_semijoin_cycles / (double)params.num_threads / (double)table_probe.size(); // / (double)params.num_threads;
+            double tw_ns = semijoin_frac * final_elapsed_time * giga / (double)table_probe.size(); // / (double)params.num_threads;
+
+            printf("TW %f ps %f cyc\n", tw_ns * kTwScale, tw_cyc);
         } else {
             profile_info.write_profile(results_file);
         }

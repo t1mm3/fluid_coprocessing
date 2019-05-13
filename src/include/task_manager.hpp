@@ -80,6 +80,7 @@ struct WorkerThread {
 	uint64_t num_prejoin = 0;
 	uint64_t num_postjoin = 0;
 
+	uint64_t prof_semijoin_time = 0;
 #endif
 
 #ifdef PROFILE_SELECT
@@ -226,7 +227,6 @@ struct WorkerThread {
 #endif
 					num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
 						cpu_probe.get_results(), num);
-					assert(num <= n);
 #ifdef PROFILE_SELECT
 					sel_time += rdtsc() - sel_start;
 #endif
@@ -242,6 +242,8 @@ struct WorkerThread {
 			if (!num) {
 				return;
 			}
+
+			auto prof_start = rdtsc();
 
 			// Other pipeline stuff
 			if (pipeline.params.slowdown > 0) {
@@ -262,6 +264,13 @@ struct WorkerThread {
 					ht->Probe(ctx, matches, keys, hashs, sel, num);
 					num = Vectorized::select_match(sel1, matches, sel, num);
 					sel = &sel1[0];
+
+					{
+						auto t = rdtsc();
+						prof_semijoin_time += t - prof_start;
+						prof_start = t;
+					}
+
 					if (!num) {
 						return; // nothing to do with this stride
 					}
@@ -350,11 +359,13 @@ void WorkerThread::execute_pipeline() {
 
 		if (pipeline.params.num_gpu_stream_threads <= 1) {
 			if (id == 0) {
+				printf("allc\n");
 				for (int i=0; i<pipeline.params.num_gpu_streams; i++) {
 					new_stream();
 				}	
 			}	
 		} else {
+			printf("thread stream\n");
 			for (int i=id; i<pipeline.params.num_gpu_streams; i+=pipeline.params.num_gpu_stream_threads) {
 				new_stream();
 			}
@@ -520,6 +531,7 @@ void WorkerThread::execute_pipeline() {
 	std::atomic_fetch_add(&pipeline.num_postfilter, num_postfilter);
 	std::atomic_fetch_add(&pipeline.num_prejoin, num_prejoin);
 	std::atomic_fetch_add(&pipeline.num_postjoin, num_postjoin);
+	std::atomic_fetch_add(&pipeline.prof_semijoin_time, prof_semijoin_time);
 #endif
 
 #ifdef PROFILE
