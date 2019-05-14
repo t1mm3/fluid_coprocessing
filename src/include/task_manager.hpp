@@ -227,6 +227,7 @@ struct WorkerThread {
 #endif
 					num = Vectorized::select_match_bit(pipeline.params.selectivity, sel2,
 						cpu_probe.get_results(), num);
+					//assert(num <= n);
 #ifdef PROFILE_SELECT
 					sel_time += rdtsc() - sel_start;
 #endif

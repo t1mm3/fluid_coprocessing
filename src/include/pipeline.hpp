@@ -33,6 +33,7 @@ struct Pipeline {
 	std::atomic<uint64_t> num_postfilter;
 	std::atomic<uint64_t> num_prejoin;
 	std::atomic<uint64_t> num_postjoin;
+	std::atomic<uint64_t> prof_semijoin_time;
 #endif
 
 	params_t& params;
@@ -53,6 +54,7 @@ public:
 		num_prejoin = 0;
 		num_postjoin = 0;
 #endif
+		prof_semijoin_time = 0;
 		ksum = 0;
 		psum = 0;
 		g_queue_head = nullptr;
@@ -82,6 +84,7 @@ public:
 		num_prejoin = 0;
 		num_postjoin = 0;
 #endif
+		prof_semijoin_time = 0;
 		ksum = 0;
 		psum = 0;
 

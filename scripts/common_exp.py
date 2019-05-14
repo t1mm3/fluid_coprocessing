@@ -53,14 +53,14 @@ def syscall(cmd):
 
 	while timed_out:
 		assert(iterations < 10)
-		output = run_timeout(cmd, time_out_seconds)
+		output = run_timeout(cmd, None) # time_out_seconds
 		timed_out = output is None
 		iterations = iterations + 1
 
 	assert(output is not None)
 	return output
 
-def run_test(fname = None, probe_size = None, streams = None, filter_size = None, probe_scale = None, num_payloads = None, build_size = None, gpu_morsel_size = None, cpu_morsel_size = None, gpu_devices = None, selectivity = None, threads = None, cpu_filter = None, slowdown = None, keys_on_gpu = None, perf_optimal_bloomfilters = None):
+def run_test(fname = None, probe_size = None, streams = None, filter_size = None, probe_scale = None, num_payloads = None, build_size = None, gpu_morsel_size = None, cpu_morsel_size = None, gpu_devices = None, selectivity = None, threads = None, cpu_filter = None, slowdown = None, keys_on_gpu = None, measure_tw = None, tw = None):
 	if fname is None: raise Exception("No filename provided")
 	if probe_size is None: probe_size = default_probe_size
 	if streams is None: streams = default_streams
@@ -76,32 +76,44 @@ def run_test(fname = None, probe_size = None, streams = None, filter_size = None
 	if keys_on_gpu is None: keys_on_gpu = default_keys_on_gpu
 	if probe_scale is None: probe_scale = default_probe_scale
 	if num_payloads is None: num_payloads = default_num_payloads
-	if perf_optimal_bloomfilters is None: perf_optimal_bloomfilters = False
+	# if tw is None: tw =
+	if measure_tw is None: measure_tw = 0
 
 	repetitions=default_repetitions
 
+	if tw is None:
+		cmd_tw = "--manual_filter=1 --filter_config=16,1,1,2"
+	else:
+		cmd_tw = "--tw={}".format(tw)
 
-	cmd = """{BINARY} --repetitions={REPS} --streams={STREAM} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --probe_scale={PROBE_SCALE} --num_payloads={NUM_PAYLOADS} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU}""".format(
+	if measure_tw > 0:
+		repetitions = 1
+
+	cmd = """{BINARY} --repetitions={REPS} --streams={STREAM} --filter_size={FILTER_SIZE} --probe_size={PROBE_SIZE} --build_size={BUILD_SIZE} --probe_scale={PROBE_SCALE} --num_payloads={NUM_PAYLOADS} --gpu_morsel_size={GPU_MORSEL_SIZE} --cpu_morsel_size={CPU_MORSEL_SIZE} --gpu={DEVICES} --selectivity={SELECTIVITY} --num_threads={THREADS} --cpu_bloomfilter={CPU_FILTER} --slowdown={SLOWDOWN} --in_gpu_keys={KEYS_ON_GPU} --measure_tw={MEASURE_TW} {TW}""".format(
 		BINARY=binary, STREAM=streams, REPS=repetitions, FILTER_SIZE=filter_size, PROBE_SIZE=probe_size, BUILD_SIZE=build_size, GPU_MORSEL_SIZE=gpu_morsel_size, CPU_MORSEL_SIZE=cpu_morsel_size,
-		DEVICES=gpu_devices, SELECTIVITY=selectivity, THREADS=threads, CPU_FILTER=cpu_filter, SLOWDOWN=slowdown, KEYS_ON_GPU=keys_on_gpu, PROBE_SCALE=probe_scale, NUM_PAYLOADS=num_payloads)
+		DEVICES=gpu_devices, SELECTIVITY=selectivity, THREADS=threads, CPU_FILTER=cpu_filter, SLOWDOWN=slowdown, KEYS_ON_GPU=keys_on_gpu, PROBE_SCALE=probe_scale, NUM_PAYLOADS=num_payloads,
+		MEASURE_TW=measure_tw, TW=cmd_tw)
 
-	if perf_optimal_bloomfilters:
+	if measure_tw:
 		# Measure tw
-		script = cmd + " --measure_tw=1"
-		output = syscall(script)
-		words = str(output).split(" ")
+		output = syscall(cmd)
+		words = str(output).replace("\\n", " ").split(" ")
 		print(words)
 		tw_pos = words.index("TW")
 		tw = words[tw_pos+1]
 		tw_float = float(tw)
-		print("Using tw {}".format(tw_float))
+		tw = int(round(tw_float))
+		print("Using tw {}".format(tw))
+		return tw
 
 	# Execute Experiment
-	syscall(cmd)
+	output = syscall(cmd)
 
 	# We include the header in the first time
 	if not os.path.isfile(os.path.join('results', fname)):
 		os.system('mv results.csv %s' % os.path.join('results', fname))
 	else:
 		os.system('sed -n \'2,3p\' results.csv >> %s' % os.path.join('results', fname))
+
+	return output
 

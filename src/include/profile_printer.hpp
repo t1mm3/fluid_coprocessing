@@ -78,5 +78,6 @@ struct ProfilePrinter {
 	int64_t tuples_gpu_consume{0};
 
 	size_t pre_join_tuples{0};
+	uint64_t semijoin_time {0};
 
 };

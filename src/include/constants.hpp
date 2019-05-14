@@ -29,6 +29,7 @@ enum {
 	num_warmup = 2,
 	in_gpu_keys = false,
 	tw = 7,
+	manual_filter = false,
 };
 constexpr const char   kernel_variant[]  = "contains_baseline";
 }; // namespace defaults
