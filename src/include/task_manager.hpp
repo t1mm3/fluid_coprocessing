@@ -360,13 +360,11 @@ void WorkerThread::execute_pipeline() {
 
 		if (pipeline.params.num_gpu_stream_threads <= 1) {
 			if (id == 0) {
-				printf("allc\n");
 				for (int i=0; i<pipeline.params.num_gpu_streams; i++) {
 					new_stream();
 				}	
 			}	
 		} else {
-			printf("thread stream\n");
 			for (int i=id; i<pipeline.params.num_gpu_streams; i+=pipeline.params.num_gpu_stream_threads) {
 				new_stream();
 			}
