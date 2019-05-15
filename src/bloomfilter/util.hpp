@@ -420,6 +420,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.filter_config = std::string(arg_value);
 		} else if (arg_name == "tw") {
 			params.tw = std::stoll(arg_value);
+		} else if (arg_name == "num_gpu_stream_threads") {
+			params.num_gpu_stream_threads = std::stoll(arg_value);
 		} else if (arg_name == "num_threads") {
 			int64_t n = std::stoll(arg_value);
 			if (n > 0) {
