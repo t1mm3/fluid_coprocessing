@@ -365,9 +365,25 @@ void WorkerThread::execute_pipeline() {
 				}	
 			}	
 		} else {
+			if (id < pipeline.params.num_gpu_stream_threads) {
+				int num = pipeline.params.num_gpu_streams / pipeline.params.num_gpu_stream_threads;
+				if (pipeline.params.num_gpu_streams % pipeline.params.num_gpu_stream_threads) {
+					assert(false);
+					fprintf(stderr, "FAIL\n");
+					exit(1);
+				}
+
+				for (int i=0; i<num; i++) {
+					new_stream();
+					// printf("TID %d stream\n", id);	
+				}
+			}
+/*
 			for (int i=id; i<pipeline.params.num_gpu_streams; i+=pipeline.params.num_gpu_stream_threads) {
 				new_stream();
+				printf("TID %d stream\n", id);
 			}
+*/
 		}
 		
 	}

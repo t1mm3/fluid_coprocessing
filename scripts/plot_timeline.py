@@ -186,7 +186,6 @@ def main():
 
 
     mpl.rcParams.update({'font.size': 15})
-    num = 6
     plot_timeline(num, infile, outfile)
 
 
