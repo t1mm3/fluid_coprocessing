@@ -413,7 +413,7 @@ int main(int argc, char** argv) {
                 << " filtersize " << params.filter_size
                 << " tw " << params.tw
                 << " probe_size " << params.probe_size
-                << " build_size" << params.build_size
+                << " build_size " << params.build_size
                 << std::endl;
             };
 
