@@ -28,6 +28,8 @@ colors = prop_cycle.by_key()['color']
 hatches = ["//", "--", "\\\\", "xx", "||", "++"]
 markers = ['o', 'x', '^', '+']
 
+max_time = 10.0**9 * 8.2
+
 import matplotlib.patches as mpatches
 
 def tag2color(t):
@@ -110,7 +112,8 @@ def plot_timeline(num, tfile, ofile):
     SA = mpatches.Patch(color=tag2color("OTHER"), label='Other')
     plt.legend(handles=[NA,EU,AP,SA], loc='upper center', ncol=4)
 
-    ax1.set_ylim(0, num + 1)
+    ax1.set_ylim(0, num + 1.5)
+    ax1.set_xlim(0, max_time)
 
 
     # Put a legend below current axis
