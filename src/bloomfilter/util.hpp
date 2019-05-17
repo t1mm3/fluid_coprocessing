@@ -326,6 +326,7 @@ struct params_t {
 	bool in_gpu_keys 			  {defaults::in_gpu_keys};
 	bool manual_filter 			  {defaults::manual_filter};
 	std::string filter_config     {"32,1,1,2"};
+	int print_bf_conf 			  {0};
 
 	std::size_t probe_scale {0};
 	std::size_t num_payloads {32};
@@ -420,6 +421,8 @@ params_t parse_command_line(int argc, char **argv) {
 			params.filter_config = std::string(arg_value);
 		} else if (arg_name == "tw") {
 			params.tw = std::stoll(arg_value);
+		} else if (arg_name == "print_bf_conf") {
+			params.print_bf_conf = std::stoll(arg_value);
 		} else if (arg_name == "num_gpu_stream_threads") {
 			params.num_gpu_stream_threads = std::stoll(arg_value);
 		} else if (arg_name == "num_threads") {

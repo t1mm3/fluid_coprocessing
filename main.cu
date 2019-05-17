@@ -399,6 +399,27 @@ int main(int argc, char** argv) {
 
 
         cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
+
+        if (params.print_bf_conf > 0) {
+            auto pconf = [&] (bool gpu, auto bf, auto m) {
+
+                std::cout << "w " << bf.word_cnt_per_block
+                << " s " << bf.sector_cnt 
+                << " z " << bf.zone_cnt 
+                << " k " << bf.k 
+                << " m " << m 
+                << (gpu ? " GPU " : " CPU ")
+                << " slowdown " << params.slowdown
+                << " filtersize " << params.filter_size
+                << std::endl;
+            };
+
+            pconf(false, cpu_config, cpu_m);
+            pconf(true, gpu_config, gpu_m);
+
+            exit(0);
+        } 
+
         // CPU Config
         std::cout << "Filter parameters: w=" << cpu_config.word_cnt_per_block
         << ", s=" << cpu_config.sector_cnt 
@@ -414,6 +435,7 @@ int main(int argc, char** argv) {
         << ", k=" << gpu_config.k 
         << ", m=" << gpu_m 
         << std::endl;
+
 
 
         //size_t m = params.filter_size;
