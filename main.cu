@@ -411,6 +411,9 @@ int main(int argc, char** argv) {
                 << (gpu ? " GPU " : " CPU ")
                 << " slowdown " << params.slowdown
                 << " filtersize " << params.filter_size
+                << " tw " << params.tw
+                << " probe_size " << params.probe_size
+                << " build_size" << params.build_size
                 << std::endl;
             };
 
