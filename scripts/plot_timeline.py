@@ -54,10 +54,12 @@ def plot_timeline(num, tfile, ofile):
     ax1.set_ylabel('Worker')
     ax1.set_xlabel('Time (in cycles)')
 
+    min_tabs = times['TABS'].min()
 
     for tid in range(0, num):
         df = times[times['ID'] == tid]
         df = df.sort_values('TABS')
+        df["T"] = df["TABS"] - min_tabs
 
         lengths = df[['TABS']]
 
@@ -76,7 +78,7 @@ def plot_timeline(num, tfile, ofile):
 
         facecolors = []
 
-        for (tabs, tlen, name) in list(zip(tuples["TABS"], tuples["LEN"], tuples["NAME"])):
+        for (tabs, tlen, name) in list(zip(tuples["T"], tuples["LEN"], tuples["NAME"])):
             if prev_name == name:
                 # aggregate
                 sum_len = sum_len + tlen
