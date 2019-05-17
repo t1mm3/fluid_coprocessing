@@ -45,12 +45,40 @@ def tag2color(t):
 def tagIsGpu(t):
     return t == "SCHEDPROBE" or t == "FINISHPROBE"
 
+def plot_timeline_bar(tid, ax, color, name, t, cycles, tuples):
+    min_w = 1
+    max_w = 10
+    margin = 1
+
+    ypos = (1 + tid) * (max_w + margin) - 10 + margin
+    default_width = max_w / 2
+
+    if tuples > 0 and name in ["CPUJOIN", "CPUWORK"]:
+        speed = tuples / cycles
+        speed = speed * 120
+        width = speed
+        old_w = width
+        if width > max_w:
+            print("overflow")
+            print("speed {} @ {} {}".format(speed, tid, old_w))
+            width = max_w
+        if width < min_w:
+            width = min_w
+
+        # print("speed {} @ {} {}".format(speed, tid, old_w))
+    else:
+        width = default_width
+    ax.barh(bottom=ypos, width=cycles, height=width, left=t,
+        facecolor=color)
+
+    ax.set_ylim(0, ypos + max_w)
 
 def plot_timeline(num, tfile, ofile):
     times = pd.read_csv(tfile,
         sep='|', names=["ID", "TABS", "TREL", "NAME", "OFFSET", "NUM_TUPLES", "PROBE_PTR"], header=None)
 
     w, h = figaspect(0.5)
+    h = h + h/2
     (fig, ax1) = plt.subplots(figsize=(w,h))
 
     ax1.set_ylabel('Worker')
@@ -77,43 +105,52 @@ def plot_timeline(num, tfile, ofile):
         prev_name = ""
         first_tabs = 0
         sum_len = 0
+        sum_tuples = 0
 
         facecolors = []
 
-        for (tabs, tlen, name) in list(zip(tuples["T"], tuples["LEN"], tuples["NAME"])):
+        for (tabs, tlen, name, tnum) in list(zip(tuples["T"], tuples["LEN"], tuples["NAME"], tuples["NUM_TUPLES"])):
+
             if prev_name == name:
                 # aggregate
                 sum_len = sum_len + tlen
+                sum_tuples = sum_tuples + tnum
             else:
                 if len(prev_name) > 0:
                     plot_tuples.append((first_tabs, sum_len))
                     facecolors.append(tag2color(prev_name))
+                    plot_timeline_bar(tid, ax1, tag2color(prev_name), prev_name, first_tabs, sum_len, sum_tuples)
+
                 prev_name = name
                 first_tabs = tabs
                 sum_len = tlen
+                sum_tuples = tnum
 
         if len(prev_name) > 0:
             plot_tuples.append((first_tabs, sum_len))
             facecolors.append(tag2color(prev_name))
+            plot_timeline_bar(tid, ax1, tag2color(prev_name), prev_name, first_tabs, sum_len, sum_tuples)
 
         # print(plot_tuples)
 
-        ax1.broken_barh(plot_tuples, ( tid + 0.5, 0.5), facecolors=facecolors)
+        # ax1.broken_barh(plot_tuples, ( tid + 0.5, 0.5), facecolors=facecolors)
 
-
+    # ax1.set_yticklabels([])
 
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
 
-    NA = mpatches.Patch(color=tag2color("CPUJOIN"), label='Join')
-    EU = mpatches.Patch(color=tag2color("CPUWORK"), label='CPU Pipeline')
+    NA = mpatches.Patch(color=tag2color("CPUJOIN"), label='Post GPU Join')
+    EU = mpatches.Patch(color=tag2color("CPUWORK"), label='CPU Bloom + Join')
     AP = mpatches.Patch(color=tag2color("SCHEDPROBE"), label='Schedule GPU Probe')
-    SA = mpatches.Patch(color=tag2color("OTHER"), label='Other')
-    plt.legend(handles=[NA,EU,AP,SA], loc='upper center', ncol=4)
+    # SA = mpatches.Patch(color=tag2color("OTHER"), label='Other')
+    plt.legend(handles=[NA,EU,AP
+        # ,SA
+        ], loc='upper center', ncol=4)
 
-    ax1.set_ylim(0, num + 1.5)
     ax1.set_xlim(0, max_time)
+    ax1.get_yaxis().set_ticks([])
 
 
     # Put a legend below current axis
@@ -136,7 +173,7 @@ def main():
     parser.add_argument("--infile")
     args = parser.parse_args()
 
-    num = 10
+    num = 6
     infile = "time.csv"
     outfile = "time.pgf"
 
@@ -149,6 +186,7 @@ def main():
 
 
     mpl.rcParams.update({'font.size': 15})
+    num = 6
     plot_timeline(num, infile, outfile)
 
 
