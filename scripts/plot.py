@@ -44,7 +44,7 @@ framework_columns = ["PipelineCycles", "PipelineSumThreadCycles", "PipelineTime"
 result_path = "results"
 
 max_sel = 70
-min_sel = 1
+min_sel = 0
 
 def df_filter_sel(df):
     df = df[df['Selectivity'] <= max_sel]
@@ -137,6 +137,7 @@ def plot_utilization(cached, runtime):
     gpu = gpu.sort_values(['Selectivity'], ascending=[True])
 
     gpu = gpu[gpu['CPUBloomFilter']==1]
+    gpu = df_filter_sel(gpu)
 
 
     gpu1 = gpu[gpu['NumStreams']==1]
@@ -164,6 +165,7 @@ def plot_utilization(cached, runtime):
         ax1.set_ylabel('GPU Utilization (in \\%)')
         ax1.set_ylim(40, 100)
     ax1.set_xlabel('Selectivity (in \\%)')
+    # ax1.set_xlim(0, 70)
 
     # ax2 = ax1.twinx()
     # ax1.grid(True)
@@ -191,7 +193,10 @@ def plot_utilization(cached, runtime):
     #          fancybox=False, ncol=3)
     
 
-    ax1.legend(loc='lower right', ncol=1)
+    if runtime:
+        ax1.legend(loc='upper left', ncol=1)
+    else:
+        ax1.legend(loc='lower right', ncol=1)
 
     #ax2.legend(loc='lower left', ncol=1)
 
@@ -381,7 +386,7 @@ def plot_bloomfilter():
     ax1.set_xlim(1, 2**9)
 
     ax1.loglog(cpu['BFSIZE'] / sz_div, cpu['TPUT'] / tp_div, linestyle='--', marker='o', color=colors[0], label="CPU", basex=2)
-    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU Default", basex=2)
+    ax1.loglog(gpu['BFSIZE'] / sz_div, gpu['TPUT'] / tp_div, linestyle='--', marker='x', color=colors[1], label="GPU", basex=2)
     #ax1.loglog(gpu_cluster['BFSIZE'] / sz_div, gpu_cluster['TPUT']  / tp_div, linestyle='--', marker='^', color=colors[2], label="GPU Radix", basex=2)
     #ax1.loglog(gpu_cluster_only['BFSIZE'] / sz_div, gpu_cluster_only['TPUT']  / tp_div, linestyle='--', marker='+', color=colors[3], label="GPU Radix (only)", basex=2)
 
@@ -627,6 +632,11 @@ def main():
         for time in [True, False]:
             plot_utilization(cached, time)
 
+    mpl.rcParams.update({'font.size': 15})
+    print("3")
+    plot_bloomfilter()
+    print("4")
+
     exit(0)
 
     print("PLOT HEATMAP")
@@ -652,11 +662,6 @@ def main():
                 plot_streams(cpubf, frac)
 
     exit(0)
-
-    mpl.rcParams.update({'font.size': 15})
-    print("3")
-    plot_bloomfilter()
-    print("4")
 
     if False:
         plot_expensiveop(1)
