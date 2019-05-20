@@ -1,240 +1,240 @@
-w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 0 filtersize 4294967296 tw 3629 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 0 filtersize 4294967296 tw 3629 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 0 filtersize 4294967296 tw 3629 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 0 filtersize 4294967296 tw 3629 probe_size 34359738368 build_size 536870912
-w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 0 filtersize 2147483648 tw 3098 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 0 filtersize 2147483648 tw 3098 probe_size 34359738368 build_size 268435456
-w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 0 filtersize 2147483648 tw 3098 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 0 filtersize 2147483648 tw 3098 probe_size 34359738368 build_size 268435456
-w 8 s 1 z 1 k 1 m 134217728 CPU  slowdown 0 filtersize 1073741824 tw 2936 probe_size 34359738368 build_size 134217728
-w 16 s 2 z 2 k 10 m 2147483648 GPU  slowdown 0 filtersize 1073741824 tw 2936 probe_size 34359738368 build_size 134217728
-w 8 s 1 z 1 k 1 m 134217728 CPU  slowdown 0 filtersize 1073741824 tw 2936 probe_size 34359738368 build_size 134217728
-w 16 s 2 z 2 k 10 m 2147483648 GPU  slowdown 0 filtersize 1073741824 tw 2936 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 536870912 tw 2897 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 0 filtersize 536870912 tw 2897 probe_size 34359738368 build_size 67108864
-w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 536870912 tw 2897 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 0 filtersize 536870912 tw 2897 probe_size 34359738368 build_size 67108864
-w 1 s 1 z 1 k 1 m 58720256 CPU  slowdown 0 filtersize 268435456 tw 2878 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 0 filtersize 268435456 tw 2878 probe_size 34359738368 build_size 33554432
-w 1 s 1 z 1 k 1 m 58720256 CPU  slowdown 0 filtersize 268435456 tw 2878 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 0 filtersize 268435456 tw 2878 probe_size 34359738368 build_size 33554432
-w 1 s 1 z 1 k 2 m 58720256 CPU  slowdown 0 filtersize 134217728 tw 2813 probe_size 34359738368 build_size 16777216
-w 16 s 1 z 1 k 5 m 134217728 GPU  slowdown 0 filtersize 134217728 tw 2813 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 2 m 58720256 CPU  slowdown 0 filtersize 134217728 tw 2813 probe_size 34359738368 build_size 16777216
-w 16 s 1 z 1 k 5 m 134217728 GPU  slowdown 0 filtersize 134217728 tw 2813 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 0 filtersize 67108864 tw 2665 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 0 filtersize 67108864 tw 2665 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 0 filtersize 67108864 tw 2665 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 0 filtersize 67108864 tw 2665 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 0 filtersize 33554432 tw 2361 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 0 filtersize 33554432 tw 2361 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 0 filtersize 33554432 tw 2361 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 0 filtersize 33554432 tw 2361 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 16777216 tw 1884 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 0 filtersize 16777216 tw 1884 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 16777216 tw 1884 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 0 filtersize 16777216 tw 1884 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 4 m 16777216 CPU  slowdown 0 filtersize 8388608 tw 1280 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 0 filtersize 8388608 tw 1280 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 4 m 16777216 CPU  slowdown 0 filtersize 8388608 tw 1280 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 0 filtersize 8388608 tw 1280 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 50 filtersize 4294967296 tw 5953 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 50 filtersize 4294967296 tw 5953 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 50 filtersize 4294967296 tw 5953 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 50 filtersize 4294967296 tw 5953 probe_size 34359738368 build_size 536870912
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 50 filtersize 2147483648 tw 5341 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 50 filtersize 2147483648 tw 5341 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 50 filtersize 2147483648 tw 5341 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 50 filtersize 2147483648 tw 5341 probe_size 34359738368 build_size 268435456
-w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 50 filtersize 1073741824 tw 5131 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 50 filtersize 1073741824 tw 5131 probe_size 34359738368 build_size 134217728
-w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 50 filtersize 1073741824 tw 5131 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 50 filtersize 1073741824 tw 5131 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 50 filtersize 536870912 tw 5038 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 50 filtersize 536870912 tw 5038 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 50 filtersize 536870912 tw 5038 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 50 filtersize 536870912 tw 5038 probe_size 34359738368 build_size 67108864
-w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 50 filtersize 268435456 tw 4950 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 50 filtersize 268435456 tw 4950 probe_size 34359738368 build_size 33554432
-w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 50 filtersize 268435456 tw 4950 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 50 filtersize 268435456 tw 4950 probe_size 34359738368 build_size 33554432
-w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 50 filtersize 134217728 tw 4804 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 10 m 268435456 GPU  slowdown 50 filtersize 134217728 tw 4804 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 50 filtersize 134217728 tw 4804 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 10 m 268435456 GPU  slowdown 50 filtersize 134217728 tw 4804 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 50 filtersize 67108864 tw 4728 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 50 filtersize 67108864 tw 4728 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 50 filtersize 67108864 tw 4728 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 50 filtersize 67108864 tw 4728 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 33554432 tw 4464 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 50 filtersize 33554432 tw 4464 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 33554432 tw 4464 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 50 filtersize 33554432 tw 4464 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 16777216 tw 4245 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 50 filtersize 16777216 tw 4245 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 16777216 tw 4245 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 50 filtersize 16777216 tw 4245 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 8388608 tw 4019 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 50 filtersize 8388608 tw 4019 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 8388608 tw 4019 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 50 filtersize 8388608 tw 4019 probe_size 34359738368 build_size 1048576
-w 8 s 8 z 2 k 4 m 2684354560 CPU  slowdown 100 filtersize 4294967296 tw 8757 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 100 filtersize 4294967296 tw 8757 probe_size 34359738368 build_size 536870912
-w 8 s 8 z 2 k 4 m 2684354560 CPU  slowdown 100 filtersize 4294967296 tw 8757 probe_size 34359738368 build_size 536870912
-w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 100 filtersize 4294967296 tw 8757 probe_size 34359738368 build_size 536870912
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 100 filtersize 2147483648 tw 8182 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 100 filtersize 2147483648 tw 8182 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 100 filtersize 2147483648 tw 8182 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 100 filtersize 2147483648 tw 8182 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 4 m 671088640 CPU  slowdown 100 filtersize 1073741824 tw 8001 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 100 filtersize 1073741824 tw 8001 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 671088640 CPU  slowdown 100 filtersize 1073741824 tw 8001 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 100 filtersize 1073741824 tw 8001 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 100 filtersize 536870912 tw 7860 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 100 filtersize 536870912 tw 7860 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 100 filtersize 536870912 tw 7860 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 100 filtersize 536870912 tw 7860 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 2 m 134217728 CPU  slowdown 100 filtersize 268435456 tw 7762 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 100 filtersize 268435456 tw 7762 probe_size 34359738368 build_size 33554432
-w 16 s 16 z 2 k 2 m 134217728 CPU  slowdown 100 filtersize 268435456 tw 7762 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 100 filtersize 268435456 tw 7762 probe_size 34359738368 build_size 33554432
-w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 100 filtersize 134217728 tw 7669 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 100 filtersize 134217728 tw 7669 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 100 filtersize 134217728 tw 7669 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 100 filtersize 134217728 tw 7669 probe_size 34359738368 build_size 16777216
-w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 67108864 tw 7474 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 9 m 134217728 GPU  slowdown 100 filtersize 67108864 tw 7474 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 67108864 tw 7474 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 9 m 134217728 GPU  slowdown 100 filtersize 67108864 tw 7474 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 3 m 50331648 CPU  slowdown 100 filtersize 33554432 tw 7294 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 100 filtersize 33554432 tw 7294 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 3 m 50331648 CPU  slowdown 100 filtersize 33554432 tw 7294 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 100 filtersize 33554432 tw 7294 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 100 filtersize 16777216 tw 7136 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 100 filtersize 16777216 tw 7136 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 100 filtersize 16777216 tw 7136 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 100 filtersize 16777216 tw 7136 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 8388608 tw 6889 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 100 filtersize 8388608 tw 6889 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 8388608 tw 6889 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 100 filtersize 8388608 tw 6889 probe_size 34359738368 build_size 1048576
-w 8 s 8 z 2 k 6 m 3422420992 CPU  slowdown 200 filtersize 4294967296 tw 14376 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 200 filtersize 4294967296 tw 14376 probe_size 34359738368 build_size 536870912
-w 8 s 8 z 2 k 6 m 3422420992 CPU  slowdown 200 filtersize 4294967296 tw 14376 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 200 filtersize 4294967296 tw 14376 probe_size 34359738368 build_size 536870912
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 200 filtersize 2147483648 tw 13886 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 200 filtersize 2147483648 tw 13886 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 200 filtersize 2147483648 tw 13886 probe_size 34359738368 build_size 268435456
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 200 filtersize 2147483648 tw 13886 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 200 filtersize 1073741824 tw 13681 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 200 filtersize 1073741824 tw 13681 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 200 filtersize 1073741824 tw 13681 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 200 filtersize 1073741824 tw 13681 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 200 filtersize 536870912 tw 13565 probe_size 34359738368 build_size 67108864
-w 16 s 1 z 1 k 10 m 1073741824 GPU  slowdown 200 filtersize 536870912 tw 13565 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 200 filtersize 536870912 tw 13565 probe_size 34359738368 build_size 67108864
-w 16 s 1 z 1 k 10 m 1073741824 GPU  slowdown 200 filtersize 536870912 tw 13565 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 268435456 CPU  slowdown 200 filtersize 268435456 tw 13532 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 200 filtersize 268435456 tw 13532 probe_size 34359738368 build_size 33554432
-w 16 s 16 z 2 k 4 m 268435456 CPU  slowdown 200 filtersize 268435456 tw 13532 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 200 filtersize 268435456 tw 13532 probe_size 34359738368 build_size 33554432
-w 16 s 16 z 2 k 4 m 100663296 CPU  slowdown 200 filtersize 134217728 tw 13400 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 200 filtersize 134217728 tw 13400 probe_size 34359738368 build_size 16777216
-w 16 s 16 z 2 k 4 m 100663296 CPU  slowdown 200 filtersize 134217728 tw 13400 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 200 filtersize 134217728 tw 13400 probe_size 34359738368 build_size 16777216
-w 16 s 16 z 2 k 4 m 67108864 CPU  slowdown 200 filtersize 67108864 tw 13273 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 200 filtersize 67108864 tw 13273 probe_size 34359738368 build_size 8388608
-w 16 s 16 z 2 k 4 m 67108864 CPU  slowdown 200 filtersize 67108864 tw 13273 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 200 filtersize 67108864 tw 13273 probe_size 34359738368 build_size 8388608
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 200 filtersize 33554432 tw 12959 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 9 m 67108864 GPU  slowdown 200 filtersize 33554432 tw 12959 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 50331648 CPU  slowdown 200 filtersize 33554432 tw 12959 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 9 m 67108864 GPU  slowdown 200 filtersize 33554432 tw 12959 probe_size 34359738368 build_size 4194304
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 200 filtersize 16777216 tw 12856 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 200 filtersize 16777216 tw 12856 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 200 filtersize 16777216 tw 12856 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 200 filtersize 16777216 tw 12856 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 8388608 tw 12602 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 200 filtersize 8388608 tw 12602 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 8388608 tw 12602 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 200 filtersize 8388608 tw 12602 probe_size 34359738368 build_size 1048576
-w 32 s 32 z 2 k 4 m 3641180160 CPU  slowdown 400 filtersize 4294967296 tw 25807 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 400 filtersize 4294967296 tw 25807 probe_size 34359738368 build_size 536870912
-w 32 s 32 z 2 k 4 m 3641180160 CPU  slowdown 400 filtersize 4294967296 tw 25807 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 400 filtersize 4294967296 tw 25807 probe_size 34359738368 build_size 536870912
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 2147483648 tw 25299 probe_size 34359738368 build_size 268435456
-w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 400 filtersize 2147483648 tw 25299 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 2147483648 tw 25299 probe_size 34359738368 build_size 268435456
-w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 400 filtersize 2147483648 tw 25299 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 1073741824 tw 25153 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 400 filtersize 1073741824 tw 25153 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 1073741824 tw 25153 probe_size 34359738368 build_size 134217728
-w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 400 filtersize 1073741824 tw 25153 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 400 filtersize 536870912 tw 25153 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 400 filtersize 536870912 tw 25153 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 400 filtersize 536870912 tw 25153 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 400 filtersize 536870912 tw 25153 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 4 m 335544320 CPU  slowdown 400 filtersize 268435456 tw 24988 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 400 filtersize 268435456 tw 24988 probe_size 34359738368 build_size 33554432
-w 16 s 16 z 2 k 4 m 335544320 CPU  slowdown 400 filtersize 268435456 tw 24988 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 400 filtersize 268435456 tw 24988 probe_size 34359738368 build_size 33554432
-w 32 s 32 z 2 k 4 m 134217728 CPU  slowdown 400 filtersize 134217728 tw 24849 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 400 filtersize 134217728 tw 24849 probe_size 34359738368 build_size 16777216
-w 32 s 32 z 2 k 4 m 134217728 CPU  slowdown 400 filtersize 134217728 tw 24849 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 400 filtersize 134217728 tw 24849 probe_size 34359738368 build_size 16777216
-w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 400 filtersize 67108864 tw 24563 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 400 filtersize 67108864 tw 24563 probe_size 34359738368 build_size 8388608
-w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 400 filtersize 67108864 tw 24563 probe_size 34359738368 build_size 8388608
-w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 400 filtersize 67108864 tw 24563 probe_size 34359738368 build_size 8388608
-w 16 s 16 z 2 k 6 m 50331648 CPU  slowdown 400 filtersize 33554432 tw 24600 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 400 filtersize 33554432 tw 24600 probe_size 34359738368 build_size 4194304
-w 16 s 16 z 2 k 6 m 50331648 CPU  slowdown 400 filtersize 33554432 tw 24600 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 400 filtersize 33554432 tw 24600 probe_size 34359738368 build_size 4194304
-w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 400 filtersize 16777216 tw 24237 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 400 filtersize 16777216 tw 24237 probe_size 34359738368 build_size 2097152
-w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 400 filtersize 16777216 tw 24237 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 400 filtersize 16777216 tw 24237 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 400 filtersize 8388608 tw 24078 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 400 filtersize 8388608 tw 24078 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 400 filtersize 8388608 tw 24078 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 400 filtersize 8388608 tw 24078 probe_size 34359738368 build_size 1048576
-w 32 s 32 z 2 k 4 m 3641180160 CPU  slowdown 800 filtersize 4294967296 tw 48795 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 800 filtersize 4294967296 tw 48795 probe_size 34359738368 build_size 536870912
-w 32 s 32 z 2 k 4 m 3641180160 CPU  slowdown 800 filtersize 4294967296 tw 48795 probe_size 34359738368 build_size 536870912
-w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 800 filtersize 4294967296 tw 48795 probe_size 34359738368 build_size 536870912
-w 16 s 16 z 2 k 6 m 2684354560 CPU  slowdown 800 filtersize 2147483648 tw 48765 probe_size 34359738368 build_size 268435456
-w 32 s 1 z 1 k 10 m 4294967296 GPU  slowdown 800 filtersize 2147483648 tw 48765 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2684354560 CPU  slowdown 800 filtersize 2147483648 tw 48765 probe_size 34359738368 build_size 268435456
-w 32 s 1 z 1 k 10 m 4294967296 GPU  slowdown 800 filtersize 2147483648 tw 48765 probe_size 34359738368 build_size 268435456
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 800 filtersize 1073741824 tw 47903 probe_size 34359738368 build_size 134217728
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 800 filtersize 1073741824 tw 47903 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 800 filtersize 1073741824 tw 47903 probe_size 34359738368 build_size 134217728
-w 16 s 4 z 4 k 12 m 4294967296 GPU  slowdown 800 filtersize 1073741824 tw 47903 probe_size 34359738368 build_size 134217728
-w 16 s 16 z 2 k 6 m 1073741824 CPU  slowdown 800 filtersize 536870912 tw 48965 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 800 filtersize 536870912 tw 48965 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 6 m 1073741824 CPU  slowdown 800 filtersize 536870912 tw 48965 probe_size 34359738368 build_size 67108864
-w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 800 filtersize 536870912 tw 48965 probe_size 34359738368 build_size 67108864
-w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 800 filtersize 268435456 tw 48056 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 800 filtersize 268435456 tw 48056 probe_size 34359738368 build_size 33554432
-w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 800 filtersize 268435456 tw 48056 probe_size 34359738368 build_size 33554432
-w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 800 filtersize 268435456 tw 48056 probe_size 34359738368 build_size 33554432
-w 32 s 32 z 2 k 6 m 167772160 CPU  slowdown 800 filtersize 134217728 tw 47603 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 800 filtersize 134217728 tw 47603 probe_size 34359738368 build_size 16777216
-w 32 s 32 z 2 k 6 m 167772160 CPU  slowdown 800 filtersize 134217728 tw 47603 probe_size 34359738368 build_size 16777216
-w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 800 filtersize 134217728 tw 47603 probe_size 34359738368 build_size 16777216
-w 32 s 32 z 2 k 6 m 83886080 CPU  slowdown 800 filtersize 67108864 tw 47913 probe_size 34359738368 build_size 8388608
-w 32 s 1 z 1 k 10 m 134217728 GPU  slowdown 800 filtersize 67108864 tw 47913 probe_size 34359738368 build_size 8388608
-w 32 s 32 z 2 k 6 m 83886080 CPU  slowdown 800 filtersize 67108864 tw 47913 probe_size 34359738368 build_size 8388608
-w 32 s 1 z 1 k 10 m 134217728 GPU  slowdown 800 filtersize 67108864 tw 47913 probe_size 34359738368 build_size 8388608
-w 16 s 16 z 2 k 6 m 67108864 CPU  slowdown 800 filtersize 33554432 tw 47398 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 800 filtersize 33554432 tw 47398 probe_size 34359738368 build_size 4194304
-w 16 s 16 z 2 k 6 m 67108864 CPU  slowdown 800 filtersize 33554432 tw 47398 probe_size 34359738368 build_size 4194304
-w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 800 filtersize 33554432 tw 47398 probe_size 34359738368 build_size 4194304
-w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 800 filtersize 16777216 tw 47244 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 800 filtersize 16777216 tw 47244 probe_size 34359738368 build_size 2097152
-w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 800 filtersize 16777216 tw 47244 probe_size 34359738368 build_size 2097152
-w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 800 filtersize 16777216 tw 47244 probe_size 34359738368 build_size 2097152
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 800 filtersize 8388608 tw 47634 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 800 filtersize 8388608 tw 47634 probe_size 34359738368 build_size 1048576
-w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 800 filtersize 8388608 tw 47634 probe_size 34359738368 build_size 1048576
-w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 800 filtersize 8388608 tw 47634 probe_size 34359738368 build_size 1048576
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 0 filtersize 4294967296 tw 3666 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 0 filtersize 4294967296 tw 3666 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 0 filtersize 4294967296 tw 3666 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 0 filtersize 4294967296 tw 3666 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 0 filtersize 2147483648 tw 3134 probe_size 4294967296 build_size 268435456 fpr0.399533
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 0 filtersize 2147483648 tw 3134 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 0 filtersize 2147483648 tw 3134 probe_size 4294967296 build_size 268435456 fpr0.399533
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 0 filtersize 2147483648 tw 3134 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 8 s 1 z 1 k 1 m 134217728 CPU  slowdown 0 filtersize 1073741824 tw 2914 probe_size 4294967296 build_size 134217728 fpr0.632114
+w 16 s 2 z 2 k 10 m 2147483648 GPU  slowdown 0 filtersize 1073741824 tw 2914 probe_size 4294967296 build_size 134217728 fpr0.000828524
+w 8 s 1 z 1 k 1 m 134217728 CPU  slowdown 0 filtersize 1073741824 tw 2914 probe_size 4294967296 build_size 134217728 fpr0.632114
+w 16 s 2 z 2 k 10 m 2147483648 GPU  slowdown 0 filtersize 1073741824 tw 2914 probe_size 4294967296 build_size 134217728 fpr0.000828524
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 536870912 tw 2907 probe_size 4294967296 build_size 67108864 fpr0.632114
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 0 filtersize 536870912 tw 2907 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 536870912 tw 2907 probe_size 4294967296 build_size 67108864 fpr0.632114
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 0 filtersize 536870912 tw 2907 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 268435456 tw 2884 probe_size 4294967296 build_size 33554432 fpr0.393465
+w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 0 filtersize 268435456 tw 2884 probe_size 4294967296 build_size 33554432 fpr0.000881358
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 0 filtersize 268435456 tw 2884 probe_size 4294967296 build_size 33554432 fpr0.393465
+w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 0 filtersize 268435456 tw 2884 probe_size 4294967296 build_size 33554432 fpr0.000881358
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 0 filtersize 134217728 tw 2826 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 1 z 1 k 5 m 134217728 GPU  slowdown 0 filtersize 134217728 tw 2826 probe_size 4294967296 build_size 16777216 fpr0.0231334
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 0 filtersize 134217728 tw 2826 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 1 z 1 k 5 m 134217728 GPU  slowdown 0 filtersize 134217728 tw 2826 probe_size 4294967296 build_size 16777216 fpr0.0231334
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 0 filtersize 67108864 tw 2679 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 0 filtersize 67108864 tw 2679 probe_size 4294967296 build_size 8388608 fpr0.0231334
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 0 filtersize 67108864 tw 2679 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 0 filtersize 67108864 tw 2679 probe_size 4294967296 build_size 8388608 fpr0.0231334
+w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 0 filtersize 33554432 tw 2374 probe_size 4294967296 build_size 4194304 fpr0.040647
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 0 filtersize 33554432 tw 2374 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 0 filtersize 33554432 tw 2374 probe_size 4294967296 build_size 4194304 fpr0.040647
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 0 filtersize 33554432 tw 2374 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 16777216 tw 1904 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 0 filtersize 16777216 tw 1904 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 16777216 tw 1904 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 0 filtersize 16777216 tw 1904 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 8388608 tw 1313 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 0 filtersize 8388608 tw 1313 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 0 filtersize 8388608 tw 1313 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 0 filtersize 8388608 tw 1313 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 50 filtersize 4294967296 tw 5983 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 50 filtersize 4294967296 tw 5983 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 50 filtersize 4294967296 tw 5983 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 50 filtersize 4294967296 tw 5983 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 50 filtersize 2147483648 tw 5438 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 50 filtersize 2147483648 tw 5438 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 50 filtersize 2147483648 tw 5438 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 50 filtersize 2147483648 tw 5438 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 50 filtersize 1073741824 tw 5149 probe_size 4294967296 build_size 134217728 fpr0.155881
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 50 filtersize 1073741824 tw 5149 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 8 s 1 z 1 k 2 m 536870912 CPU  slowdown 50 filtersize 1073741824 tw 5149 probe_size 4294967296 build_size 134217728 fpr0.155881
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 50 filtersize 1073741824 tw 5149 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 50 filtersize 536870912 tw 5063 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 50 filtersize 536870912 tw 5063 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 50 filtersize 536870912 tw 5063 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 50 filtersize 536870912 tw 5063 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 50 filtersize 268435456 tw 4971 probe_size 4294967296 build_size 33554432 fpr0.393465
+w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 50 filtersize 268435456 tw 4971 probe_size 4294967296 build_size 33554432 fpr0.000828524
+w 16 s 1 z 1 k 1 m 67108864 CPU  slowdown 50 filtersize 268435456 tw 4971 probe_size 4294967296 build_size 33554432 fpr0.393465
+w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 50 filtersize 268435456 tw 4971 probe_size 4294967296 build_size 33554432 fpr0.000828524
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 50 filtersize 134217728 tw 4841 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 2 z 2 k 10 m 268435456 GPU  slowdown 50 filtersize 134217728 tw 4841 probe_size 4294967296 build_size 16777216 fpr0.000828524
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 50 filtersize 134217728 tw 4841 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 2 z 2 k 10 m 268435456 GPU  slowdown 50 filtersize 134217728 tw 4841 probe_size 4294967296 build_size 16777216 fpr0.000828524
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 50 filtersize 67108864 tw 4701 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 50 filtersize 67108864 tw 4701 probe_size 4294967296 build_size 8388608 fpr0.0231334
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 50 filtersize 67108864 tw 4701 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 5 m 67108864 GPU  slowdown 50 filtersize 67108864 tw 4701 probe_size 4294967296 build_size 8388608 fpr0.0231334
+w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 33554432 tw 4485 probe_size 4294967296 build_size 4194304 fpr0.040647
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 50 filtersize 33554432 tw 4485 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 4 m 33554432 CPU  slowdown 50 filtersize 33554432 tw 4485 probe_size 4294967296 build_size 4194304 fpr0.040647
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 50 filtersize 33554432 tw 4485 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 16777216 tw 4303 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 50 filtersize 16777216 tw 4303 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 16777216 tw 4303 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 50 filtersize 16777216 tw 4303 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 8388608 tw 4086 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 50 filtersize 8388608 tw 4086 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 50 filtersize 8388608 tw 4086 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 50 filtersize 8388608 tw 4086 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 100 filtersize 4294967296 tw 8777 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 100 filtersize 4294967296 tw 8777 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 100 filtersize 4294967296 tw 8777 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 16 s 1 z 1 k 5 m 4294967296 GPU  slowdown 100 filtersize 4294967296 tw 8777 probe_size 4294967296 build_size 536870912 fpr0.0231334
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 100 filtersize 2147483648 tw 8288 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 100 filtersize 2147483648 tw 8288 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 100 filtersize 2147483648 tw 8288 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 100 filtersize 2147483648 tw 8288 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 100 filtersize 1073741824 tw 8041 probe_size 4294967296 build_size 134217728 fpr0.027422
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 100 filtersize 1073741824 tw 8041 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 100 filtersize 1073741824 tw 8041 probe_size 4294967296 build_size 134217728 fpr0.027422
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 100 filtersize 1073741824 tw 8041 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 100 filtersize 536870912 tw 7920 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 100 filtersize 536870912 tw 7920 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 100 filtersize 536870912 tw 7920 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 10 m 1073741824 GPU  slowdown 100 filtersize 536870912 tw 7920 probe_size 4294967296 build_size 67108864 fpr0.000828524
+w 16 s 16 z 2 k 2 m 134217728 CPU  slowdown 100 filtersize 268435456 tw 7798 probe_size 4294967296 build_size 33554432 fpr0.155068
+w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 100 filtersize 268435456 tw 7798 probe_size 4294967296 build_size 33554432 fpr0.000828524
+w 16 s 16 z 2 k 2 m 134217728 CPU  slowdown 100 filtersize 268435456 tw 7798 probe_size 4294967296 build_size 33554432 fpr0.155068
+w 16 s 2 z 2 k 10 m 536870912 GPU  slowdown 100 filtersize 268435456 tw 7798 probe_size 4294967296 build_size 33554432 fpr0.000828524
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 100 filtersize 134217728 tw 7762 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 100 filtersize 134217728 tw 7762 probe_size 4294967296 build_size 16777216 fpr1.65447e-05
+w 1 s 1 z 1 k 3 m 67108864 CPU  slowdown 100 filtersize 134217728 tw 7762 probe_size 4294967296 build_size 16777216 fpr0.16077
+w 16 s 2 z 2 k 8 m 536870912 GPU  slowdown 100 filtersize 134217728 tw 7762 probe_size 4294967296 build_size 16777216 fpr1.65447e-05
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 67108864 tw 7528 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 9 m 134217728 GPU  slowdown 100 filtersize 67108864 tw 7528 probe_size 4294967296 build_size 8388608 fpr0.000827118
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 67108864 tw 7528 probe_size 4294967296 build_size 8388608 fpr0.040647
+w 16 s 1 z 1 k 9 m 134217728 GPU  slowdown 100 filtersize 67108864 tw 7528 probe_size 4294967296 build_size 8388608 fpr0.000827118
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 33554432 tw 7309 probe_size 4294967296 build_size 4194304 fpr0.00845688
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 100 filtersize 33554432 tw 7309 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 4 m 67108864 CPU  slowdown 100 filtersize 33554432 tw 7309 probe_size 4294967296 build_size 4194304 fpr0.00845688
+w 16 s 1 z 1 k 5 m 33554432 GPU  slowdown 100 filtersize 33554432 tw 7309 probe_size 4294967296 build_size 4194304 fpr0.0231334
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 16777216 tw 7167 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 100 filtersize 16777216 tw 7167 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 16777216 tw 7167 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 100 filtersize 16777216 tw 7167 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 8388608 tw 6986 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 100 filtersize 8388608 tw 6986 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 100 filtersize 8388608 tw 6986 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 100 filtersize 8388608 tw 6986 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 200 filtersize 4294967296 tw 14581 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 200 filtersize 4294967296 tw 14581 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 1 z 1 k 3 m 2147483648 CPU  slowdown 200 filtersize 4294967296 tw 14581 probe_size 4294967296 build_size 536870912 fpr0.14783
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 200 filtersize 4294967296 tw 14581 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 200 filtersize 2147483648 tw 13983 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 200 filtersize 2147483648 tw 13983 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 200 filtersize 2147483648 tw 13983 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 200 filtersize 2147483648 tw 13983 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 200 filtersize 1073741824 tw 13799 probe_size 4294967296 build_size 134217728 fpr0.027422
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 200 filtersize 1073741824 tw 13799 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 1073741824 CPU  slowdown 200 filtersize 1073741824 tw 13799 probe_size 4294967296 build_size 134217728 fpr0.027422
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 200 filtersize 1073741824 tw 13799 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 200 filtersize 536870912 tw 13652 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 1 z 1 k 10 m 1073741824 GPU  slowdown 200 filtersize 536870912 tw 13652 probe_size 4294967296 build_size 67108864 fpr0.000822961
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 200 filtersize 536870912 tw 13652 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 1 z 1 k 10 m 1073741824 GPU  slowdown 200 filtersize 536870912 tw 13652 probe_size 4294967296 build_size 67108864 fpr0.000822961
+w 16 s 16 z 2 k 4 m 268435456 CPU  slowdown 200 filtersize 268435456 tw 13504 probe_size 4294967296 build_size 33554432 fpr0.027422
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 200 filtersize 268435456 tw 13504 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 16 s 16 z 2 k 4 m 268435456 CPU  slowdown 200 filtersize 268435456 tw 13504 probe_size 4294967296 build_size 33554432 fpr0.027422
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 200 filtersize 268435456 tw 13504 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 16 s 16 z 2 k 4 m 134217728 CPU  slowdown 200 filtersize 134217728 tw 13640 probe_size 4294967296 build_size 16777216 fpr0.027422
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 200 filtersize 134217728 tw 13640 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 16 s 16 z 2 k 4 m 134217728 CPU  slowdown 200 filtersize 134217728 tw 13640 probe_size 4294967296 build_size 16777216 fpr0.027422
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 200 filtersize 134217728 tw 13640 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 16 s 16 z 2 k 4 m 67108864 CPU  slowdown 200 filtersize 67108864 tw 13204 probe_size 4294967296 build_size 8388608 fpr0.027422
+w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 200 filtersize 67108864 tw 13204 probe_size 4294967296 build_size 8388608 fpr0.000822961
+w 16 s 16 z 2 k 4 m 67108864 CPU  slowdown 200 filtersize 67108864 tw 13204 probe_size 4294967296 build_size 8388608 fpr0.027422
+w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 200 filtersize 67108864 tw 13204 probe_size 4294967296 build_size 8388608 fpr0.000822961
+w 1 s 1 z 1 k 5 m 67108864 CPU  slowdown 200 filtersize 33554432 tw 13000 probe_size 4294967296 build_size 4194304 fpr0.00753582
+w 16 s 1 z 1 k 9 m 67108864 GPU  slowdown 200 filtersize 33554432 tw 13000 probe_size 4294967296 build_size 4194304 fpr0.000827118
+w 1 s 1 z 1 k 5 m 67108864 CPU  slowdown 200 filtersize 33554432 tw 13000 probe_size 4294967296 build_size 4194304 fpr0.00753582
+w 16 s 1 z 1 k 9 m 67108864 GPU  slowdown 200 filtersize 33554432 tw 13000 probe_size 4294967296 build_size 4194304 fpr0.000827118
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 16777216 tw 12901 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 200 filtersize 16777216 tw 12901 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 16777216 tw 12901 probe_size 4294967296 build_size 2097152 fpr0.00773007
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 200 filtersize 16777216 tw 12901 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 8388608 tw 12611 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 200 filtersize 8388608 tw 12611 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 200 filtersize 8388608 tw 12611 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 200 filtersize 8388608 tw 12611 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 16 s 16 z 2 k 6 m 4294967296 CPU  slowdown 400 filtersize 4294967296 tw 26015 probe_size 4294967296 build_size 536870912 fpr0.0277775
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 400 filtersize 4294967296 tw 26015 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 16 z 2 k 6 m 4294967296 CPU  slowdown 400 filtersize 4294967296 tw 26015 probe_size 4294967296 build_size 536870912 fpr0.0277775
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 400 filtersize 4294967296 tw 26015 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 2147483648 tw 25734 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 400 filtersize 2147483648 tw 25734 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 2147483648 tw 25734 probe_size 4294967296 build_size 268435456 fpr0.0277775
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 400 filtersize 2147483648 tw 25734 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 1073741824 tw 25242 probe_size 4294967296 build_size 134217728 fpr0.00220187
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 400 filtersize 1073741824 tw 25242 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 400 filtersize 1073741824 tw 25242 probe_size 4294967296 build_size 134217728 fpr0.00220187
+w 16 s 1 z 1 k 10 m 2147483648 GPU  slowdown 400 filtersize 1073741824 tw 25242 probe_size 4294967296 build_size 134217728 fpr0.000822961
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 400 filtersize 536870912 tw 25127 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 400 filtersize 536870912 tw 25127 probe_size 4294967296 build_size 67108864 fpr5.15999e-06
+w 16 s 16 z 2 k 4 m 536870912 CPU  slowdown 400 filtersize 536870912 tw 25127 probe_size 4294967296 build_size 67108864 fpr0.027422
+w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 400 filtersize 536870912 tw 25127 probe_size 4294967296 build_size 67108864 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 400 filtersize 268435456 tw 25056 probe_size 4294967296 build_size 33554432 fpr0.00220187
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 400 filtersize 268435456 tw 25056 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 400 filtersize 268435456 tw 25056 probe_size 4294967296 build_size 33554432 fpr0.00220187
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 400 filtersize 268435456 tw 25056 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 32 s 32 z 2 k 4 m 134217728 CPU  slowdown 400 filtersize 134217728 tw 24958 probe_size 4294967296 build_size 16777216 fpr0.0269295
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 400 filtersize 134217728 tw 24958 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 32 s 32 z 2 k 4 m 134217728 CPU  slowdown 400 filtersize 134217728 tw 24958 probe_size 4294967296 build_size 16777216 fpr0.0269295
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 400 filtersize 134217728 tw 24958 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 400 filtersize 67108864 tw 24625 probe_size 4294967296 build_size 8388608 fpr0.0269295
+w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 400 filtersize 67108864 tw 24625 probe_size 4294967296 build_size 8388608 fpr0.000822961
+w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 400 filtersize 67108864 tw 24625 probe_size 4294967296 build_size 8388608 fpr0.0269295
+w 16 s 1 z 1 k 10 m 134217728 GPU  slowdown 400 filtersize 67108864 tw 24625 probe_size 4294967296 build_size 8388608 fpr0.000822961
+w 1 s 1 z 1 k 5 m 67108864 CPU  slowdown 400 filtersize 33554432 tw 24737 probe_size 4294967296 build_size 4194304 fpr0.00753582
+w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 400 filtersize 33554432 tw 24737 probe_size 4294967296 build_size 4194304 fpr0.000822961
+w 1 s 1 z 1 k 5 m 67108864 CPU  slowdown 400 filtersize 33554432 tw 24737 probe_size 4294967296 build_size 4194304 fpr0.00753582
+w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 400 filtersize 33554432 tw 24737 probe_size 4294967296 build_size 4194304 fpr0.000822961
+w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 400 filtersize 16777216 tw 24640 probe_size 4294967296 build_size 2097152 fpr0.00186289
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 400 filtersize 16777216 tw 24640 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 400 filtersize 16777216 tw 24640 probe_size 4294967296 build_size 2097152 fpr0.00186289
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 400 filtersize 16777216 tw 24640 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 400 filtersize 8388608 tw 24062 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 400 filtersize 8388608 tw 24062 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 400 filtersize 8388608 tw 24062 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 400 filtersize 8388608 tw 24062 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 16 s 16 z 2 k 6 m 4294967296 CPU  slowdown 800 filtersize 4294967296 tw 49819 probe_size 4294967296 build_size 536870912 fpr0.0277775
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 800 filtersize 4294967296 tw 49819 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 16 z 2 k 6 m 4294967296 CPU  slowdown 800 filtersize 4294967296 tw 49819 probe_size 4294967296 build_size 536870912 fpr0.0277775
+w 32 s 1 z 1 k 5 m 4294967296 GPU  slowdown 800 filtersize 4294967296 tw 49819 probe_size 4294967296 build_size 536870912 fpr0.0224099
+w 16 s 16 z 2 k 4 m 2147483648 CPU  slowdown 800 filtersize 2147483648 tw 48492 probe_size 4294967296 build_size 268435456 fpr0.027422
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 800 filtersize 2147483648 tw 48492 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 4 m 2147483648 CPU  slowdown 800 filtersize 2147483648 tw 48492 probe_size 4294967296 build_size 268435456 fpr0.027422
+w 16 s 1 z 1 k 10 m 4294967296 GPU  slowdown 800 filtersize 2147483648 tw 48492 probe_size 4294967296 build_size 268435456 fpr0.000822961
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 800 filtersize 1073741824 tw 48117 probe_size 4294967296 build_size 134217728 fpr0.00220187
+w 8 s 1 z 1 k 13 m 4294967296 GPU  slowdown 800 filtersize 1073741824 tw 48117 probe_size 4294967296 build_size 134217728 fpr1.84849e-05
+w 16 s 16 z 2 k 6 m 2147483648 CPU  slowdown 800 filtersize 1073741824 tw 48117 probe_size 4294967296 build_size 134217728 fpr0.00220187
+w 8 s 1 z 1 k 13 m 4294967296 GPU  slowdown 800 filtersize 1073741824 tw 48117 probe_size 4294967296 build_size 134217728 fpr1.84849e-05
+w 16 s 16 z 2 k 6 m 1073741824 CPU  slowdown 800 filtersize 536870912 tw 48050 probe_size 4294967296 build_size 67108864 fpr0.00220187
+w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 800 filtersize 536870912 tw 48050 probe_size 4294967296 build_size 67108864 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 1073741824 CPU  slowdown 800 filtersize 536870912 tw 48050 probe_size 4294967296 build_size 67108864 fpr0.00220187
+w 16 s 2 z 2 k 14 m 2147483648 GPU  slowdown 800 filtersize 536870912 tw 48050 probe_size 4294967296 build_size 67108864 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 800 filtersize 268435456 tw 48095 probe_size 4294967296 build_size 33554432 fpr0.00220187
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 800 filtersize 268435456 tw 48095 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 536870912 CPU  slowdown 800 filtersize 268435456 tw 48095 probe_size 4294967296 build_size 33554432 fpr0.00220187
+w 16 s 2 z 2 k 14 m 1073741824 GPU  slowdown 800 filtersize 268435456 tw 48095 probe_size 4294967296 build_size 33554432 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 268435456 CPU  slowdown 800 filtersize 134217728 tw 47677 probe_size 4294967296 build_size 16777216 fpr0.00220187
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 800 filtersize 134217728 tw 47677 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 16 s 16 z 2 k 6 m 268435456 CPU  slowdown 800 filtersize 134217728 tw 47677 probe_size 4294967296 build_size 16777216 fpr0.00220187
+w 16 s 2 z 2 k 14 m 536870912 GPU  slowdown 800 filtersize 134217728 tw 47677 probe_size 4294967296 build_size 16777216 fpr5.15999e-06
+w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 800 filtersize 67108864 tw 48730 probe_size 4294967296 build_size 8388608 fpr0.0269295
+w 32 s 1 z 1 k 10 m 134217728 GPU  slowdown 800 filtersize 67108864 tw 48730 probe_size 4294967296 build_size 8388608 fpr0.000637121
+w 32 s 32 z 2 k 4 m 67108864 CPU  slowdown 800 filtersize 67108864 tw 48730 probe_size 4294967296 build_size 8388608 fpr0.0269295
+w 32 s 1 z 1 k 10 m 134217728 GPU  slowdown 800 filtersize 67108864 tw 48730 probe_size 4294967296 build_size 8388608 fpr0.000637121
+w 16 s 16 z 2 k 6 m 67108864 CPU  slowdown 800 filtersize 33554432 tw 48846 probe_size 4294967296 build_size 4194304 fpr0.00220187
+w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 800 filtersize 33554432 tw 48846 probe_size 4294967296 build_size 4194304 fpr0.000822961
+w 16 s 16 z 2 k 6 m 67108864 CPU  slowdown 800 filtersize 33554432 tw 48846 probe_size 4294967296 build_size 4194304 fpr0.00220187
+w 16 s 1 z 1 k 10 m 67108864 GPU  slowdown 800 filtersize 33554432 tw 48846 probe_size 4294967296 build_size 4194304 fpr0.000822961
+w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 800 filtersize 16777216 tw 47103 probe_size 4294967296 build_size 2097152 fpr0.00186289
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 800 filtersize 16777216 tw 47103 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 32 s 32 z 2 k 8 m 33554432 CPU  slowdown 800 filtersize 16777216 tw 47103 probe_size 4294967296 build_size 2097152 fpr0.00186289
+w 16 s 1 z 1 k 10 m 33554432 GPU  slowdown 800 filtersize 16777216 tw 47103 probe_size 4294967296 build_size 2097152 fpr0.000822961
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 800 filtersize 8388608 tw 47233 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 800 filtersize 8388608 tw 47233 probe_size 4294967296 build_size 1048576 fpr5.01355e-06
+w 1 s 1 z 1 k 7 m 33554432 CPU  slowdown 800 filtersize 8388608 tw 47233 probe_size 4294967296 build_size 1048576 fpr0.00117855
+w 16 s 1 z 1 k 15 m 33554432 GPU  slowdown 800 filtersize 8388608 tw 47233 probe_size 4294967296 build_size 1048576 fpr5.01355e-06

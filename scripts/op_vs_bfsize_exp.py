@@ -28,7 +28,7 @@ for s in [0, 50, 100, 200, 400, 800]:
 	# calibrate
 	for filter_size,build_size in my_dict.items():
 		tw=run_test(fname="tempfile", selectivity="1", slowdown=s,
-				build_size=int(build_size), probe_size=int(536870912 * default_probe_scale),
+				build_size=int(build_size), probe_size=int(536870912 * default_probe_scale / 8),
 				measure_tw=1, num_payloads=1)
 
 		for cpu_filter in cpu_filter_values:
@@ -37,7 +37,7 @@ for s in [0, 50, 100, 200, 400, 800]:
 			
 				file = "op_vs_bfsize/results-op_vs_bfsize{}.csv".format(postfix)
 				run_test(fname=file, selectivity="1", slowdown=s, gpu_devices=gpu,
-					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(536870912 * default_probe_scale),
+					cpu_filter=cpu_filter, filter_size=int(filter_size), build_size=int(build_size), probe_size=int(536870912 * default_probe_scale / 8),
 					num_payloads=1, tw=tw)
 				# assert(False)
 

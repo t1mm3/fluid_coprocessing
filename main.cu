@@ -15,6 +15,7 @@
 #include "bloomfilter/util.hpp"
 
 #include <amsfilter_model/model.hpp>
+#include <amsfilter_model/fpr.hpp>
 #include <amsfilter/amsfilter_lite.hpp>
 #include <amsfilter/internal/blocked_bloomfilter_template.hpp>
 
@@ -402,6 +403,7 @@ int main(int argc, char** argv) {
 
         if (params.print_bf_conf > 0) {
             auto pconf = [&] (bool gpu, auto bf, auto m) {
+                size_t n = params.build_size;
 
                 std::cout << "w " << bf.word_cnt_per_block
                 << " s " << bf.sector_cnt 
@@ -414,6 +416,7 @@ int main(int argc, char** argv) {
                 << " tw " << params.tw
                 << " probe_size " << params.probe_size
                 << " build_size " << params.build_size
+                << " fpr " << amsfilter::fpr(bf, m, n)
                 << std::endl;
             };
 

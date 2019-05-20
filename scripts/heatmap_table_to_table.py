@@ -41,10 +41,22 @@ for line in fileinput.input():
 	k = int(a[7])
 	m = int(a[9])
 
+	fpr = a[21]
+	fpr = fpr.replace("fpr", "")
+	fpr = float(fpr)
+
+	# print(fpr)
+
 	slowdown = int(a[9+3])
 	filtersize = int(a[9+5]) / 8
 
-	s = "({m}, {k}, {w}, {s}, {z})".format(m=autofix_unit(m), s=s, w=w, z=z, k=k,)
+	# s = "({m}, {k}, {w}, {s}, {z})".format(m=autofix_unit(m), s=s, w=w, z=z, k=k,)
+	# s = "({m}, {k})".format(m=autofix_unit(m), s=s, w=w, z=z, k=k,)
+
+	if fpr * 100.0 < 0.05:
+		s = " < 0.1 \\%"
+	else:
+		s = "{:10.1f}\\%".format(fpr*100.0)
 
 	# print("str={} slowdnow{} filter{}".format(s,slowdown,filtersize))
 
@@ -80,7 +92,8 @@ for size in filtersizes:
 	line = "& {}".format(autofix_unit(size))
 	for col in slowdowns:
 		line = line + " & "
-		line = line + str_cells[(slowdown, size)]
+		line = line + str_cells[(col, size)]
+		# print(str_cells[(col, size)])
 		first = False
 
 	print("{}\\\\".format(line))

@@ -503,11 +503,11 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=200)
+    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=20)
     plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
 
-    ax1.set_xlabel("Additonal Pipeline Cost $c_A$")
+    ax1.set_xlabel("Additional Pipeline Cost $c_A$")
 
     if not rbar:
         plt.setp(ax1.get_yticklabels(), visible=False)
@@ -617,27 +617,28 @@ def plot_morselsizes():
     plt.close(fig)
 
 def main():
-    print("PLOT SEL")
-    mpl.rcParams.update({'font.size': 15})
+    if False:
+        print("PLOT SEL")
+        mpl.rcParams.update({'font.size': 15})
 
-    print("1")
-    plot_joinspeed()
-    print("2")
-    plot_sel()
+        print("1")
+        plot_joinspeed()
+        print("2")
+        plot_sel()
 
 
-    mpl.rcParams.update({'font.size': 20})
+        mpl.rcParams.update({'font.size': 20})
 
-    for cached in [True, False]:
-        for time in [True, False]:
-            plot_utilization(cached, time)
+        for cached in [True, False]:
+            for time in [True, False]:
+                plot_utilization(cached, time)
 
-    mpl.rcParams.update({'font.size': 15})
-    print("3")
-    plot_bloomfilter()
-    print("4")
+        mpl.rcParams.update({'font.size': 15})
+        print("3")
+        plot_bloomfilter()
+        print("4")
 
-    exit(0)
+        exit(0)
 
     print("PLOT HEATMAP")
     for sel in [1]: #, 5]:
@@ -651,7 +652,7 @@ def main():
                 cpubf = False
             plot_heatmap(sel, file, right, left, cpubf)
 
-    # exit(0)
+    exit(0)
     print("PLOT STREAMS")
     mpl.rcParams.update({'font.size': 20})
 
