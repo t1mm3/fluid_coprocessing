@@ -75,7 +75,7 @@ num_cols = len(slowdowns)
 num_rows = len(filtersizes)
 colformat = ""
 for a in range(0, num_cols):
-	colformat = colformat + " c "
+	colformat = colformat + " r "
 
 print("""\\begin{{tabular}}{{ c  c | {fmt} }}
 	\\multicolumn{num}{{c}}{{ Additional Pipeline Cost $c_A$ }}\\\\

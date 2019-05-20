@@ -505,16 +505,53 @@ def plot_heatmap(sel, file, rbar, lbar, cpubf):
     #Cols = ['A', 'B', 'C', 'D']
     #df = DataFrame(abs(np.random.randn(5, 4)), index=Index, columns=Cols)
 
-    cpu['NormalizedPipelineTime'] = cpu['PipelineTime'] # s # * 1000.0 * 1000.0 # ms # * 1000.0 * 1000.0 * 1000.0 * 1000.0
-    with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
-        print(cpu)    
+    cpu['NormalizedPipelineTime'] = cpu['PipelineTime']
 
-    df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=0)
+    invalid = np.nan
+    if not lbar:
+        # Mask Data because some points do not make sense on our hardware...
+        # This happens when the query with BF would be slower than without
+        for index, row in cpu.iterrows():
+            # Hard coded values
+            if row['Slowdown'] == 0:
+                if row['FilterSize'] / 8 >= 8 * 1024 * 1024:
+                    cpu.at[index, 'NormalizedPipelineTime'] = invalid
+                    print("yes")
+
+            if row['Slowdown'] == 50:
+                if row['FilterSize'] / 8 >= 256 * 1024 * 1024:
+                    cpu.at[index, 'NormalizedPipelineTime'] = invalid
+                    print("yes")
+        # cpu = np.ma.masked_invalid(cpu)
+
+    if False:
+        with pd.option_context('display.max_rows', None, 'display.max_columns', 100):
+            print(cpu)    
+
+    df = pd.pivot_table(cpu, values="NormalizedPipelineTime",index=["FilterSize"], columns=["Slowdown"], fill_value=invalid)
+
+    print(df)
+
     # df = cpu.pivot("FilterSize", "Slowdown", "PipelineTime")
 
-    c = plt.pcolor(df, cmap="plasma", vmin=0.5, vmax=20)
-    plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
-    plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
+    cmap = mpl.cm.plasma
+    cmap.set_bad('white',1.)
+
+    df = np.ma.masked_invalid(df)
+
+    #if cpubf:
+    #    exit(1)
+
+    # Plot heatmap
+    c = plt.pcolor(df, cmap=cmap, vmin=0.5, vmax=20)
+
+    p = ["1", "2", "4", "8",
+            "16", "32", "64", "128",
+            "256", "512"]
+    plt.yticks(np.arange(0.5, len(p), 1), p)
+
+    cols = ["0", "50", "100", "200", "400", "800"]
+    plt.xticks(np.arange(0.5, len(cols), 1), cols)
 
     ax1.set_xlabel("Additional Pipeline Cost $c_A$")
 

@@ -74,6 +74,9 @@ struct WorkerThread {
 	Profiling::Time prof_aggr_gpu;
 	Profiling::Time prof_aggr_gpu_cpu_join;
 
+	const float max_cpu_sel;
+	const float max_gpu_sel;
+
 #ifdef PROFILE
 	uint64_t num_prefilter = 0;
 	uint64_t num_postfilter = 0;
@@ -96,10 +99,11 @@ struct WorkerThread {
 
 	WorkerThread(int gpu_device, Pipeline &pipeline, FilterWrapper &filter_cpu, FilterWrapper &filter_gpu,
 	              ProfilePrinter &profile_printer,
-	              Timeline<TimelineEvent>* parent_timeline, int64_t id)
+	              Timeline<TimelineEvent>* parent_timeline, int64_t id, float max_cpu_sel,
+					float max_gpu_sel)
 	    : pipeline(pipeline), device(gpu_device), filter_cpu(filter_cpu), 
 	    	filter_gpu(filter_gpu), cpu_probe(filter_cpu),
-	    	parent_timeline(parent_timeline), id(id) {
+	    	parent_timeline(parent_timeline), id(id), max_cpu_sel(max_cpu_sel), max_gpu_sel(max_gpu_sel) {
 
 	    thread = new std::thread(ExecuteWorkerThread, this);
 	}
@@ -308,13 +312,14 @@ class TaskManager {
 public:
 
 	void execute_query(Pipeline &pipeline, FilterWrapper &filter_cpu, FilterWrapper &filter_gpu,
-			ProfilePrinter &profile_printer, Timeline<TimelineEvent>* timeline) {
+			ProfilePrinter &profile_printer, Timeline<TimelineEvent>* timeline, float max_cpu_sel,
+			float max_gpu_sel) {
 		std::vector<WorkerThread*> workers;
 		auto num_threads = pipeline.params.num_threads;
 		assert(num_threads > 0);
 		workers.reserve(num_threads);
 		for (int i = 0; i != num_threads; ++i) {
-			workers.push_back(new WorkerThread(0, pipeline, filter_cpu, filter_gpu, profile_printer, timeline, i));
+			workers.push_back(new WorkerThread(0, pipeline, filter_cpu, filter_gpu, profile_printer, timeline, i, max_cpu_sel, max_gpu_sel));
 		}
 
 		for (auto &worker : workers) {

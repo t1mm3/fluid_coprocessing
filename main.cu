@@ -379,6 +379,9 @@ int main(int argc, char** argv) {
     Pipeline pipeline(hts, table_probe, params);
 
 
+    float max_cpu_sel;
+    float max_gpu_sel;
+
     // Build Blocked Bloom Filter on CPU (Block size = 128 Bytes)
     {
         amsfilter::Config cpu_config, gpu_config;
@@ -396,6 +399,9 @@ int main(int argc, char** argv) {
             cpu_m = cpu_params.get_filter_size();
             gpu_config = gpu_params.get_filter_config();
             gpu_m = gpu_params.get_filter_size();
+
+            max_cpu_sel = cpu_params.get_max_selectivity();
+            max_gpu_sel = gpu_params.get_max_selectivity();
         }
 
 
@@ -404,6 +410,10 @@ int main(int argc, char** argv) {
         if (params.print_bf_conf > 0) {
             auto pconf = [&] (bool gpu, auto bf, auto m) {
                 size_t n = params.build_size;
+
+                auto smaller = [] (auto a, auto b) {
+                    return a < b ? "smaller" : "NOT";
+                };
 
                 std::cout << "w " << bf.word_cnt_per_block
                 << " s " << bf.sector_cnt 
@@ -417,6 +427,11 @@ int main(int argc, char** argv) {
                 << " probe_size " << params.probe_size
                 << " build_size " << params.build_size
                 << " fpr " << amsfilter::fpr(bf, m, n)
+                << " sel " << (float)params.selectivity / 100
+                << " max_cpu_sel " << max_cpu_sel
+                << " smaller " << smaller((float)params.selectivity / 100, max_cpu_sel)
+                << " max_gpu_sel " << max_gpu_sel
+                << " smaller " << smaller((float)params.selectivity / 100, max_gpu_sel)
                 << std::endl;
             };
 
@@ -490,7 +505,8 @@ int main(int argc, char** argv) {
             const auto start = std::chrono::system_clock::now();
             const auto start_cycles = rdtsc();
             manager.execute_query(pipeline, filter_cpu, filter_gpu, profile_info,
-                i == params.num_warmup ? timeline : nullptr);
+                i == params.num_warmup ? timeline : nullptr,
+                max_cpu_sel, max_gpu_sel);
             auto end_cycles = rdtsc();
             auto end = std::chrono::system_clock::now();
 
