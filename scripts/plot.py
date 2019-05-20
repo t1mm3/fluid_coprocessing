@@ -343,6 +343,15 @@ def plot_joinspeed():
     ax1.yaxis.get_major_formatter().set_useOffset(False)
     ax1.yaxis.set_minor_formatter(mticker.ScalarFormatter())
 
+    pointA = (10, 510)
+    pointB = (10, 610)
+    ax1.annotate('', xytext=pointA, xy=pointB,
+            arrowprops=dict(facecolor='black', shrink=0.05, width=0.5), size=15, horizontalalignment='right', verticalalignment='top',
+            )
+    ax1.annotate('', xytext=pointB, xy=pointA,
+            arrowprops=dict(facecolor='black', shrink=0.05, width=0.5), size=15, horizontalalignment='right', verticalalignment='top',
+            )
+
     box = ax1.get_position()
     ax1.set_position([box.x0, box.y0 + box.height * 0.1,
                      box.width, box.height * 0.9])
