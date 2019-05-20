@@ -617,28 +617,26 @@ def plot_morselsizes():
     plt.close(fig)
 
 def main():
-    if False:
-        print("PLOT SEL")
-        mpl.rcParams.update({'font.size': 15})
+    print("PLOT SEL")
+    mpl.rcParams.update({'font.size': 15})
 
-        print("1")
-        plot_joinspeed()
-        print("2")
-        plot_sel()
+    print("1")
+    plot_joinspeed()
+    print("2")
+    plot_sel()
 
 
-        mpl.rcParams.update({'font.size': 20})
+    mpl.rcParams.update({'font.size': 20})
 
-        for cached in [True, False]:
-            for time in [True, False]:
-                plot_utilization(cached, time)
+    for cached in [True, False]:
+        for time in [True, False]:
+            plot_utilization(cached, time)
 
-        mpl.rcParams.update({'font.size': 15})
-        print("3")
-        plot_bloomfilter()
-        print("4")
+    mpl.rcParams.update({'font.size': 15})
+    print("3")
+    plot_bloomfilter()
+    print("4")
 
-        exit(0)
 
     print("PLOT HEATMAP")
     for sel in [1]: #, 5]:
